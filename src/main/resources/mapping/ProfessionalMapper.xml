@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcet.dao.ProfessionalMapper">
+    <resultMap id="BaseResultMap" type="com.cqcet.entity.Professional">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="college_id" jdbcType="VARCHAR" property="collegeId"/>
+        <result column="sort" jdbcType="VARCHAR" property="sort"/>
+    </resultMap>
+    <select id="list" resultMap="BaseResultMap">
+        SELECT *
+        FROM
+            professional_info
+        ORDER BY
+            sort
+    </select>
+
+    <!--插入专业  -->
+    <insert id="insert">
+        INSERT INTO professional_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sort!=null and sort!=''">sort,</if>
+            <if test="name!=null and name!=''">name,</if>
+            <if test="collegeId!=null and collegeId!=''">college_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sort!=null">#{sort},</if>
+            <if test="name!=null">#{name},</if>
+            <if test="collegeId!=null and collegeId!=''">#{collegeId},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新专业 -->
+    <update id="update">
+        UPDATE professional_info
+        <set>
+            <if test="sort!=null and sort!=''">sort=#{sort},</if>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="collegeId!=null and collegeId!=''">college_id=#{collegeId},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 批量删除 -->
+    <delete id="delete">
+        DELETE FROM professional_info WHERE id IN
+        <foreach collection="idArr" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 查询专业是否重复 -->
+    <select id="countByName" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        professional_info
+        WHERE
+        name = #{name}
+        <if test="id!=null and id!=''">AND id != #{id}</if>
+    </select>
+
+    <!-- 查询优先级重复 -->
+    <select id="countBySort" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        professional_info
+        WHERE
+        sort = #{sort}
+        <if test="id!=null and id!=''">AND id != #{id}</if>
+    </select>
+
+    <select id="countByCollegeIdArr" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            professional_info
+        WHERE
+            college_id=#{collegeId}
+    </select>
+<!--根据专业id查询学院id-->
+    <select id="selectByProfessionalId" resultType="int">
+        SELECT
+            college_id
+        FROM
+            professional_info
+        WHERE
+            id = #{professionalId}
+    </select>
+
+</mapper>

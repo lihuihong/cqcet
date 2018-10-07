@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcet.dao.ArticleMapper">
+    <resultMap id="BaseResultMap" type="com.cqcet.entity.Article">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="cover" jdbcType="VARCHAR" property="cover"/>
+        <result column="view_count" jdbcType="INTEGER" property="viewCount"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="type_id" jdbcType="INTEGER" property="typeId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="username" property="username"/>
+    </resultMap>
+
+    <!-- 根据条件查询所有帖子 -->
+    <select id="list" resultMap="BaseResultMap">
+        SELECT
+        ai.id,
+        ai.type_id,
+        ai.title,
+        ai.cover,
+        ai.content,
+        ai.view_count,
+        ai.user_id,
+        ai.update_time,
+        ti.name,
+        ui.username
+        FROM
+        article ai,
+        type ti,
+        user ui
+        WHERE
+        ai.user_id = ui.id
+        AND
+        ai.type_id = ti.id
+
+        <if test="status!=null and status!=''">AND ai.status=#{status}</if>
+        <if test="typeId!=null and typeId!=''">AND ai.type_id=#{typeId}</if>
+        <if test="keyWord!=null and keyWord!=''">AND ai.title LIKE #{keyWord}</if>
+        <if test="userId!=null and userId!=''">AND ai.user_id = #{userId}</if>
+        ORDER BY
+        ai.update_time DESC
+    </select>
+
+    <!-- 更新帖子浏览量 -->
+    <update id="updateViewCount">
+        UPDATE article
+        <set>
+            <if test="viewCount!=null and viewCount!='' ">view_count=#{viewCount},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据主键查询单个帖子的信息 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+            ai.id,
+            ai.type_id,
+            ti.name,
+            ai.title,
+            ai.cover,
+            ai.content,
+            ai.view_count
+        FROM
+            article ai,
+            type ti
+        WHERE
+            ai.type_id = ti.id
+            AND ai.status = '0'
+            AND ai.id = #{id}
+    </select>
+
+    <!-- 新增帖子 -->
+    <insert id="insert">
+        INSERT INTO article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeId!=null and typeId!=''">type_id,</if>
+            <if test="title!=null and title!='' ">title,</if>
+            <if test="content!=null and content!=''">content,</if>
+            <if test="cover!=null and cover!=''">cover,</if>
+            <if test="viewCount!=null and viewCount!='' ">view_count,</if>
+            <if test="updateTime!=null and updateTime!=''">update_time,</if>
+            <if test="status!=null and status!=''">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeId!=null and typeId!=''">#{typeId},</if>
+            <if test="title!=null and title!=''">#{title},</if>
+            <if test="content!=null and content!=''">#{content},</if>
+            <if test="cover!=null and cover!=''">#{cover},</if>
+            <if test="viewCount!=null and viewCount!=''">#{viewCount},</if>
+            <if test="updateTime!=null and updateTime!=''">#{updateTime},</if>
+            <if test="status!=null and status!=''">#{status},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新帖子 -->
+    <update id="update">
+        UPDATE article
+        <set>
+            <if test="typeId!=null and typeId!=''">type_id=#{typeId},</if>
+            <if test="title!=null and title!='' ">title=#{title},</if>
+            <if test="content!=null and content!=''">content=#{content},</if>
+            <if test="cover!=null and cover!=''">cover=#{cover},</if>
+            <if test="viewCount!=null and viewCount!='' ">view_count=#{viewCount},</if>
+            <if test="updateTime!=null and updateTime!=''">update_time=#{updateTime},</if>
+            <if test="status!=null and status!=''">status=#{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
+    <!-- 批量移动帖子到某个分类 -->
+    <update id="batchUpdate">
+        UPDATE article
+        <set>
+            <if test="typeId!=null and typeId!=''">type_id=#{typeId},</if>
+            <if test="status!=null and status!=''">status=#{status},</if>
+        </set>
+        WHERE id IN
+        <foreach collection="idArr" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 根据文章主键批量删除 -->
+    <delete id="batchDelete">
+        DELETE FROM article WHERE id IN
+        <foreach collection="idArr" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 根据文章分类 查询文章的数量 -->
+    <select id="countByTypeIdArr" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        article
+        WHERE
+        status = #{status}
+        AND type_id =
+        <foreach collection="typeIdArr" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 批量删除 -->
+    <delete id="batchDeleteByTypeIdArr">
+        DELETE FROM article WHERE type_id IN
+        <foreach collection="typeIdArr" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

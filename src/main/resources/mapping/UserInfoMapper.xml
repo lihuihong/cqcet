@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcet.dao.UserInfoMapper">
+
+    <!-- 建立sql查询结果字段与实体属性的映射关系 -->
+    <resultMap id="User" type="com.cqcet.entity.UserInfo">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="grade_id" property="gradeId"/>
+        <result column="avatar" property="avatar"/>
+        <result column="professional_id" property="professionalId"/>
+    </resultMap>
+
+    <!-- 注册新的用户扩展信息 -->
+    <insert id="insert">
+        INSERT INTO user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId!=null and userId!=''">user_id,</if>
+            <if test="gradeId!=null and gradeId!=''">grade_id,</if>
+            <if test="avatar!=null and avatar!=''">avatar,</if>
+            <if test="professionalId!=null and professionalId!=''">professional_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId!=null and userId!=''">#{userId},</if>
+            <if test="gradeId!=null and gradeId!=''">#{gradeId},</if>
+            <if test="avatar!=null and avatar!=''">#{avatar},</if>
+            <if test="professionalId!=null and professionalId!=''">#{professionalId},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新用户扩展信息 -->
+    <update id="update">
+        UPDATE user_info
+        <set>
+            <if test="userId!=null and userId!=''">user_id=#{userId},</if>
+            <if test="gradeId!=null and gradeId!=''">grade_id=#{gradeId},</if>
+            <if test="avatar!=null and avatar!=''">avatar=#{avatar},</if>
+            <if test="professionalId!=null and professionalId!=''">professional_id=#{professionalId},</if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 批量更新用户扩展信息 -->
+    <update id="batchUpdate">
+        UPDATE user_info
+        <set>
+            <if test="gradeId!=null">grade_id=#{gradeId},</if>
+        </set>
+        WHERE user_id IN
+        <foreach collection="userIdArr" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+</mapper>

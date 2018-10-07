@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcet.dao.UserGradeMapper">
+
+    <resultMap id="BaseResultMap" type="com.cqcet.entity.UserGrade">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="integral" jdbcType="VARCHAR" property="integral"/>
+    </resultMap>
+
+    <select id="list" resultMap="BaseResultMap">
+        SELECT *
+        FROM
+        user_grade
+        ORDER BY
+        integral
+    </select>
+
+    <!--插入一条新的数据  -->
+    <insert id="insert">
+        INSERT INTO user_grade
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="integral!=null and integral!=''">integral,</if>
+            <if test="name!=null and name!=''">name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="integral!=null">#{integral},</if>
+            <if test="name!=null">#{name},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新一条数据 -->
+    <update id="update">
+        UPDATE user_grade
+        <set>
+            <if test="integral!=null and integral!=''">integral=#{integral},</if>
+            <if test="name!=null and name!=''">name=#{name},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 批量删除 -->
+    <delete id="delete">
+        DELETE FROM user_grade WHERE id IN
+        <foreach collection="idArr" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 查询帖子分类的数量，用于校验帖子分类名字重复 -->
+    <select id="countByName" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        user_grade
+        WHERE
+        name = #{name}
+        <if test="id!=null and id!=''">AND id != #{id}</if>
+    </select>
+
+    <!-- 查询帖子分类排序的数量，用于校验帖子分类排序重复 -->
+    <select id="countByIntegral" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        user_grade
+        WHERE
+        integral = #{integral}
+        <if test="id!=null and id!=''">AND id != #{id}</if>
+    </select>
+
+
+</mapper>
