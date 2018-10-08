@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * Ìû×Ó·ÖÀà
+ * ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½
  */
 @Data
 public class Type implements Serializable {
