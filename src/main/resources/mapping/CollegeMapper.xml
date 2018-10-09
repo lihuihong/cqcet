@@ -37,7 +37,7 @@
         WHERE id = #{id}
     </update>
 
-    <!-- 批量删除 -->
+    <!-- 批量删除学院 -->
     <delete id="delete">
         DELETE FROM college_info WHERE id IN
         <foreach collection="idArr" index="index" item="item" open="(" separator="," close=")">
@@ -45,7 +45,7 @@
         </foreach>
     </delete>
 
-    <!-- 查询帖子分类的数量，用于校验帖子分类名字重复 -->
+    <!-- 查询学院的数量 -->
     <select id="countByName" resultType="int">
         SELECT
         COUNT(*)
@@ -56,7 +56,17 @@
         <if test="id!=null and id!=''">AND id != #{id}</if>
     </select>
 
-    <!-- 查询帖子分类排序的数量，用于校验帖子分类排序重复 -->
+    <!-- 查询学院的id -->
+    <select id="idByName" resultType="int">
+        SELECT
+        id
+        FROM
+        college_info
+        WHERE
+        name = #{name}
+    </select>
+
+    <!-- 查询学院排序 -->
     <select id="countBySort" resultType="int">
         SELECT
         COUNT(*)

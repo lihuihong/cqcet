@@ -20,7 +20,7 @@ public class User implements Serializable {
 
     private String status;
 
-    private Integer studentId;
+    private String studentId;
 
     private String college;
 

@@ -11,9 +11,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <title>重电校园</title>
-    <!-- 引入 Bootstrap -->
-    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-    <link href="css/style.css" type="text/css" rel="stylesheet" />
+
 </head>
 <body>
     <jsp:include page="header.jsp" flush="true" />
@@ -91,16 +89,7 @@
         </div>
 
     </div>
-    <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
-    <script src="js/jquery.min.js"></script>
-    <!-- 包括所有已编译的插件 -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/login.js"></script>
-    <script>
-        $(window).scroll(function () {
-            if ($(document).scrollTop() > 80) {$(".navbar").addClass("top-nav");
-            }else {$(".navbar").removeClass("top-nav");}
-        })
-    </script>
+
+    <jsp:include page="footer.jsp" flush="true" />
 </body>
 </html>

@@ -4,8 +4,10 @@ import com.cqcet.entity.Article;
 import com.cqcet.entity.Result;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.TypeService;
+import com.cqcet.services.UserService;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,17 +15,19 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by 那个谁 on 2018/9/11.
- * 帖子
+ * 首页
  */
 @Controller
-@RequestMapping(value = "/index",method={RequestMethod.GET})
+@RequestMapping(value = "/show/index",method={RequestMethod.GET})
 public class IndexController {
 
     @Autowired
@@ -31,8 +35,11 @@ public class IndexController {
     @Autowired
     private TypeService typeService;
 
+    @Autowired
+    private UserService userService;
+
     /**
-     * 查询所有帖子
+     * 主页
      * @param map
      * @param pageNum
      * @param pageSize
@@ -44,77 +51,31 @@ public class IndexController {
 
         return "show/index";
     }
-
     /**
-     * 根据根据主键查询帖子详情
+     * 用户登录
+     * @param request
      * @return
+     * @throws Exception
      */
-    @RequestMapping("/detail.action")
-    public String detail(ModelMap map, @RequestParam(value = "id") String id) {
+    @RequestMapping(value = "/login.json",method = RequestMethod.POST)
+    @ResponseBody
+    public Result login(HttpServletRequest request) throws Exception {
 
-        Article article = articleService.selectById(id);
-        if (article == null) {
-            return "/404";
-        }
-        map.put("articleInfo", article);
-        return "protal/type";
+        Map<String, Object> info = userService.selectUser(request);
+        return Result.success().add("info", info);
     }
 
     /**
-     * 根据帖子分类来查询帖子
-     * @param map
-     * @param typeId
-     * @param pageNum
-     * @param pageSize
-     * @return
+     * 用户注册
+     * @throws Exception
      */
-    @RequestMapping("/type.action")
-    public String type(ModelMap map, @RequestParam(value = "typeId") String typeId,
-                       @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
-                       @RequestParam(value = "pageSize",defaultValue = "4")int pageSize){
-        Map<String,Object> param = new HashMap<String, Object>();
-        param.put("typeId",typeId);
-        param.put("status",0);
+    @RequestMapping(value = "/register.json",method = RequestMethod.POST)
+    @ResponseBody
+    public Result show_register(HttpServletRequest request) throws Exception {
 
-        //pageHelper分页插件
-        //在查询之前调用，传入当前页码，以及每一页显示多少条数据
-        PageMethod.startPage(pageNum,pageSize);
-        List<Article> list = articleService.list(param);
-        if (list.size()==0){
-            return "/404";
-        }
-        PageInfo<Article> pageInfo = new PageInfo<Article>(list);
-        map.put("pageInfo",pageInfo);
-        return "list";
-    }
+        Map<String, Object> info = userService.show_regist(request);
 
-    /**
-     * 根据关键字搜索帖子
-     * @param map
-     * @param keyWord
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    @RequestMapping("/search.action")
-    public String search(ModelMap map,@RequestParam(value = "keyWord")String keyWord,
-                         @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
-                         @RequestParam(value = "pageSize",defaultValue = "4")int pageSize){
-
-        Map<String, Object> param = new HashMap<String, Object>();
-        if (!StringUtils.isEmpty(keyWord)) {
-            param.put("keyWord", "%" + keyWord.trim() + "%");
-        }
-        param.put("status", 0);
-
-        // pageHelper分页插件
-        // 只需要在查询之前调用，传入当前页码，以及每一页显示多少条
-        PageMethod.startPage(pageNum, pageSize);
-        List<Article> list = articleService.list(param);
-        PageInfo<Article> pageInfo = new PageInfo<Article>(list);
-        map.put("pageInfo", pageInfo);
-        map.put("keyWord", keyWord);
-        return "search";
+        return Result.success().add("info", info);
     }
 
     /**

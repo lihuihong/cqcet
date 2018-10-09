@@ -32,11 +32,19 @@ public interface CollegeMapper {
 
     /**
      * 学院是否重复
-     * @param name 帖子分类
+     * @param name 学院名称
      * @param id 主键
      * @return
      */
     int countByName(@Param("name") String name, @Param("id") String id);
+
+    /**
+     * 学院id
+     * @param name 学院名称
+     * @return
+     */
+    int idByName(String name);
+
 
     /**
      * 学院排序是否重复
