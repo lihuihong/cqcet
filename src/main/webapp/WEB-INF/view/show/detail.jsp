@@ -17,7 +17,7 @@
 
     <div class="content" >&nbsp;</div>
     <div class="container content">
-        <div class="row"> 
+        <div class="row">
             <div class="col-md-3">
                 <div  id="float_left">
                     <div class="answer-item">

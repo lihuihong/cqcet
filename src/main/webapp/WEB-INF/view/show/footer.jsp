@@ -8,9 +8,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
 </head>
 <body>
+    <div class="content2 shadow-bg" id="footer">
+        <nav>
+            <a href="about.html">关于我们</a><i>|</i>
+            <a href="about.html">联系我们</a><i>|</i>
+            <a href="feedback.html">常见问题</a><i>|</i>
+            <a href="feedback.html">意见反馈</a><i>|</i>
+            <a href="">友情链接</a>
+        </nav>
+        <div class="copyright">Copyright © 2018-2018 www.xxx.com All Rights Reserved. 渝ICP备xxxxxx号</div>
+    </div>
 
 
     <script src="${pageContext.request.contextPath}/resources/show/login.js"></script>

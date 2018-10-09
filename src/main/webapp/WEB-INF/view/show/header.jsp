@@ -6,15 +6,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <title>重电校园</title>
     <!-- 引入 Bootstrap -->
     <link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" type="text/css"
           rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/resources/show/style.css" type="text/css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/resources/show/font/font-awesome.css" type="text/css" rel="stylesheet"/>
 </head>
 <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/jquery.min.js"></script>
@@ -98,10 +98,22 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="user">
-                    <button type="button" class="btn btn-primary loginbtn">登陆</button>
-                    <button type="button" class="btn btn-default registerbtn">注册</button>
-                </div>
+                <c:choose>
+                    <c:when test="${sessionScope.get(\"userInfo\") != null}">
+                        <div class="user" id="oklogin">
+                            <a href="/show/user/user.action">
+                                <img src="${pageContext.request.contextPath}/resources/show/img/headimg1.png" />
+                                <span>zcq</span>
+                            </a>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="user" id="nologin">
+                            <button type="button" class="btn btn-primary loginbtn">登陆</button>
+                            <button type="button" class="btn btn-default registerbtn">注册</button>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>

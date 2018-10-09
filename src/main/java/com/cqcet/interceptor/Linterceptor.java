@@ -32,13 +32,13 @@ public class Linterceptor implements HandlerInterceptor {
         String url = request.getRequestURI();
 
         //  对特殊地址，直接放行
-        if (true ) {
+        if (url.indexOf("show") > 0 || url.indexOf("resources") > 0) {
             return true;
         }
 
         // 判断session，session存在的话，登录后台.getSession();
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("userInfo");
         if (user != null) {
             //身份存在，放行
             return true;

@@ -108,7 +108,7 @@
             <div class="col-md-3">
                 <div id="float_right">
                     <div class="answer-item">
-                        <img class="answer-img" src="img/headimg1.png" />
+                        <img class="answer-img" src="${pageContext.request.contextPath}/resources/show/img/headimg1.png" />
                         <div class="answer-bod">
                             <a href="#" class="btn btn-info btn-sm">
                                 点 击 发 贴
