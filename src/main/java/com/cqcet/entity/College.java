@@ -11,4 +11,6 @@ public class College {
     private String id;
     private String name;
     private String sort;
+    private String avatar;
+    private String des;
 }

@@ -29,6 +29,8 @@ public class Article implements Serializable {
 
     private String username;
 
+    private String collegeId;
+
 
     private static final long serialVersionUID = 1L;
 

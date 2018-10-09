@@ -5,6 +5,7 @@
         <result column="id" jdbcType="VARCHAR" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="sort" jdbcType="VARCHAR" property="sort"/>
+        <result column="college_id" jdbcType="VARCHAR" property="collegeId"/>
     </resultMap>
     <select id="list" resultMap="BaseResultMap">
         SELECT *
@@ -54,6 +55,16 @@
         WHERE
         name = #{name}
         <if test="id!=null and id!=''">AND id != #{id}</if>
+    </select>
+
+    <!-- 根据学院id查询帖子分类条数 -->
+    <select id="countByCollegeId" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        type
+        WHERE
+        <if test="collegeId!=null and collegeId!=''">college_id=#{collegeId}</if>
     </select>
 
     <!-- 查询帖子分类排序的数量，用于校验帖子分类排序重复 -->

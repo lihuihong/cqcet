@@ -5,6 +5,8 @@
         <result column="id" jdbcType="VARCHAR" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="sort" jdbcType="VARCHAR" property="sort"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+        <result column="des" jdbcType="VARCHAR" property="des"/>
     </resultMap>
     <select id="list" resultMap="BaseResultMap">
         SELECT *

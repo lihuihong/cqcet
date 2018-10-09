@@ -1,7 +1,10 @@
 package com.cqcet.services;
 
 import com.cqcet.dao.ArticleMapper;
+import com.cqcet.dao.TypeMapper;
 import com.cqcet.entity.Article;
+import com.cqcet.entity.College;
+import com.cqcet.entity.Forum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,6 +22,8 @@ public class ArticleService {
 
     @Autowired
     private ArticleMapper articleMapper;
+    @Autowired
+    private TypeMapper typeMapper;
 
     /**
      * 查询所有帖子
@@ -28,6 +33,7 @@ public class ArticleService {
     public List<Article> list(Map<String, Object> param){
         return articleMapper.list(param);
     }
+
 
     /**
      * 查询单个帖子信息并更新浏览量
@@ -83,6 +89,25 @@ public class ArticleService {
             articleMapper.update(article);
         }
 
+    }
+
+    /**
+     * 论坛对象
+     * @param college
+     * @return
+     */
+    public Forum selectByCollege(College college){
+        //该学院下帖子数量
+        int countArticle = articleMapper.countByCollegeId(college.getId(), "0");
+        Forum forum = new Forum();
+        forum.setArticleCount(countArticle);
+        forum.setCollegeAvatar(college.getAvatar());
+        forum.setCollegeDes(college.getDes());
+        forum.setCollegeName(college.getName());
+        int typeCount = typeMapper.countByCollegeId(college.getId());
+        forum.setTypeCount(typeCount);
+        forum.setCollegeId(college.getId());
+        return forum;
     }
 
 }

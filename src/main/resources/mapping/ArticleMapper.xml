@@ -11,6 +11,7 @@
         <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="type_id" jdbcType="INTEGER" property="typeId"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="college_id" jdbcType="VARCHAR" property="collegeId"/>
         <result column="name" property="name"/>
         <result column="username" property="username"/>
     </resultMap>
@@ -134,7 +135,7 @@
         </foreach>
     </delete>
 
-    <!-- 根据文章分类 查询文章的数量 -->
+    <!-- 根据帖子分类 查询帖子的数量 -->
     <select id="countByTypeIdArr" resultType="java.lang.Integer">
         SELECT
         COUNT(*)
@@ -147,6 +148,18 @@
             #{item}
         </foreach>
     </select>
+
+    <!-- 根据学院id查询该学院下文章的数量 -->
+    <select id="countByCollegeId" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        article
+        WHERE
+        status = #{status}
+        <if test="collegeId!=null and collegeId!=''">AND college_id=#{collegeId}</if>
+    </select>
+
 
     <!-- 批量删除 -->
     <delete id="batchDeleteByTypeIdArr">

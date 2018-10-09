@@ -5,7 +5,9 @@
   Time: 10:06
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -20,47 +22,25 @@
                 <div class="col-md-12">
                     <div class="forum-box">
                         <div class="navbar-default nav-title">学院专区</div>
+
                         <div class="row" style="padding: 10px;">
+                            <c:forEach items="${list}" var="entity" varStatus="status" >
                             <div class="col-md-4">
                                 <div class="app_box">
-                                    <a href=""><img src="${pageContext.request.contextPath}/resources/show/img/ecard.png" class="pull-left"/></a>
+                                    <a href=""><img src="${entity.collegeAvatar}" class="pull-left"/></a>
                                     <dl class="box_dl">
-                                        <dt><a href="${pageContext.request.contextPath}/show/answer.action">人工智能与大数据</a></dt>
+                                        <dt><a href="${pageContext.request.contextPath}/show/answer.action?collegeId=${entity.collegeId}">${entity.collegeName}</a></dt>
                                         <dd style="width: 200px; overflow: hidden; white-space: nowrap;">
-                                            <span>原软件学院和计算机学院合并</span>
+                                            <span>${entity.collegeDes}</span>
                                         </dd>
-                                        <dd style="color:#999;"><span>主题:3270, 帖子:8620</span></dd>
+                                        <dd style="color:#999;"><span>主题:${entity.typeCount}, 帖子:${entity.articleCount}</span></dd>
                                     </dl>
                                 </div>
 
                             </div>
-                            <div class="col-md-4">
-                                <div class="app_box">
-                                    <a href=""><img src="${pageContext.request.contextPath}/resources/show/img/ecard.png" class="pull-left"/></a>
-                                    <dl class="box_dl">
-                                        <dt><a href="">人工智能与大数据</a></dt>
-                                        <dd style="width: 200px; overflow: hidden; white-space: nowrap;">
-                                            <span>原软件学院和计算机学院合并</span>
-                                        </dd>
-                                        <dd style="color:#999;"><span>主题:3270, 帖子:8620</span></dd>
-                                    </dl>
-                                </div>
-
-                            </div>
-                            <div class="col-md-4">
-                                <div class="app_box">
-                                    <a href=""><img src="${pageContext.request.contextPath}/resources/show/img/ecard.png" class="pull-left"/></a>
-                                    <dl class="box_dl">
-                                        <dt><a href="">人工智能与大数据</a></dt>
-                                        <dd style="width: 200px; overflow: hidden; white-space: nowrap;">
-                                            <span>原软件学院和计算机学院合并</span>
-                                        </dd>
-                                        <dd style="color:#999;"><span>主题:3270, 帖子:8620</span></dd>
-                                    </dl>
-                                </div>
-
-                            </div>
+                            </c:forEach>
                         </div>
+
                     </div>
                 </div>
 

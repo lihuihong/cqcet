@@ -131,7 +131,7 @@ $(function () {
                     success: function (rtn) {
                         if (rtn.code == "000000") {
                             var info = rtn.data.info;
-                            alert(rtn.message);
+                            alert("登陆"+rtn.message);
                             /*delCookie("userToken");
                              setCookie("userToken", info.userToken);*/
                             setTimeout(function () {

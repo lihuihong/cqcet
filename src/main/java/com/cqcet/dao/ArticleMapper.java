@@ -67,6 +67,18 @@ public interface ArticleMapper {
      */
     int countByTypeIdArr(@Param("typeIdArr") String[] typeIdArr, @Param("status") String status);
 
+
+    /**
+     * 根据学院id查询文章数量
+     *
+     * @param collegeId
+     *            分类id数组
+     * @param status
+     *            文章的状态
+     * @return
+     */
+    int countByCollegeId(@Param("collegeId") String collegeId, @Param("status") String status);
+
     /**
      * 根据文章分类批量删除回收站的文章
      *

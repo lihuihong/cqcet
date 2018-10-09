@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * ���ӷ���
+ * 帖子分类
  */
 @Data
 public class Type implements Serializable {
@@ -14,6 +14,8 @@ public class Type implements Serializable {
     private String name;
 
     private String sort;
+
+    private String collegeId;
 
     private static final long serialVersionUID = 1L;
 

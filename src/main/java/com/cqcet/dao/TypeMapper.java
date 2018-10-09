@@ -44,4 +44,11 @@ public interface TypeMapper {
      * @return
      */
     int countBySort(@Param("sort") String sort, @Param("id") String id);
+
+    /**
+     * 根据学院id查询该学院下文章的数量
+     * @param collegeId
+     * @return
+     */
+    int countByCollegeId(@Param("collegeId") String collegeId);
 }
