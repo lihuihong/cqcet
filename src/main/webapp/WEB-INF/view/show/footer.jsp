@@ -18,7 +18,7 @@
             <a href="feedback.html">意见反馈</a><i>|</i>
             <a href="">友情链接</a>
         </nav>
-        <div class="copyright">Copyright © 2018-2018 www.xxx.com All Rights Reserved. 渝ICP备xxxxxx号</div>
+        <div class="copyright"><p></p>Copyright © 2018-2020 www.heylhh.com All Rights Reserved.备案号： <a href="http://www.miitbeian.gov.cn/">渝ICP备18013192号</a></div>
     </div>
 
 

@@ -32,8 +32,6 @@ public class IndexController {
 
     @Autowired
     private ArticleService articleService;
-    @Autowired
-    private TypeService typeService;
 
     @Autowired
     private UserService userService;

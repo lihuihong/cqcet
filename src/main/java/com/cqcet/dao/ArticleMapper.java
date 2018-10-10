@@ -88,6 +88,14 @@ public interface ArticleMapper {
     void batchDeleteByTypeIdArr(@Param("typeIdArr") String[] typeIdArr);
 
 
+    /**
+     * 根据学院id查询该学院下帖子
+     * @param collegeId
+     * @param status
+     * @return
+     */
+    List<Article> articleByCollegeId(@Param("collegeId") String collegeId, @Param("status") String status);
+
 
 
 

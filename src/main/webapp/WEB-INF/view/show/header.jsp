@@ -175,7 +175,12 @@
                         <i class="fa fa-lock"></i>
                         <a href="#" class="fa fa-question-circle"></a>
                     </div>
-                    <div class="form-group" style="margin-top:40px;height: 30px;">
+                    <div class="form-group help">
+                        <input type="text" class="form-control" id="reg-professional" placeholder="专   业">
+                        <i class="fa fa-lock"></i>
+                        <a href="#" class="fa fa-question-circle"></a>
+                    </div>
+                    <div class="form-group" style="margin-top:40px;">
                         <button type="submit" class="btn btn-default" style="float:left;" id="reg-button-submit">注册
                         </button>
                         <button type="button" class="btn btn-default" style="background-color: #C5C4C4;" id="go-login">

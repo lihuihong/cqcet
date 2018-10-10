@@ -32,6 +32,14 @@ public class CollegeService {
     }
 
     /**
+     * 根据学院id查询学院信息
+     * @return
+     */
+    public College listById(String id){
+        return collegeMapper.listById(id);
+    }
+
+    /**
      * 更新/插入学院
      */
     public void save(List<College> collegeList) throws LException {

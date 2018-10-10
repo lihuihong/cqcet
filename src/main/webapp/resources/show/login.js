@@ -63,21 +63,25 @@ $(function () {
                     success: function (rtn) {
                         if (rtn.code == "000000") {
                             var info = rtn.data.info;
-                            alert(rtn.message);
                             /*delCookie("userToken");
                              setCookie("userToken", info.userToken);*/
-                            window.location.href=window.location.href;
+                            helper.toast({
+                                content : "登录成功，即将为您跳转到首页",
+                                type : "success"
+                            });
+                            alert("axaxaxaxaxaxaxaxaxaxaxaxax");
                             setTimeout(function () {
                                 $('.login').hide();
                                 $('.login-bg').hide();
                                 $('.list-input').val('');
-                                // 跳转到首页
-
-                                //location=location;
-                                //window.location.href = window.location.href;
+                                // 刷新页面
+                                window.location.reload();
                             }, 2000);
                         } else {
-                            alert(rtn.message);
+                            helper.toast({
+                                content : rtn.message,
+                                type : "error"
+                            });
                         }
                     },
 
@@ -95,6 +99,8 @@ $(function () {
             var student = $("#reg-num");
             var studentValue = $("#reg-num").val();
             var schoolValue = $("#reg-school").val();
+            var professional = $("#reg-professional");
+            var professionalValue = $("#reg-professional").val();
 
             if (usernameValue == "") {
                 alert("用户名不能为空");
@@ -116,12 +122,16 @@ $(function () {
                 alert("两次密码不一致");
                 repassword.focus();
                 return false;
-            }else if (studentValue.length == 10) {
+            }else if (studentValue.length == 8) {
                 alert("学号必须是10位");
                 student.focus();
                 return false;
             }else if (schoolValue == "") {
                 alert("学院不能为空");
+                student.focus();
+                return false;
+            } else if (professionalValue == "") {
+                alert("专业不能为空");
                 student.focus();
                 return false;
             } else {
@@ -130,22 +140,29 @@ $(function () {
                     type: "POST",
                     dataType: "json",
                     async: false,
-                    data: {username: usernameValue, password: passwordValue,studentId:studentValue,college:schoolValue},
+                    data: {username: usernameValue, password: passwordValue,studentId:studentValue,college:schoolValue,professional:professionalValue},
                     success: function (rtn) {
                         if (rtn.code == "000000") {
                             var info = rtn.data.info;
-                            alert("登陆"+rtn.message);
+
+                            helper.toast({
+                                content : "注册成功，即将为您跳转到首页",
+                                type : "success"
+                            });
                             /*delCookie("userToken");
                              setCookie("userToken", info.userToken);*/
                             setTimeout(function () {
                                 $('.login').hide();
                                 $('.login-bg').hide();
                                 $('.list-input').val('');
-                                // 跳转到首页
-                                //window.location.href = "${pageContext.request.contextPath}/";
+                                // 刷新页面
+                                window.location.reload();
                             }, 2000);
                         } else {
-                            alert(rtn.message);
+                            helper.toast({
+                                content : rtn.message,
+                                type : "error"
+                            });
                         }
                     },
 

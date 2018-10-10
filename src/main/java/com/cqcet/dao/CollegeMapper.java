@@ -39,7 +39,7 @@ public interface CollegeMapper {
     int countByName(@Param("name") String name, @Param("id") String id);
 
     /**
-     * 学院id
+     * 学院名称查询学院id
      * @param name 学院名称
      * @return
      */
@@ -53,6 +53,13 @@ public interface CollegeMapper {
      * @return
      */
     int countBySort(@Param("sort") String sort, @Param("id") String id);
+
+    /**
+     * 根据学院id查询学院信息
+     * @param collegeId
+     * @return
+     */
+    College listById(@Param("collegeId") String collegeId);
 
 
 }

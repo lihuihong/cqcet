@@ -5,7 +5,10 @@
   Time: 10:41
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -20,10 +23,10 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="ans-head">
-                    <img src="${pageContext.request.contextPath}/resources/show/img/ecard.png" class="pull-left" />
+                    <img src="${college.avatar}" class="pull-left" />
                     <div style="margin-top: 10px">
-                        <h2>人工智能与大数据</h2>
-                        <p class="dark-p">前身软件学院和计算机学院，后合并为人工智能与大数据</p><br/>
+                        <h2>${college.name}</h2>
+                        <p class="dark-p">${college.des}</p><br/>
                     </div>
                 </div>
             </div>
@@ -40,23 +43,29 @@
                         <a href="">全部帖子</a>    <a href="">精品专区</a>     <a href="">最新帖子</a>
                     </div>
                     <hr/>
-                    <div class="answer-content">
-                        <div class="left">
-                            <div class="bor-rai" style="background: #ff82e4;">前端</div>
-                        </div>
-                        <div class="left ans-con-rig">
+                <c:choose>
+                    <c:when test="${fn:length(articles.list)==0}">
 
-                            <p>对于一个，只想更好的使用电脑和手机，并对它们进行维护的学生一枚，应该学什么？</p>
+                            <div  style="text-align:center;">暂无记录</div>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach items="${articles.list}" var="entity" varStatus="status" >
+                        <div class="answer-content">
+                        <div class="left">
+                            <img style="width: 50px;height: 50px" src="${entity.avatar}" />
+                        </div>
+                        <div class="left ans-con-rig" style="width: 90%">
+                            <p>${entity.title}</p>
                             <div class="dark-p">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <p>来自 <a href="#" style="color:#ff82e4;">前端</a> </p>
+                                        <p>来自 <a href="#" style="color:#ff82e4;">${entity.username}</a> </p>
                                     </div>
                                     <div class="col-md-4">
-                                        <p>回复 <span style="color:#ff82e4;">3018</span> / 查看 <span style="color:#ff82e4;">4019</span> </p>
+                                        <p>回复 <span style="color:#ff82e4;">3018</span> / 查看 <span style="color:#ff82e4;">${entity.viewCount}</span> </p>
                                     </div>
                                     <div class="col-md-4" style="text-align:right">
-                                        <p>时间 <span style="color:#ff82e4;">2018.9.13</span> </p>
+                                        <p>时间 <span style="color:#ff82e4;"><fmt:formatDate value="${entity.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" /></span> </p>
                                     </div>
 
                                 </div>
@@ -67,42 +76,22 @@
                                 <a href="#" class="btn btn-info btn-sm">
                                     <span class="glyphicon glyphicon-tint"></span> 快速回帖
                                 </a>
-                                <a href="${pageContext.request.contextPath}/show/detail.action" class="btn btn-default btn-sm">
+                                <a href="${pageContext.request.contextPath}/show/detail.action?id=${entity.id}" class="btn btn-default btn-sm">
                                     <span class="glyphicon glyphicon-globe"></span> 查看详情
                                 </a>
                             </p>
                         </div>
                     </div>
+                            <hr/>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
                     <hr/>
-                    <div class="answer-content">
-                        <div class="left">
-                            <div class="bor-rai" style="background: #fe6900;">后台</div>
-                        </div>
-                        <div class="left ans-con-rig">
-                            <p class="dark-p" >来自 <a href="#" style="color:#fe6900;">后台</a></p>
-                            <p>对于一个，只想更好的使用电脑和手机，并对它们进行维护的学生一枚，应该学什么？</p>
-                            <input type="text" class="answer-input" />
-                            <p class="ans-other">
-                                <a href="#" class="btn btn-info btn-sm">
-                                    <span class="glyphicon glyphicon-tint"></span> 快速回帖
-                                </a>
-                                <a href="detail.jsp" class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-globe"></span> 查看详情
-                                </a>
-                            </p>
-                        </div>
+                    <!-- 分页 -->
+                    <div class="page">
+                        <ul id="page" class="pagination"></ul>
                     </div>
-                    <nav class="ul-center">
-                        <ul class="pagination">
-                            <li><a href="#">&laquo;</a></li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">&raquo;</a></li>
-                        </ul>
-                    </nav>
+
                 </div>
             </div>
             <div class="col-md-3">
@@ -132,5 +121,33 @@
         </div>
     </div>
     <jsp:include page="footer.jsp" flush="true" />
+    <script>
+
+        var currentPage = "${articles.pageNum}";
+        var pageCount = "${articles.pages}";
+
+        helper.page({
+            id : "page",
+            pageCount : pageCount,	// 总页数
+            currentPage : currentPage,// 默认选中第几页
+            // 返回当前选中的页数
+            callback:function(rtn) {
+                search(rtn);
+            }
+        });
+
+        var collegeId = ${college.id};
+        function search(pageNum) {
+            if (pageNum==undefined) {
+                pageNum = 1;
+            }
+
+            window.location.href = "/show/answer.action"
+                + "?pageNum="+pageNum
+                + "&collegeId="+collegeId
+            ;
+        }
+
+    </script>
 </body>
 </html>

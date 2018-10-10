@@ -72,6 +72,41 @@
 								</div>
 								<!--分割线-->
 								<p class="divider"></p>
+								<!--下拉选择框-->
+								<div class="unit">
+									<div class="left">
+										<p class="subtitle">所属学院</p>
+									</div>
+									<div class="right" style="width: 60%">
+										<select id="college_id" name="collegeId">
+											<c:forEach items="${collegeList}" var="collegeInfo" varStatus="status" >
+												<option value="${collegeInfo.id}" <c:if test="${article.collegeId==collegeInfo.id}">selected</c:if>>${collegeInfo.name}</option>
+											</c:forEach>
+										</select>
+									</div>
+									<!--清浮动-->
+									<span class="clearfix"></span>
+								</div>
+								<!--分割线-->
+								<p class="divider"></p>
+								<!--下拉选择框-->
+								<div class="unit">
+									<div class="left">
+										<p class="subtitle">所属用户</p>
+									</div>
+									<div class="right" style="width: 60%">
+										<select id="user_id" name="userId">
+											<c:forEach items="${user}" var="userInfo" varStatus="status" >
+												<option value="${userInfo.id}" <c:if test="${article.userId==userInfo.id}">selected</c:if>>${userInfo.username}</option>
+											</c:forEach>
+										</select>
+									</div>
+									<!--清浮动-->
+									<span class="clearfix"></span>
+								</div>
+
+								<!--分割线-->
+								<p class="divider"></p>
 								
 								<!--文章封面-->
 								<div class="unit">

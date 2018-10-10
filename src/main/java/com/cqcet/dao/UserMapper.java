@@ -8,6 +8,13 @@ import java.util.Map;
 
 public interface UserMapper {
 
+
+    /**
+     * 查询全部用户
+     * @return
+     */
+    List<User> listArticle();
+
     /**
      * 校验用户
      * @param userName 登录名

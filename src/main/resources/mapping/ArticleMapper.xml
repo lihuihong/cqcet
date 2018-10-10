@@ -14,6 +14,7 @@
         <result column="college_id" jdbcType="VARCHAR" property="collegeId"/>
         <result column="name" property="name"/>
         <result column="username" property="username"/>
+        <result column="avatar" property="avatar"/>
     </resultMap>
 
     <!-- 根据条件查询所有帖子 -->
@@ -55,6 +56,31 @@
         WHERE id = #{id}
     </update>
 
+    <!-- 根据学院id查询该学院下帖子 -->
+    <select id="articleByCollegeId" resultMap="BaseResultMap">
+        SELECT
+        ai.title,
+        ai.content,
+        ai.cover,
+        ai.view_count,
+        ai.update_time,
+        ai.id,
+        ai.user_id,
+        ai.type_id,
+        ai.college_id,
+        ui.avatar AS avatar,
+        user.username AS username
+        FROM
+        article ai,
+        user_info ui,
+        user
+        WHERE
+        ai.status = #{status}
+        and ai.user_id = ui.user_id
+        AND ai.user_id = user.id
+        <if test="collegeId!=null and collegeId!=''">AND ai.college_id=#{collegeId}</if>
+    </select>
+
     <!-- 根据主键查询单个帖子的信息 -->
     <select id="selectById" resultMap="BaseResultMap">
         SELECT
@@ -64,14 +90,23 @@
             ai.title,
             ai.cover,
             ai.content,
-            ai.view_count
+            ai.user_id,
+            ai.view_count,
+            ai.update_time,
+            ui.avatar AS avatar,
+            u.username AS username,
+            ai.college_id AS collegeId
         FROM
             article ai,
-            type ti
+            type ti,
+            user u,
+            user_info ui
         WHERE
             ai.type_id = ti.id
             AND ai.status = '0'
             AND ai.id = #{id}
+            and ai.user_id = ui.user_id
+            AND ai.user_id = u.id
     </select>
 
     <!-- 新增帖子 -->
@@ -79,21 +114,25 @@
         INSERT INTO article
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="typeId!=null and typeId!=''">type_id,</if>
+            <if test="collegeId!=null and collegeId!=''">college_id,</if>
             <if test="title!=null and title!='' ">title,</if>
             <if test="content!=null and content!=''">content,</if>
             <if test="cover!=null and cover!=''">cover,</if>
             <if test="viewCount!=null and viewCount!='' ">view_count,</if>
             <if test="updateTime!=null and updateTime!=''">update_time,</if>
             <if test="status!=null and status!=''">status,</if>
+            <if test="userId!=null and userId!=''">user_id,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="typeId!=null and typeId!=''">#{typeId},</if>
+            <if test="collegeId!=null and collegeId!=''">#{collegeId},</if>
             <if test="title!=null and title!=''">#{title},</if>
             <if test="content!=null and content!=''">#{content},</if>
             <if test="cover!=null and cover!=''">#{cover},</if>
             <if test="viewCount!=null and viewCount!=''">#{viewCount},</if>
             <if test="updateTime!=null and updateTime!=''">#{updateTime},</if>
             <if test="status!=null and status!=''">#{status},</if>
+            <if test="userId!=null and userId!=''">#{userId},</if>
         </trim>
     </insert>
 
@@ -101,6 +140,8 @@
     <update id="update">
         UPDATE article
         <set>
+            <if test="userId!=null and userId!=''">user_id=#{userId},</if>
+            <if test="collegeId!=null and collegeId!=''">college_id=#{collegeId},</if>
             <if test="typeId!=null and typeId!=''">type_id=#{typeId},</if>
             <if test="title!=null and title!='' ">title=#{title},</if>
             <if test="content!=null and content!=''">content=#{content},</if>
@@ -149,7 +190,7 @@
         </foreach>
     </select>
 
-    <!-- 根据学院id查询该学院下文章的数量 -->
+    <!-- 根据学院id查询该学院下帖子的数量 -->
     <select id="countByCollegeId" resultType="java.lang.Integer">
         SELECT
         COUNT(*)

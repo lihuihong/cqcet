@@ -98,13 +98,22 @@ public class UserService {
     }
 
     /**
-     * 查询全部用户
+     * 查询全部用户(条件查询)
      *
      * @param param
      * @return
      */
     public List<User> list(Map<String, Object> param) {
         return userMapper.list(param);
+    }
+
+    /**
+     * 查询全部用户
+     *
+     * @return
+     */
+    public List<User> list_article() {
+        return userMapper.listArticle();
     }
 
     /**
@@ -142,8 +151,8 @@ public class UserService {
             // 校验学号长度
             studentId = studentId.replaceAll("\\s*", "");
             ;
-            if (studentId.length() < 2 || studentId.length() > 6) {
-                throw new LException("学号长度应该是2到6个");
+            if (studentId.length() < 2 || studentId.length() > 11) {
+                throw new LException("学号长度应该是2到10个");
             }
             // 校验密码是否填写
             if (StringUtils.isEmpty(password)) {
@@ -257,6 +266,7 @@ public class UserService {
         String password = request.getParameter("password");
         String studentId = request.getParameter("studentId");
         String college = request.getParameter("college");
+        String professional = request.getParameter("professional");
 
         int count = 0;
         // 校验学号是否已被占用
@@ -273,6 +283,11 @@ public class UserService {
         count = collegeMapper.countByName(college, null);
         if (count == 0) {
             throw new LException("学院不存在");
+        }
+        // 校验专业是否存在
+        count = professionalMapper.countByName(professional, null);
+        if (count == 0) {
+            throw new LException("专业不存在");
         }
 
         //添加用户
@@ -294,18 +309,19 @@ public class UserService {
         int collegeId = collegeMapper.idByName(college);
         //int collegeId = professionalMapper.selectByProfessionalId(user.getProfessionalId());
         user.setCollege(String.valueOf(collegeId));
-        user.setLevel("0");
+        user.setLevel("1");
         user.setUsername(username);
         user.setStudentId(studentId);
         userMapper.insert(user);
 
-        /*UserInfo userInfo = new UserInfo();
+        UserInfo userInfo = new UserInfo();
         userInfo.setUserId(user.getId());
-        userInfo.setGradeId(user.getGroupId());
-        userInfo.setAvatar(user.getAvatar());
-        userInfo.setProfessionalId(user.getProfessionalId());
+        userInfo.setGradeId("1");
+        userInfo.setAvatar("http://heylhh.com/FgWPzwwYEQRoBYYvx1lL3epPtIws");
+        int professionalId = professionalMapper.idByName(professional);
+        userInfo.setProfessionalId(String.valueOf(professionalId));
         userInfoMapper.insert(userInfo);
-        */
+
         // 对用户信息进行加密，用于cookie存储
         // 用户的登录名和密码
         String userToken = Jiami.getInstance().encrypt(username) + "&&" + Jiami.getInstance().encrypt(password);

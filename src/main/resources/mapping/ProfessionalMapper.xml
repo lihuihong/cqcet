@@ -89,4 +89,14 @@
             id = #{professionalId}
     </select>
 
+    <!-- 查询学院的id -->
+    <select id="idByName" resultType="int">
+        SELECT
+        id
+        FROM
+            professional_info
+        WHERE
+        name = #{professional}
+    </select>
+
 </mapper>

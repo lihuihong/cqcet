@@ -34,6 +34,14 @@ public class ArticleService {
         return articleMapper.list(param);
     }
 
+    /**
+     * 根据学院id查询该学院下帖子
+     * @return
+     */
+    public List<Article> articleByCollegeId(String collegeId){
+        return articleMapper.articleByCollegeId(collegeId,"0");
+    }
+
 
     /**
      * 查询单个帖子信息并更新浏览量
@@ -41,15 +49,15 @@ public class ArticleService {
      * @return
      */
     public Article selectById(String id){
-        Article acticle = articleMapper.selectById(id);
-        if (acticle != null){
+        Article article = articleMapper.selectById(id);
+        if (article != null){
             //获取当前的阅读量
-            int viewCount = acticle.getViewCount();
+            int viewCount = article.getViewCount();
             //阅读量自增
             viewCount ++;
             articleMapper.updateViewCount(id,viewCount);
         }
-        return acticle;
+        return article;
     }
 
     /**
@@ -77,7 +85,7 @@ public class ArticleService {
         // 判断是新增还是更新
         if (StringUtils.isEmpty(article.getId())) {
             // 新增
-            article.setStatus(0);
+            article.setStatus("0");
             article.setUpdateTime(currentTime);
             article.setViewCount(1);
 

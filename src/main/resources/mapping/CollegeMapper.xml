@@ -16,6 +16,14 @@
             sort
     </select>
 
+    <select id="listById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+        college_info
+        WHERE id = #{collegeId}
+    </select>
+
     <!--插入一条新的数据  -->
     <insert id="insert">
         INSERT INTO college_info

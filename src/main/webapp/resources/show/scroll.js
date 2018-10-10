@@ -1,3 +1,231 @@
+;(function() {
+    var helper = function () {
+        // 默认属性
+        function defaults(args) {
+            var defaults = {
+                id : "",	// 元素id
+                type : "",	// 组件类型
+                url : "",	// 请求地址
+                // 分页属性
+                pageCount: null,	// 总页数
+                currentPage: 1,	// 默认选中第几页
+                position: "center",	// 分页显示位置。 left:居左；center:居中；right:居右
+            }
+            return $.extend(defaults, args);
+        }
+
+        var info = {
+            // 提示气泡
+            toast : function(args) {
+                var opt = defaults(args);
+                var tipHtml = '';
+                var type = opt.type;
+                if (type=="success" || type=="") {
+                    tipHtml = '<div class="top-tip animated fadeInDown" style="background-color: #5cb85c;">' + opt.content + '</div>';
+                } else {
+                    tipHtml = '<div class="top-tip animated shake" style="background-color: #fd4c5b;">' + opt.content + '</div>';
+                }
+                $(document.body).append(tipHtml);
+                setTimeout(function() {
+                    $(".top-tip").remove();
+                }, 20000);
+            },
+            // page分页
+            page: function (args) {
+                var opt = defaults(args);
+                var pageId = opt.id;
+                // 获取总页数
+                var pageCount = opt.pageCount;
+                if (pageCount == null) {
+                    return false;
+                }
+                // 获取默认选中页
+                var currentPage = opt.currentPage;
+                if (currentPage < 1 || currentPage > pageCount) {
+                    currentPage = 1;
+                }
+                // 获取显示位置
+                var position = opt.position;
+                $("#" + pageId).parent().css("margin", "16px 0");
+                if (position == "left") {
+                    $("#" + pageId).parent().css("text-align", "left");
+                } else if (position == "center") {
+                    $("#" + pageId).parent().css("text-align", "center");
+                } else if (position == "right") {
+                    $("#" + pageId).parent().css("text-align", "right");
+                }
+
+                // 判断总页数数量
+                if (pageCount <= 1) {
+                    $("#" + pageId).append('');
+                    return;
+                } else if (pageCount < 7) {
+                    var html = '<li><a aria-label="Previous">首页</a></li><li><a>上一页</a></li>';
+                    for (var i = 1; i <= pageCount; i++) {
+                        if (i == currentPage) {
+                            html += '<li class="active" page="' + i + '"><a>' + i + '</a></li>';
+                        } else {
+                            html += '<li page="' + i + '"><a>' + i + '</a></li>';
+                        }
+                    }
+                    html += '<li><a>下一页</a></li><li><a aria-label="Next">尾页</a></li>';
+                    $("#" + pageId).append(html);
+                    init(pageId);
+                } else {
+                    newPages(pageId, "jump", currentPage);
+                }
+
+                /**
+                 * 初始化
+                 */
+                function init(pageId) {
+                    // 监听点击分页事件
+                    $("#" + pageId).children("li").click(function () {
+                        // 当前点击对象（点击非数字时，需要改变）
+                        var element = $(this);
+                        // 当前点击的是第几页
+                        var pageText = $(this).children("a").text();
+                        // 当前页
+                        var currentPage = "";
+                        // 上一页
+                        var lastPage = $("#" + pageId).children("li.active").attr("page");
+                        // 判断点击的是数字页还是上一页、下一页之类的
+                        if (isNaN(pageText)) {
+                            switch (pageText) {
+                                case "首页":
+                                    if (lastPage == "1") {
+                                        return;
+                                    }
+                                    if (pageCount > 6) {
+                                        newPages(pageId, "首页", 1);
+                                    }
+                                    element = $("#" + pageId).children("li[page=1]");
+                                    break;
+                                case "上一页":
+                                    if (lastPage == "1") {
+                                        return;
+                                    }
+                                    if (lastPage >= (pageCount - 1) || lastPage <= 3 || pageCount < 7) {
+                                        element = $("#" + pageId).children("li.active").prev();
+                                    } else {
+                                        newPages(pageId, "prev", (parseInt(lastPage) - 1));
+                                        element = $("#" + pageId).children("li.active");
+                                    }
+                                    break;
+                                case "下一页":
+                                    if (lastPage == pageCount) {
+                                        return;
+                                    }
+                                    if (lastPage >= (pageCount - 2) || lastPage < 3 || pageCount < 7) {
+                                        element = $("#" + pageId).children("li.active").next();
+                                    } else {
+                                        newPages(pageId, "next", (parseInt(lastPage) + 1));
+                                        element = $("#" + pageId).children("li.active");
+                                    }
+                                    break;
+                                case "尾页":
+                                    if (lastPage == pageCount) {
+                                        return;
+                                    }
+                                    if (pageCount > 6) {
+                                        newPages(pageId, "尾页", pageCount);
+                                    }
+                                    element = $("#" + pageId).children("li[page=" + pageCount + "]");
+                                    break;
+                                case "...":
+                                    return;
+                            }
+                        } else {
+                            if (pageCount > 6) {
+                                if (pageText <= 3 || pageText >= (pageCount - 3)) {
+                                    newPages(pageId, "jump", pageText);
+                                }
+                            }
+                        }
+
+                        currentPage = activePage(pageId, element);
+                        if (currentPage != "" && currentPage != lastPage) {
+                            opt.callback(currentPage);
+                        }
+                    });
+                }
+
+                /**
+                 * 激活页
+                 */
+                function activePage(pageId, element) {
+                    element.addClass("active").siblings().removeClass("active");
+                    return $("#" + pageId).children("li.active").text();
+                }
+
+                function newPages(pageId, type, i) {
+                    var htmlLeft = "";
+                    var htmlRight = "";
+                    var htmlC = "";
+                    var HL = '<li><a>...</a></li>';
+                    var html = '<li><a aria-label="Previous">首页</a></li><li><a>上一页</a></li>';
+                    for (var n = 0; n < 3; n++) {
+                        htmlC += '<li ' + ((n - 1) == 0 ? 'class="active"' : '') + ' page="' + (i + n - 1) + '"><a>' + (i + n - 1) + '</a></li>';
+                        htmlLeft += '<li ' + ((n + 2) == i ? 'class="active"' : '') + ' page="' + (n + 2) + '"><a>' + (n + 2) + '</a></li>';
+                        htmlRight += '<li ' + ((pageCount + n - 3) == i ? 'class="active"' : '') + ' page="' + (pageCount + n - 3) + '"><a>' + (pageCount + n - 3) + '</a></li>';
+                    }
+
+                    switch (type) {
+                        case "next":
+                            if (i <= 4) {
+                                html += '<li page="1"><a>1</a></li>' + htmlLeft + HL + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                            } else if (i >= (pageCount - 3)) {
+                                html += '<li page="1"><a>1</a></li>' + HL + htmlRight + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                            } else {
+                                html += '<li page="1"><a>1</a></li>' + HL + htmlC + HL + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                            }
+                            break;
+                        case "prev":
+                            if (i <= 4) {
+                                html += '<li page="1"><a>1</a></li>' + htmlLeft + HL + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                            } else if (i >= (pageCount - 3)) {
+                                html += '<li page="1"><a>1</a></li>' + HL + htmlRight + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                            } else {
+                                html += '<li page="1"><a>1</a></li>' + HL + htmlC + HL + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                            }
+                            break;
+                        case "首页":
+                            html += '<li class="active" page="1"><a>1</a></li>' + htmlLeft + HL + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                            break;
+                        case "尾页":
+                            html += '<li page="1"><a>1</a></li>' + HL + htmlRight + '<li class="active" page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                            break;
+                        case "jump":
+                            if (i <= 4) {
+                                if (i == 1) {
+                                    html += '<li class="active" page="1"><a>1</a></li>' + htmlLeft + HL + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                                } else {
+                                    html += '<li page="1"><a>1</a></li>' + htmlLeft + HL + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                                }
+                            } else if ((i >= pageCount - 3) && (pageCount >= 7)) {
+                                if (i == pageCount) {
+                                    html += '<li page="1"><a>1</a></li>' + HL + htmlRight + '<li class="active" page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                                } else {
+                                    html += '<li page="1"><a>1</a></li>' + HL + htmlRight + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                                }
+                            } else {
+                                html += '<li page="1"><a>1</a></li>' + HL + htmlC + HL + '<li page="' + pageCount + '"><a>' + pageCount + '</a></li>';
+                            }
+                    }
+                    html += '<li><a>下一页</a></li><li><a aria-label="Next">尾页</a></li>';
+                    if (pageCount > 5 || pageCount < 3) {
+                        $("#" + pageId).empty();
+                        $("#" + pageId).append(html);
+                        init(pageId);
+                    }
+                }
+            }
+
+        };
+        return info;
+    };
+    window.helper = helper();
+})();
 
     function scrollx(p) {
         var d = document, dd = d.documentElement, db = d.body, w = window, o = d.getElementById(p.id), ie6 = /msie 6/i.test(navigator.userAgent), style, timer;

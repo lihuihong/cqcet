@@ -20,6 +20,15 @@
         <result column="professional_id" property="professionalId"/>
     </resultMap>
 
+    <!--查询全部用户-->
+    <select id="listArticle" resultMap="User">
+        SELECT
+            *
+        FROM
+        user
+        ORDER BY
+            register_time
+    </select>
     <!-- 校验用户 -->
     <select id="checkUser" resultMap="User">
         SELECT *

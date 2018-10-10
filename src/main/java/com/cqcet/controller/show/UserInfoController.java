@@ -1,7 +1,5 @@
 package com.cqcet.controller.show;
 
-import com.cqcet.entity.Article;
-import com.cqcet.entity.Result;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;

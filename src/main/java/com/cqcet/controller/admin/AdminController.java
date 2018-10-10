@@ -1,9 +1,9 @@
 package com.cqcet.controller.admin;
 
 import com.cqcet.entity.Article;
+import com.cqcet.entity.College;
 import com.cqcet.entity.Result;
-import com.cqcet.services.ArticleService;
-import com.cqcet.services.TypeService;
+import com.cqcet.services.*;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import com.google.gson.Gson;
@@ -45,6 +45,13 @@ public class AdminController {
 
     @Autowired
     private TypeService typeService;
+
+    @Autowired
+    private CollegeService collegeService;
+
+    @Autowired
+    private UserService userService;
+
 
     /**
      * 查询所有帖子
@@ -185,8 +192,11 @@ public class AdminController {
             Article article = articleService.selectById(id);
             map.put("article", article);
         }
+        List<College> collegeList = collegeService.list();
         // 查询所有文章分类
         map.put("typeList", typeService.list());
+        map.put("collegeList", collegeList);
+        map.put("user",userService.list_article());
         return "admin/edit";
     }
 

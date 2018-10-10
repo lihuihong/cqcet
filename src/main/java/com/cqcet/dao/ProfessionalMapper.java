@@ -59,4 +59,10 @@ public interface ProfessionalMapper {
     //根据专业id查询学院id
     int selectByProfessionalId(String professionalId);
 
+    /**
+     * 专业名称查询专业id
+     * @param professional
+     * @return
+     */
+    int idByName(String professional);
 }
