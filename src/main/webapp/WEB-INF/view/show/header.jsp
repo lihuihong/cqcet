@@ -101,7 +101,7 @@
                 <c:choose>
                     <c:when test="${sessionScope.get(\"userInfo\") != null}">
                         <div class="user" id="oklogin">
-                            <a href="/show/user/user.action">
+                            <a href="<%=request.getContextPath()%>/show/user/dashboard.action">
                                 <img src="${pageContext.request.contextPath}/resources/show/img/headimg1.png" />
                                 <span>zcq</span>
                             </a>
@@ -122,7 +122,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-4 col-md-4">
-                <form class="form-horizontal" id="form">
+                <form class="login-form" id="form">
                     <span class="close-login"><a href="javascript:void(0);">关闭</a></span>
                     <span class="heading">用户登录</span>
                     <div class="form-group">
@@ -134,7 +134,7 @@
                         <i class="fa fa-lock"></i>
                         <a href="#" class="fa fa-question-circle"></a>
                     </div>
-                    <div class="form-group" style="margin-top:40px;">
+                    <div class="form-group" style="margin-top:40px;height: 30px;">
                         <button type="button" class="btn btn-default" style="float:left;background-color: #C5C4C4;"
                                 id="go-register">前往注册
                         </button>
@@ -149,7 +149,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-4 col-md-4">
-                <form class="form-horizontal" id="reg">
+                <form class="login-form" id="reg">
                     <span class="close-register"><a href="javascript:void(0);">关闭</a></span>
                     <span class="heading">用户注册</span>
                     <div class="form-group">
@@ -175,7 +175,7 @@
                         <i class="fa fa-lock"></i>
                         <a href="#" class="fa fa-question-circle"></a>
                     </div>
-                    <div class="form-group" style="margin-top:40px;">
+                    <div class="form-group" style="margin-top:40px;height: 30px;">
                         <button type="submit" class="btn btn-default" style="float:left;" id="reg-button-submit">注册
                         </button>
                         <button type="button" class="btn btn-default" style="background-color: #C5C4C4;" id="go-login">

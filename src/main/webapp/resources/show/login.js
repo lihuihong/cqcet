@@ -66,12 +66,15 @@ $(function () {
                             alert(rtn.message);
                             /*delCookie("userToken");
                              setCookie("userToken", info.userToken);*/
+                            window.location.href=window.location.href;
                             setTimeout(function () {
                                 $('.login').hide();
                                 $('.login-bg').hide();
                                 $('.list-input').val('');
                                 // 跳转到首页
-                                //window.location.href = "${pageContext.request.contextPath}/";
+
+                                //location=location;
+                                //window.location.href = window.location.href;
                             }, 2000);
                         } else {
                             alert(rtn.message);

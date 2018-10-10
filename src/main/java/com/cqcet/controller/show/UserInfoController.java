@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * Created by 论坛 on 2018/9/11.
  * 帖子
@@ -32,10 +34,27 @@ public class UserInfoController {
      * @return
      */
     @RequestMapping("/user.action")
-    public String index(ModelMap map,@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                        @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
+    public String user(ModelMap map,@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+        @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
 
         return "show/user";
+    }
+
+    @RequestMapping("/dashboard.action")
+    public String index(){
+        return "show/dashboard";
+    }
+
+    /**
+     *退出登录
+     * @param session
+     * @return
+     */
+    @RequestMapping("/login_out.action")
+    public String loginOut(HttpSession session) {
+        //销毁session
+        session.invalidate();
+        return "show/index";
     }
 
 

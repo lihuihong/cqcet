@@ -33,7 +33,7 @@
                     </div>
                     <hr />
                     <ul id="main-nav" class="nav nav-tabs nav-stacked">
-                        <li>
+                        <li class="active">
                             <a href="<%=request.getContextPath()%>/show/user/dashboard.action">
                                 <i class="icon-home"></i>
                                 总览
@@ -52,20 +52,20 @@
                             </a>
                         </li>
                         <li>
-                            <a href="grid.html" >
+                            <a href="grid.html" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/grid.html">
                                 <i class="icon-th-large"></i>
                                 最新消息
                                 <span class="label label-warning pull-right">5</span>
                             </a>
                         </li>
-                        <li class="active">
-                            <a href="<%=request.getContextPath()%>/show/user/user.action">
+                        <li>
+                            <a href="user.jsp" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/account.html">
                                 <i class="icon-user"></i>
                                 个人信息
                             </a>
                         </li>
                         <li>
-                            <a href="<%=request.getContextPath()%>/show/user/login_out.action">
+                            <a href="/show/user/login_out.action">
                                 <i class="icon-lock"></i>
                                 退出登录
                             </a>
@@ -124,8 +124,8 @@
 
                                             <br />
                                             <div class="form-actions" style="padding-left: 140px;">
-                                                <button type="submit" class="btn btn-primary">保存</button>
-                                                <button class="btn">取消</button>
+                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                <button class="btn">Cancel</button>
                                             </div>
                                         </fieldset>
                                         </form>
@@ -134,14 +134,14 @@
                                         <form id="edit-profile2" class="form-horizontal" />
                                         <fieldset>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2" for="password1">原密码</label>
+                                                <label class="control-label col-sm-2" for="password1">密码</label>
                                                 <div class="col-sm-10">
                                                     <input type="password" class="input-medium" id="password0" value="" />
                                                 </div>
                                             </div>
                                             <div clas
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2" for="password1">新密码</label>
+                                                <label class="control-label col-sm-2" for="password1">密码</label>
                                                 <div class="col-sm-10">
                                                     <input type="password" class="input-medium" id="password1" value="" />
                                                 </div>
@@ -154,7 +154,7 @@
                                             </div>
                                             <br />
                                             <div class="form-actions" style="padding-left: 140px;">
-                                                <button type="submit" class="btn btn-primary">保存</button> <button class="btn">取消</button>
+                                                <button type="submit" class="btn btn-primary">Save</button> <button class="btn">Cancel</button>
                                             </div>
                                         </fieldset>
                                         </form>
