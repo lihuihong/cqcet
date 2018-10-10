@@ -10,7 +10,7 @@
 <head>
 </head>
 <body>
-    <div class="content2 shadow-bg" id="footer">
+    <div class="content2 shadow-bg" id="footer" style="margin-top: 80px">
         <nav>
             <a href="about.html">关于我们</a><i>|</i>
             <a href="about.html">联系我们</a><i>|</i>
@@ -23,7 +23,7 @@
 
     <script>
         $(window).scroll(function () {
-            if ($(document).scrollTop() > 80) {$(".navbar").addClass("top-nav");
+            if ($(document).scrollTop() > 150) {$(".navbar").addClass("top-nav");
             }else {$(".navbar").removeClass("top-nav");}
         })
 
@@ -31,11 +31,11 @@
         //右侧固定
         //scrollx({id:'float_right', r:0, t:200, f:1});
         //左侧固定
-        scrollx({id:'float_left', f:1});
+        //scrollx({id:'float_left', f:1});
         //相对父级相定固定
         //scrollx({id:'float_father', l:300, t:200, f:1});
         //页面滚动同时滚动固定对像
-        scrollx({id:'float_right', l:0, t:0, f:0});
+        //scrollx({id:'float_right', l:0, t:0, f:0});
         /*
         scrollx参数说明
 
