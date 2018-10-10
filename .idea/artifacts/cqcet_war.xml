@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="cqcet:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="cqcet-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="cqcet:war exploded" />
+    </root>
+  </artifact>
+</component>
