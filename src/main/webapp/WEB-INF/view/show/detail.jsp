@@ -27,7 +27,7 @@
                         <img class="answer-img" src="${article.avatar}" />
                         <div class="answer-bod">
                             <a href="#" class="btn btn-info btn-sm">
-                                点 击 发 贴
+                                查 看 更 多
                             </a>
                         </div>
                     </div>

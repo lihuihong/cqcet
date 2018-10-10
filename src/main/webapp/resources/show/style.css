@@ -729,4 +729,12 @@ a:hover{
 	width: 150px;
 	padding: 5px;
 }
+.fb-sub {
+	background: #5dd2f7;
+	box-shadow: 2px 4px 16px 5px rgba(7, 17, 27, 0.13);
+	margin: 0 auto;
+}
+.fb-sub a {
+	color: #fff;
+}
 

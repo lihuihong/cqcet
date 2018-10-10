@@ -109,6 +109,25 @@ public class ForumController {
         return "show/app";
     }
 
+
+    /**
+     * 发布帖子
+     *
+     * @param map
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping("/posted.action")
+    public String posted(ModelMap map,
+                         @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                         @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
+
+        return "show/posted";
+    }
+
+
+
     /**
      * 帖子保存
      *

@@ -99,7 +99,7 @@
                     <div class="answer-item">
                         <img class="answer-img" src="${pageContext.request.contextPath}/resources/show/img/headimg1.png" />
                         <div class="answer-bod">
-                            <a href="#" class="btn btn-info btn-sm">
+                            <a href="<%=request.getContextPath()%>/show/posted.action" class="btn btn-info btn-sm">
                                 点 击 发 贴
                             </a>
                         </div>
