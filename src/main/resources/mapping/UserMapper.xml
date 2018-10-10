@@ -31,12 +31,23 @@
     </select>
     <!-- 校验用户 -->
     <select id="checkUser" resultMap="User">
-        SELECT *
+        SELECT
+            u.id,
+            u.username,
+            u.password,
+            u.register_time,
+            u.last_login_time,
+            u.student_id,
+            u.level,
+            u.status,
+            ui.avatar
         FROM
-            user
+            user u,
+            user_info ui
         WHERE
             username = #{userName}
             AND password = #{passWord}
+            AND u.id = ui.user_id
     </select>
 
     <!--增加用户名和密码进行注册  -->

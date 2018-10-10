@@ -31,6 +31,7 @@ public class Linterceptor implements HandlerInterceptor {
         //获取请求的地址ַ
         String url = request.getRequestURI();
 
+
         //  对特殊地址，直接放行
         if (url.indexOf("show") > 0 || url.indexOf("resources") > 0) {
             return true;
@@ -43,6 +44,7 @@ public class Linterceptor implements HandlerInterceptor {
             //身份存在，放行
             return true;
         }
+
 
         //ִ 执行这里表示用户身份需要验证，跳转到登录界面
         request.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(request, response);

@@ -1,7 +1,4 @@
-/**
- * 作者：陈霓清
- * 官网：http://www.javaex.cn
- */
+
 $(function() {
 	// 改变元素的大小（放大、缩小）
 	$(":button, input, p, select, textarea, label").each(function() {

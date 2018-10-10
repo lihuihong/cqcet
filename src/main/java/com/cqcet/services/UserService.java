@@ -64,6 +64,9 @@ public class UserService {
 
         //将用户信息保存进session
         request.getSession().setAttribute("userInfo", user);
+        request.getSession().setAttribute("user", user.getId());
+        request.getSession().setAttribute("avatar", user.getAvatar());
+        request.getSession().setAttribute("username", user.getUsername());
 
         //对用户信息进行加密，用于cookie存储
         // 用户的登录名和密码

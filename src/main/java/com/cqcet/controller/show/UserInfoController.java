@@ -1,13 +1,17 @@
 package com.cqcet.controller.show;
 
+import com.cqcet.entity.Result;
+import com.cqcet.entity.User;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.TypeService;
+import com.cqcet.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,16 +20,14 @@ import javax.servlet.http.HttpSession;
  * 帖子
  */
 @Controller
-@RequestMapping(value = "/show/user",method={RequestMethod.GET})
+@RequestMapping(value = "/show/user")
 public class UserInfoController {
 
     @Autowired
-    private ArticleService articleService;
-    @Autowired
-    private TypeService typeService;
+    private UserService userService;
 
     /**
-     * 查询所有帖子
+     * 个人信息中心
      * @param map
      * @param pageNum
      * @param pageSize
@@ -39,7 +41,10 @@ public class UserInfoController {
     }
 
     @RequestMapping("/dashboard.action")
-    public String index(){
+    public String index(ModelMap map,@RequestParam(value = "userId") String userId){
+
+        User user = userService.selectById(userId);
+        map.put("user",user);
         return "show/dashboard";
     }
 
@@ -48,11 +53,12 @@ public class UserInfoController {
      * @param session
      * @return
      */
-    @RequestMapping("/login_out.action")
-    public String loginOut(HttpSession session) {
+    @RequestMapping(value = "/login_out.json",method={RequestMethod.POST})
+    @ResponseBody
+    public Result loginOut(HttpSession session) {
         //销毁session
         session.invalidate();
-        return "show/index";
+        return Result.success();
     }
 
 

@@ -20,11 +20,11 @@
                 <div class="col-md-3">
                     <div class="account-container">
                         <div class="account-avatar">
-                            <img src="<%=request.getContextPath()%>/resources/show/img/headimg1.png"  alt="" class="thumbnail" />
+                            <img src="${user.avatar}"  alt="" class="thumbnail" />
                         </div>
                         <div class="account-details">
-                            <span class="account-name">zcq1314</span>
-                            <span class="account-role">普通用户</span>
+                            <span class="account-name">${user.username}</span>
+                            <span class="account-role">${user.groupName}</span>
                             <span class="account-actions">
                                 <a href="javascript:;">Profile</a> |
                                 <a href="javascript:;">Edit Settings</a>
@@ -59,13 +59,13 @@
                             </a>
                         </li>
                         <li>
-                            <a href="user.jsp" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/account.html">
+                            <a href="#" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/account.html">
                                 <i class="icon-user"></i>
                                 个人信息
                             </a>
                         </li>
-                        <li>
-                            <a href="/show/user/login_out.action">
+                        <li >
+                            <a href="#" onclick="logout()">
                                 <i class="icon-lock"></i>
                                 退出登录
                             </a>
@@ -98,7 +98,7 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-2" for="username">用户名</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control input-medium" id="username" value="zcq1314" disabled="" />
+                                                    <input type="text" class="form-control input-medium" id="username" value="${user.username}" disabled="" />
                                                     <p class="help-block">这是您登录的名字，注册后无法更改！</p>
                                                 </div>
                                             </div>
@@ -111,7 +111,7 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm-2" for="lastname">学号</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="input-medium" id="lastname" value="" />
+                                                    <input type="text" class="input-medium" id="lastname" value="${user.studentId}" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -139,7 +139,6 @@
                                                     <input type="password" class="input-medium" id="password0" value="" />
                                                 </div>
                                             </div>
-                                            <div clas
                                             <div class="form-group">
                                                 <label class="control-label col-sm-2" for="password1">密码</label>
                                                 <div class="col-sm-10">
@@ -166,13 +165,26 @@
                 </div>
             </div>
         </div>
-            </div>
-
-        </div>
     </div>
-
-
-
     <jsp:include page="footer.jsp" flush="true" />
+
+<script>
+    // 退出登录
+    function logout() {
+        $.ajax({
+            url : "/show/user/login_out.json",
+            type : "POST",
+            dataType : "json",
+            async: false,
+            success : function(rtn) {
+                if (rtn.code=="000000") {
+                    delCookie("userToken");
+                    // 跳转到首页
+                    window.location.href = "${pageContext.request.contextPath}/";
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>

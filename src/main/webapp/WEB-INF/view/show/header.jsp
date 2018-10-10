@@ -6,7 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -14,13 +16,16 @@
     <link href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css" type="text/css"
           rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/resources/show/style.css" type="text/css" rel="stylesheet"/>
-    <link href="${pageContext.request.contextPath}/resources/show/font/font-awesome.css" type="text/css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/resources/show/font/font-awesome.css" type="text/css"
+          rel="stylesheet"/>
 </head>
 <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/jquery.min.js"></script>
 <!-- 包括所有已编译的插件 -->
 <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/show/scroll.js"></script>
+<script src="${pageContext.request.contextPath}/resources/javaex/pc/js/cookie.js"></script>
+
 </head>
 <body>
 <header id="header">
@@ -101,9 +106,9 @@
                 <c:choose>
                     <c:when test="${sessionScope.get(\"userInfo\") != null}">
                         <div class="user" id="oklogin">
-                            <a href="<%=request.getContextPath()%>/show/user/dashboard.action">
-                                <img src="${pageContext.request.contextPath}/resources/show/img/headimg1.png" />
-                                <span>zcq</span>
+                            <a href="<%=request.getContextPath()%>/show/user/dashboard.action?userId=<%=session.getAttribute("user")%>">
+                                <img src="<%=session.getAttribute("avatar")%>"/>
+                                <span><%=session.getAttribute("username")%></span>
                             </a>
                         </div>
                     </c:when>
@@ -193,6 +198,203 @@
     </div>
 </div>
 <div class="login-bg"></div>
+<script>
+    H_login = {};
+    H_login.openLogin = function () {
+        $('.loginbtn').click(function () {
+            $('.login').show();
+            $('.login-bg').show();
+        });
+        $('.registerbtn').click(function () {
+            $('.register').show();
+            $('.login-bg').show();
+        });
+        $('#go-register').click(function () {
+            $('.login').hide();
+            $('.register').show();
+            $('.login-bg').show();
+        });
+        $('#go-login').click(function () {
+            $('.register').hide();
+            $('.login').show();
+            $('.login-bg').show();
+        });
+    };
+    H_login.closeLogin = function () {
+        $('.close-login').click(function () {
+            $('.login').hide();
+            $('.login-bg').hide();
+        });
+        $('.close-register').click(function () {
+            $('.register').hide();
+            $('.login-bg').hide();
+        });
+
+    };
+    H_login.loginForm = function () {
+        $("#login-button-submit").on('click', function () {
+            helper.toast({
+                content: "登陆中...",
+                type: "success"
+            });
+            var username = $("#username");
+            var usernameValue = $("#username").val();
+            var password = $("#password");
+            var passwordValue = $("#password").val();
+            if (usernameValue == "") {
+                alert("用户名不能为空");
+                username.focus();
+                return false;
+            } else if (usernameValue.length > 15) {
+                alert("用户名长度不能大于15字符");
+                username.focus();
+                return false;
+            } else if (passwordValue == "") {
+                alert("密码不能为空");
+                password.focus();
+                return false;
+            } else if (passwordValue.length < 6 || passwordValue.length > 30) {
+                alert("密码长度不能小于6或大于30位字符");
+                password.focus();
+                return false;
+            } else {
+
+                $.ajax({
+                    url: "/show/index/login.json",
+                    type: "POST",
+                    dataType: "json",
+                    data: {username: usernameValue, password: passwordValue},
+                    success: function (rtn) {
+                        if (rtn.code == "000000") {
+                            var info = rtn.data.info;
+                            delCookie("userToken");
+                            setCookie("userToken", info.userToken);
+                            helper.toast({
+                                content: "登录成功，即将为您跳转到首页",
+                                type: "success"
+                            });
+
+                            window.location.href = "${pageContext.request.contextPath}/";
+
+                            setTimeout(function () {
+                                location.reload(true);
+                                // 跳转到首页
+                                $('.login').hide();
+                                $('.login-bg').hide();
+                                $('.list-input').val('');
+
+                            }, 2000);
+                        } else {
+                            helper.toast({
+                                content: rtn.message,
+                                type: "error"
+                            });
+                        }
+                    },
+
+                });
+
+            }
+        });
+        $("#reg-button-submit").on('click', function () {
+            helper.toast({
+                content: "注册中...",
+                type: "success"
+            });
+            var username = $("#reg-user");
+            var usernameValue = $("#reg-user").val();
+            var password = $("#reg-pwd");
+            var passwordValue = $("#reg-pwd").val();
+            var repassword = $("#reg-repwd");
+            var repasswordValue = $("#reg-repwd").val();
+            var student = $("#reg-num");
+            var studentValue = $("#reg-num").val();
+            var schoolValue = $("#reg-school").val();
+            var professional = $("#reg-professional");
+            var professionalValue = $("#reg-professional").val();
+
+            if (usernameValue == "") {
+                alert("用户名不能为空");
+                username.focus();
+                return false;
+            } else if (usernameValue.length > 15) {
+                alert("用户名长度不能大于15字符");
+                username.focus();
+                return false;
+            } else if (passwordValue == "") {
+                alert("密码不能为空");
+                password.focus();
+                return false;
+            } else if (passwordValue.length < 6 || passwordValue.length > 16) {
+                alert("密码长度不能小于6或大于16位字符");
+                password.focus();
+                return false;
+            } else if (passwordValue != repasswordValue) {
+                alert("两次密码不一致");
+                repassword.focus();
+                return false;
+            } else if (studentValue.length == 8) {
+                alert("学号必须是10位");
+                student.focus();
+                return false;
+            } else if (schoolValue == "") {
+                alert("学院不能为空");
+                student.focus();
+                return false;
+            } else if (professionalValue == "") {
+                alert("专业不能为空");
+                student.focus();
+                return false;
+            } else {
+
+                $.ajax({
+                    url: "/show/index/register.json",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        username: usernameValue,
+                        password: passwordValue,
+                        studentId: studentValue,
+                        college: schoolValue,
+                        professional: professionalValue
+                    },
+                    success: function (rtn) {
+                        if (rtn.code == "000000") {
+                            var info = rtn.data.info;
+                            helper.toast({
+                                content: "注册成功，即将为您跳转到首页",
+                                type: "success"
+                            });
+                            delCookie("userToken");
+                            setCookie("userToken", info.userToken);
+                            // 跳转到首页
+                            window.location.href = "${pageContext.request.contextPath}/";
+                            setTimeout(function () {
+                                $('.login').hide();
+                                $('.login-bg').hide();
+                                $('.list-input').val('');
+                            }, 2000);
+                        } else {
+                            helper.toast({
+                                content: rtn.message,
+                                type: "error"
+                            });
+                        }
+                    },
+
+                });
+            }
+
+        });
+    };
+    H_login.run = function () {
+        this.closeLogin();
+        this.openLogin();
+        this.loginForm();
+    };
+    H_login.run();
+
+</script>
 
 </body>
 </html>

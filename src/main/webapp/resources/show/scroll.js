@@ -20,7 +20,7 @@
                 confirmName : "确定",	// 确定按钮名称
                 cancelName : "取消",	// 取消按钮名称
                 callback : function() {return true;},	// 回调函数
-                live : 2000,		// 操作提示存在时间
+                live : 5000,		// 操作提示存在时间
                 selector : "",		// 图片数组选择器
 
 
@@ -48,6 +48,7 @@
                     $(".top-tip").remove();
                 }, opt.live);
             },
+
             // page分页
             page: function (args) {
                 var opt = defaults(args);
