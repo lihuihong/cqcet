@@ -115,7 +115,7 @@
                                 <hr/>
                                 <c:forEach items="${articleList}" begin="0" end="2" var="entity" varStatus="status" >
                                 <div class="ans-hot">
-                                    <p><a href="">${entity.title}</a></p>
+                                    <p><a href="${pageContext.request.contextPath}/show/detail.action?id=${entity.id}">${entity.title}</a></p>
                                     <p style="text-align:right;">更新时间 <a href="#" style="color:#ff82e4;"><fmt:formatDate value="${entity.updateTime}" pattern="yyyy/MM/dd" /></a></p>
                                 </div>
                                 </c:forEach>
@@ -138,14 +138,12 @@
                             <div class="answer-item">
                                 <h4>推荐帖子</h4>
                                 <hr/>
+                                <c:forEach items="${articleList}" begin="0" end="4" var="entity" varStatus="status" >
                                 <div class="ans-hot">
-                                    <p><a href="">开发工具怎么下载？</a></p>
-                                    <p style="text-align:right;">来自 <a href="#" style="color:#ff82e4;">前端</a></p>
+                                    <p><a href="${pageContext.request.contextPath}/show/detail.action?id=${entity.id}">${entity.title}</a></p>
+                                    <p style="text-align:right;">来自 <a href="#" style="color:#ff82e4;">${entity.username}</a></p>
                                 </div>
-                                <div class="ans-hot">
-                                    <p><a href="">购买了课程可以开发票么？</a></p>
-                                    <p style="text-align:right;">来自 <a href="" style="color: #fe6900;">后台</a></p>
-                                </div>
+                                </c:forEach>
                             </div>
 
                         </c:otherwise>

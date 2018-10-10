@@ -58,8 +58,8 @@
                         </div>
                         <input type="text" class="form-control">
                         <span class="input-group-btn">
-                                            <button class="btn btn-primary" type="button">搜 索</button>
-                                        </span>
+                            <button class="btn btn-primary" type="button">搜 索</button>
+                        </span>
                     </div>
 
                 </form>

@@ -22,7 +22,7 @@
     <div class="container content">
         <div class="row">
             <div class="col-md-3">
-                <div  id="float_left">
+                <div  id="float_left" style="width: 16%">
                     <div class="answer-item">
                         <img class="answer-img" src="${article.avatar}" />
                         <div class="answer-bod">
@@ -34,14 +34,12 @@
                     <div class="answer-item">
                         <h4>他的更多帖子</h4>
                         <hr/>
-                        <div class="ans-hot">
-                            <p><a href="">开发工具怎么下载？</a></p>
-                            <p style="text-align:right;">来自 <a href="#" style="color:#ff82e4;">前端</a></p>
-                        </div>
-                        <div class="ans-hot">
-                            <p><a href="">购买了课程可以开发票么？</a></p>
-                            <p style="text-align:right;">来自 <a href="" style="color: #fe6900;">后台</a></p>
-                        </div>
+                        <c:forEach items="${articleList}" begin="0" end="1" var="entity" varStatus="status" >
+                            <div class="ans-hot">
+                                <p><a href="${pageContext.request.contextPath}/show/detail.action?id=${entity.id}">${entity.title}</a></p>
+                                <p style="text-align:right;">更新时间 <a href="#" style="color:#ff82e4;"><fmt:formatDate value="${entity.updateTime}" pattern="yyyy/MM/dd" /></a></p>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
             </div>

@@ -64,17 +64,24 @@ public class ForumController {
                          @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
                          @RequestParam(value = "collegeId", defaultValue = "") String collegeId) {
 
+        List<Article> list;
+        //得到当前用户登录的id
         String userId = String.valueOf(request.getSession().getAttribute("user"));
         Map<String,Object> param = new HashMap<>();
-        if (!userId.equals("")){
+        if (userId.equals("")){
             User user = userService.selectById(userId);
             map.put("user",user);
             param.put("userId",userId);
-            List<Article> list = articleService.list(param);
+            param.put("status","0");
+            param.put("collegeId",collegeId);
+            list = articleService.list(param);
             map.put("userId",userId);
             map.put("articleList",list);
         }else {
-            map.put("userId",userId);
+            param.put("status","0");
+            param.put("collegeId",collegeId);
+            list = articleService.list(param);
+            map.put("articleList",list);
         }
         //学院信息
         College college = collegeService.listById(collegeId);
@@ -101,9 +108,13 @@ public class ForumController {
     public String type(ModelMap map, @RequestParam(value = "id", defaultValue = "") String id,
                        @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                        @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
-        //该学院下帖子信息
+        //该学院下帖子信息详情
         Article article = articleService.selectById(id);
+        Map<String,Object> param = new HashMap<>();
+        param.put("userId",article.getUserId());
+        param.put("status","0");
         map.put("article", article);
+        map.put("articleList",articleService.list(param));
         return "show/detail";
     }
 

@@ -21,8 +21,6 @@
         <div class="copyright"><p></p>Copyright © 2018-2020 www.heylhh.com All Rights Reserved.备案号： <a href="http://www.miitbeian.gov.cn/">渝ICP备18013192号</a></div>
     </div>
 
-
-    <script src="${pageContext.request.contextPath}/resources/show/login.js"></script>
     <script>
         $(window).scroll(function () {
             if ($(document).scrollTop() > 80) {$(".navbar").addClass("top-nav");

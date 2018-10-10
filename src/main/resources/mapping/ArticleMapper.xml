@@ -43,6 +43,7 @@
         <if test="typeId!=null and typeId!=''">AND ai.type_id=#{typeId}</if>
         <if test="keyWord!=null and keyWord!=''">AND ai.title LIKE #{keyWord}</if>
         <if test="userId!=null and userId!=''">AND ai.user_id = #{userId}</if>
+        <if test="collegeId!=null and collegeId!=''">AND ai.college_id = #{collegeId}</if>
         ORDER BY
         ai.update_time DESC
     </select>
