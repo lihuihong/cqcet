@@ -45,6 +45,13 @@ public class UserService {
     private CollegeMapper collegeMapper;
 
 
+    /**
+     * 用户登录
+     * @param request
+     * @return
+     * @throws LException
+     * @throws UnsupportedEncodingException
+     */
     public Map<String, Object> selectUser(HttpServletRequest request) throws LException, UnsupportedEncodingException {
 
         //获取登录参数

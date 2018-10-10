@@ -1,11 +1,9 @@
 package com.cqcet.controller.show;
 
-import com.cqcet.entity.Article;
-import com.cqcet.entity.College;
-import com.cqcet.entity.Forum;
-import com.cqcet.entity.Result;
+import com.cqcet.entity.*;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.CollegeService;
+import com.cqcet.services.UserService;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 论坛 on 2018/9/11.
@@ -30,6 +31,8 @@ public class ForumController {
     private ArticleService articleService;
     @Autowired
     private CollegeService collegeService;
+    @Autowired
+    private UserService userService;
 
 
     /**
@@ -57,11 +60,22 @@ public class ForumController {
      * @return
      */
     @RequestMapping(value = "/answer.action", method = {RequestMethod.GET})
-    public String answer(ModelMap map, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+    public String answer(ModelMap map, HttpServletRequest request, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                          @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
                          @RequestParam(value = "collegeId", defaultValue = "") String collegeId) {
 
-
+        String userId = String.valueOf(request.getSession().getAttribute("user"));
+        Map<String,Object> param = new HashMap<>();
+        if (!userId.equals("")){
+            User user = userService.selectById(userId);
+            map.put("user",user);
+            param.put("userId",userId);
+            List<Article> list = articleService.list(param);
+            map.put("userId",userId);
+            map.put("articleList",list);
+        }else {
+            map.put("userId",userId);
+        }
         //学院信息
         College college = collegeService.listById(collegeId);
         //pageHelper分页插件

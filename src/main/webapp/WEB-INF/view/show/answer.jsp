@@ -96,26 +96,61 @@
             </div>
             <div class="col-md-3">
                 <div id="float_right">
-                    <div class="answer-item">
-                        <img class="answer-img" src="${pageContext.request.contextPath}/resources/show/img/headimg1.png" />
-                        <div class="answer-bod">
-                            <a href="<%=request.getContextPath()%>/show/posted.action" class="btn btn-info btn-sm">
-                                点 击 发 贴
-                            </a>
-                        </div>
-                    </div>
-                    <div class="answer-item">
-                        <h4>我的帖子</h4>
-                        <hr/>
-                        <div class="ans-hot">
-                            <p><a href="">开发工具怎么下载？</a></p>
-                            <p style="text-align:right;">来自 <a href="#" style="color:#ff82e4;">前端</a></p>
-                        </div>
-                        <div class="ans-hot">
-                            <p><a href="">购买了课程可以开发票么？</a></p>
-                            <p style="text-align:right;">来自 <a href="" style="color: #fe6900;">后台</a></p>
-                        </div>
-                    </div>
+                    <c:choose>
+                        <c:when test="${sessionScope.get(\"user\") != null}">
+                            <div class="answer-item">
+                                <img class="answer-img" src="${user.avatar}" />
+                                <div style="margin-left: 50%">
+                                    <h3 style="color: #269abc">${user.username}</h3>
+                                    <p class="dark-p">${user.groupName}</p><br>
+                                </div>
+                                <div class="answer-bod">
+                                    <a href="<%=request.getContextPath()%>/show/posted.action" class="btn btn-info btn-sm">
+                                        点 击 发 贴
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="answer-item">
+                                <h4>我的帖子</h4>
+                                <hr/>
+                                <c:forEach items="${articleList}" begin="0" end="2" var="entity" varStatus="status" >
+                                <div class="ans-hot">
+                                    <p><a href="">${entity.title}</a></p>
+                                    <p style="text-align:right;">更新时间 <a href="#" style="color:#ff82e4;"><fmt:formatDate value="${entity.updateTime}" pattern="yyyy/MM/dd" /></a></p>
+                                </div>
+                                </c:forEach>
+
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="answer-item">
+                                <img class="answer-img" src="/resources/show/img/unll.jpg" />
+                                <div style="margin-left: 50%">
+                                    <h3 style="color: #269abc"></h3>
+                                    <p class="dark-p"></p><br>
+                                </div>
+                                <div class="answer-bod">
+                                    <a href="<%=request.getContextPath()%>/show/posted.action" class="btn btn-info btn-sm">
+                                        请 登 陆
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="answer-item">
+                                <h4>推荐帖子</h4>
+                                <hr/>
+                                <div class="ans-hot">
+                                    <p><a href="">开发工具怎么下载？</a></p>
+                                    <p style="text-align:right;">来自 <a href="#" style="color:#ff82e4;">前端</a></p>
+                                </div>
+                                <div class="ans-hot">
+                                    <p><a href="">购买了课程可以开发票么？</a></p>
+                                    <p style="text-align:right;">来自 <a href="" style="color: #fe6900;">后台</a></p>
+                                </div>
+                            </div>
+
+                        </c:otherwise>
+                    </c:choose>
+
                 </div>
             </div>
         </div>
@@ -141,7 +176,6 @@
             if (pageNum==undefined) {
                 pageNum = 1;
             }
-
             window.location.href = "/show/answer.action"
                 + "?pageNum="+pageNum
                 + "&collegeId="+collegeId
