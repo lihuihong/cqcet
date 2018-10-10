@@ -6,6 +6,24 @@
                 id : "",	// 元素id
                 type : "",	// 组件类型
                 url : "",	// 请求地址
+
+                // 弹出层属性
+                mask : true,			// 是否使用遮罩
+                width : 350,			// 弹出层宽度，单位px
+                height : "",			// 弹出层高度
+                top : "30%",			// 距离顶部距离，支持 200px 这种写法
+                title : "温馨提示",		// 弹出层标题
+                closeIcon : true,		// 是否显示右上角关闭 X
+                content : "",			// 弹出层内容
+                textAlign : "left",		// 内容位置：left；center；right
+                tip : "删除后不可恢复，请慎重操作",	// 提示
+                confirmName : "确定",	// 确定按钮名称
+                cancelName : "取消",	// 取消按钮名称
+                callback : function() {return true;},	// 回调函数
+                live : 2000,		// 操作提示存在时间
+                selector : "",		// 图片数组选择器
+
+
                 // 分页属性
                 pageCount: null,	// 总页数
                 currentPage: 1,	// 默认选中第几页
@@ -28,7 +46,7 @@
                 $(document.body).append(tipHtml);
                 setTimeout(function() {
                     $(".top-tip").remove();
-                }, 20000);
+                }, opt.live);
             },
             // page分页
             page: function (args) {

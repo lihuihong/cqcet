@@ -58,13 +58,12 @@ public class ForumController {
      */
     @RequestMapping(value = "/answer.action", method = {RequestMethod.GET})
     public String answer(ModelMap map, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                         @RequestParam(value = "pageSize", defaultValue = "3") int pageSize,
+                         @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
                          @RequestParam(value = "collegeId", defaultValue = "") String collegeId) {
 
 
         //学院信息
         College college = collegeService.listById(collegeId);
-
         //pageHelper分页插件
         //在查询之前调用，传入当前页码，以及每一页显示多少条数据
         PageMethod.startPage(pageNum,pageSize);

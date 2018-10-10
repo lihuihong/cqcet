@@ -69,7 +69,6 @@ $(function () {
                                 content : "登录成功，即将为您跳转到首页",
                                 type : "success"
                             });
-                            alert("axaxaxaxaxaxaxaxaxaxaxaxax");
                             setTimeout(function () {
                                 $('.login').hide();
                                 $('.login-bg').hide();
