@@ -2,6 +2,7 @@ package com.cqcet.controller.show;
 
 import com.cqcet.entity.Result;
 import com.cqcet.entity.User;
+import com.cqcet.exception.LException;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.TypeService;
 import com.cqcet.services.UserService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -36,16 +38,34 @@ public class UserInfoController {
     @RequestMapping("/user.action")
     public String user(ModelMap map,@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
         @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
-
         return "show/user";
     }
 
+    //修改信息
     @RequestMapping("/dashboard.action")
     public String index(ModelMap map,@RequestParam(value = "userId") String userId){
-
         User user = userService.selectById(userId);
         map.put("user",user);
         return "show/dashboard";
+    }
+
+    /**
+     * 保存修改密码
+     * @param oldPassword
+     * @param newPassword1
+     * @param newPassword2
+     * @return
+     * @throws LException
+     */
+    @RequestMapping(value = "/save_password.json",method={RequestMethod.POST})
+    @ResponseBody
+    public Result save(HttpServletRequest request,
+                       @RequestParam(value="oldPassword") String oldPassword,
+                       @RequestParam(value="newPassword1") String newPassword1,
+                       @RequestParam(value="newPassword2") String newPassword2) throws LException{
+        userService.updateNewPassword(request,oldPassword.trim(),newPassword1.trim(),newPassword2.trim());
+
+        return Result.success();
     }
 
     /**
