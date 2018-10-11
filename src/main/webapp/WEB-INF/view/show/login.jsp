@@ -185,7 +185,7 @@
             var schoolValue = $("#reg-school").val();
             var professional = $("#reg-professional");
             var professionalValue = $("#reg-professional").val();
- 
+
             if (usernameValue == "") {
                 alert("用户名不能为空");
                 username.focus();

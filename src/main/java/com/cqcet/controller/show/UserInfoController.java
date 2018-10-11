@@ -2,7 +2,6 @@ package com.cqcet.controller.show;
 
 import com.cqcet.entity.Result;
 import com.cqcet.entity.User;
-import com.cqcet.exception.LException;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.TypeService;
 import com.cqcet.services.UserService;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**

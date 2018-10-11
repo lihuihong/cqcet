@@ -77,12 +77,6 @@
     </div>
 
   </div>
-  <script>
-      $(window).scroll(function () {
-          if ($(document).scrollTop() > 80) {$(".navbar").addClass("top-nav");
-          }else {$(".navbar").removeClass("top-nav");}
-      })
-  </script>
   <jsp:include page="footer.jsp" flush="true" />
   </body>
 </html>
