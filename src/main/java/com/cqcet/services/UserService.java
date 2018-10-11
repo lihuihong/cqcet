@@ -345,4 +345,35 @@ public class UserService {
         return info;
 
     }
+
+    /**
+     * 用户修改密码
+     * @param oldPassword
+     * @param newPassword1
+     * @param newPassword2
+     */
+    public void updateNewPassword(HttpServletRequest request,String oldPassword, String newPassword1, String newPassword2) throws LException {
+        //得到当前用户登录的id
+        String userId = String.valueOf(request.getSession().getAttribute("user"));
+        //根据旧密码，判断查询用户
+        String pass = MD5.md5(oldPassword);
+        User user = userMapper.selectByPassword(MD5.md5(oldPassword),userId);
+        if (user == null){
+            throw new LException("旧密码错误");
+        }
+        //校验新密码
+        newPassword1 = newPassword1.replaceAll("\\s*", "");
+        if (newPassword1.length()<6 || newPassword1.length()>16) {
+            throw new LException("密码长度应为6到16个字符");
+        }
+        //校验新密码两次输入是否一致
+        if (!newPassword1.equals(newPassword2)) {
+            throw new LException("两次新密码不一致");
+        }
+        //更新新密码
+        user.setPassword(MD5.md5(newPassword1));
+        user.setId(userId);
+        userMapper.update(user);
+
+    }
 }
