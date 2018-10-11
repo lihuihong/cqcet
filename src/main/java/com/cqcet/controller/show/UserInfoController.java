@@ -56,7 +56,7 @@ public class UserInfoController {
      */
     @RequestMapping("/postCenter.action")
     public String postCenter() {
- 
+    
         return "show/postCenter";
     }
 
