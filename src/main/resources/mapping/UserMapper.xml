@@ -175,7 +175,8 @@
             ui.avatar,
             ug.name AS group_name,
             ug.id   AS grade_id,
-            pi.id   AS professional_id
+            pi.id   AS professional_id,
+            pi.name   AS professionalName
         FROM
             user u,
             user_info ui,
@@ -198,5 +199,16 @@
             #{item}
         </foreach>
     </update>
+
+    <!-- 根据旧密码，判断查询用户 -->
+    <select id="selectByPassword" resultMap="User">
+        SELECT
+        *
+        FROM
+        user
+        WHERE
+        password = #{password}
+        AND id = #{id}
+    </select>
 
 </mapper>

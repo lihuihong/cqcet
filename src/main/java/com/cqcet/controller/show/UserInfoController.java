@@ -2,6 +2,7 @@ package com.cqcet.controller.show;
 
 import com.cqcet.entity.Result;
 import com.cqcet.entity.User;
+import com.cqcet.exception.LException;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.TypeService;
 import com.cqcet.services.UserService;
@@ -63,7 +64,7 @@ public class UserInfoController {
     public Result save(HttpServletRequest request,
                        @RequestParam(value="oldPassword") String oldPassword,
                        @RequestParam(value="newPassword1") String newPassword1,
-                       @RequestParam(value="newPassword2") String newPassword2) throws LException{
+                       @RequestParam(value="newPassword2") String newPassword2) throws LException {
         userService.updateNewPassword(request,oldPassword.trim(),newPassword1.trim(),newPassword2.trim());
 
         return Result.success();

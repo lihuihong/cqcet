@@ -96,37 +96,36 @@
                                         <form id="edit-profile" class="form-horizontal" />
                                         <fieldset>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2" for="username">用户名</label>
+                                                <label class="control-label col-sm-2">用户名</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control input-medium" id="username" value="${user.username}" disabled="" />
+                                                    <input type="text" class="form-control input-medium" name="username" value="${user.username}" disabled="" />
                                                     <p class="help-block">这是您登录的名字，注册后无法更改！</p>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2" for="firstname">用户昵称</label>
+                                                <label class="control-label col-sm-2" >所属专业</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="input-medium" id="firstname" value="八月君" />
+                                                    <input type="text" class="input-medium" name="professionalId" value="${user.professionalName}" disabled=""/>
+                                                    <p class="help-block">这是您的专业，不可修改！</p>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2" for="lastname">学号</label>
+                                                <label class="control-label col-sm-2" >学号</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="input-medium" id="lastname" value="${user.studentId}" />
+                                                    <input type="text" class="input-medium" name="studentId" value="${user.studentId}" disabled=""/>
+                                                    <p class="help-block">这是您的学号，不可修改！</p>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2" for="email">邮箱地址</label>
+                                                <label class="control-label col-sm-2" >用户等级</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="input-large input-medium" id="email" value="test@example.com" />
+                                                    <input type="text" class="input-large input-medium" name="groupnaame" value="${user.groupName}" disabled=""/>
+                                                    <p class="help-block">这是您的用户等级，不可修改！</p>
                                                 </div>
                                             </div>
                                             <br /><br />
 
                                             <br />
-                                            <div class="form-actions" style="padding-left: 140px;">
-                                                <button type="submit" class="btn btn-primary">Save</button>
-                                                <button class="btn">Cancel</button>
-                                            </div>
                                         </fieldset>
                                         </form>
                                     </div>
@@ -134,26 +133,26 @@
                                         <form id="edit-profile2" class="form-horizontal" />
                                         <fieldset>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2" for="password1">密码</label>
+                                                <label class="control-label col-sm-2" >旧密码</label>
                                                 <div class="col-sm-10">
-                                                    <input type="password" class="input-medium" id="password0" value="" />
+                                                    <input type="password" class="input-medium" name="oldPassword" value="" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2" for="password1">密码</label>
+                                                <label class="control-label col-sm-2" >新密码</label>
                                                 <div class="col-sm-10">
-                                                    <input type="password" class="input-medium" id="password1" value="" />
+                                                    <input type="password" class="input-medium" name="newPassword1" value="" />
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2" for="password2">确认密码</label>
+                                                <label class="control-label col-sm-2" >确认新密码</label>
                                                 <div class="col-sm-10">
-                                                    <input type="password" class="input-medium" id="password2" value="" />
+                                                    <input type="password" class="input-medium" name="newPassword2" value="" />
                                                 </div>
                                             </div>
                                             <br />
                                             <div class="form-actions" style="padding-left: 140px;">
-                                                <button type="submit" class="btn btn-primary">Save</button> <button class="btn">Cancel</button>
+                                                <button type="button" class="btn btn-primary" onclick="save()">保存</button> <button class="btn">取消</button>
                                             </div>
                                         </fieldset>
                                         </form>
@@ -169,6 +168,33 @@
     <jsp:include page="footer.jsp" flush="true" />
 
 <script>
+
+    //保存信息
+    function save() {
+        $.ajax({
+            url : "/show/user/save_password.json",
+            type : "POST",
+            dataType : "json",
+            data : $("#edit-profile2").serialize(),
+            success : function(rtn) {
+                if (rtn.code=="000000") {
+                    helper.toast({
+                        content : "修改密码成功",
+                        type : "success"
+                    });
+                    // 返回当前页面
+                    window.location.href = "${refererUrl}";
+                    return false;
+                } else {
+                    helper.toast({
+                        content : rtn.message,
+                        type : "error"
+                    });
+                }
+            }
+        });
+    }
+
     // 退出登录
     function logout() {
         $.ajax({

@@ -82,4 +82,11 @@ public interface UserMapper {
      * @param param
      */
     void batchUpdate(Map<String, Object> param);
+
+    /**
+     * 根据旧密码，判断查询用户
+     * @param password
+     * @return
+     */
+    User selectByPassword(@Param("password") String password, @Param("id")String id);
 }
