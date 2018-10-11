@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -29,14 +30,15 @@ public class UserInfoController {
     /**
      * 个人信息中心
      * @param map
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @RequestMapping("/user.action")
-    public String user(ModelMap map,@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-        @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
+    public String user(ModelMap map, HttpServletRequest request) {
 
+        //得到当前用户登录的id
+        String userId = String.valueOf(request.getSession().getAttribute("user"));
+        User user = userService.selectById(userId);
+        map.put("user",user);
         return "show/user";
     }
 
@@ -46,6 +48,16 @@ public class UserInfoController {
         User user = userService.selectById(userId);
         map.put("user",user);
         return "show/dashboard";
+    }
+
+    /**
+     * 帖子中心
+     * @return
+     */
+    @RequestMapping("/postCenter.action")
+    public String postCenter() {
+
+        return "show/postCenter";
     }
 
     /**

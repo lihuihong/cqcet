@@ -430,7 +430,7 @@ a:hover{
 	padding: 10px 0;
 }
 .shadow-bg {
-	box-shadow: 0 1px 7px 1px rgba(0,0,0,0.18);
+	border: #EEEEEE 1px solid;
 	background-color: #ffffff;
 }
 .account-container {
@@ -748,4 +748,38 @@ a:hover{
 .fb-sub a {
 	color: #fff;
 }
+.news-content {
+	border-radius: 10px;
+	height: 98px;
+	transition: all 0.5s;
+	margin-bottom: 20px;
+}
+.news-content:hover {
+	box-shadow: 0 1px 7px 1px rgba(0,0,0,0.18);
+	margin-right: 20px;
+}
 
+.news-content img{
+	width: 74px;
+	height: 74px;
+	border-radius: 4px;
+	margin: 12px 16px 12px 12px;
+	float:left;
+}
+.news-title{
+	float: left;
+	height: 98px;
+	width: 85%;
+}
+.news-title a{
+	color:#000;
+}
+.news-title h3{
+	margin-top:10px;
+	padding-top: 10px;
+	padding-bottom: 14px;
+}
+.news-title span{
+	color: #545c63;
+	font-size:12px;
+}

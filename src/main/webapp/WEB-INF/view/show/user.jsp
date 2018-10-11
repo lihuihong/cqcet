@@ -40,7 +40,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="faq.html" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/faq.html">
+                            <a href="<%=request.getContextPath()%>/show/user/postCenter.action">
                                 <i class="icon-pushpin"></i>
                                 我的帖子
                             </a>
