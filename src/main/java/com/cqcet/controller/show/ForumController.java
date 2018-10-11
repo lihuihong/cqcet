@@ -62,7 +62,7 @@ public class ForumController {
     @RequestMapping(value = "/answer.action", method = {RequestMethod.GET})
     public String answer(ModelMap map, HttpServletRequest request, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                          @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
-                         @RequestParam(value = "collegeId", defaultValue = "") String collegeId) {
+                         @RequestParam(value = "collegeId") String collegeId) {
 
         List<Article> list;
         //得到当前用户登录的id

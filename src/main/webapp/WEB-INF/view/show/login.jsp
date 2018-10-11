@@ -21,6 +21,7 @@
     <!-- 包括所有已编译的插件 -->
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/show/scroll.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/javaex/pc/js/cookie.js"></script>
 </head>
 <body style="background-color: #267D9C;">
 <div class="login" style="padding: 20px 0;display:none;">
@@ -42,7 +43,7 @@
                         <button type="button" class="btn btn-default" style="float:left;background-color: #C5C4C4;"
                                 id="go-register">前往注册
                         </button>
-                        <button type="submit" class="btn btn-default " id="login-button-submit">登录</button>
+                        <button type="button" class="btn btn-default " id="login-button-submit">登录</button>
                     </div>
                 </form>
                 <br/><br/>
@@ -86,7 +87,7 @@
                         <a href="#" class="fa fa-question-circle"></a>
                     </div>
                     <div class="form-group" style="margin-top:40px;">
-                        <button type="submit" class="btn btn-default" style="float:left;" id="reg-button-submit">注册
+                        <button type="button" class="btn btn-default" style="float:left;" id="reg-button-submit">注册
                         </button>
                         <button type="button" class="btn btn-default" style="background-color: #C5C4C4;" id="go-login">
                             前往登陆
@@ -140,31 +141,11 @@
                     content: "登陆中...",
                     type: "success"
                 });
-                $.post("/show/login.json", {
-                        username:usernameValue,
-                        password:passwordValue
-                    },function (rtn) {
-                        if (rtn.code == "000000") {
-                            var info = rtn.data.info;
-                            delCookie("userToken");
-                            setCookie("userToken", info.userToken);
-                            helper.toast({
-                                content: "登录成功，即将为您跳转到首页",
-                                type: "success"
-                            });
-
-                            //window.location.href = "${refererUrl}";
-                        } else {
-                            helper.toast({
-                                content: rtn.message,
-                                type: "error"
-                            });
-                        }
-                    },"json");
-                /*$.ajax({
-                    url: "/show/index/login.json",
+                $.ajax({
+                    url: "/show/login.json",
                     type: "POST",
                     dataType: "json",
+                    async:true,
                     data: {username: usernameValue, password: passwordValue},
                     success: function (rtn) {
                         if (rtn.code == "000000") {
@@ -176,7 +157,7 @@
                                 type: "success"
                             });
                             window.location.href = "${refererUrl}";
-
+                            return false;
                         } else {
                             helper.toast({
                                 content: rtn.message,
@@ -185,7 +166,7 @@
                         }
                     },
 
-                });*/
+                });
             }
         });
         $("#reg-button-submit").on('click', function () {
