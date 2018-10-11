@@ -68,7 +68,7 @@ public class ForumController {
         //得到当前用户登录的id
         String userId = String.valueOf(request.getSession().getAttribute("user"));
         Map<String,Object> param = new HashMap<>();
-        if (userId.equals("")){
+        if (!(userId.equals("null"))){
             User user = userService.selectById(userId);
             map.put("user",user);
             param.put("userId",userId);

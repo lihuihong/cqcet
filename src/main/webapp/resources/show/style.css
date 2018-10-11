@@ -109,13 +109,24 @@ a:hover{
 }
 .login{
 	width: 100%;
-	position: fixed;
     z-index: 999;
+	position: absolute;
+	top: 25%;
 }
 .register{
 	width: 100%;
-	position: fixed;
     z-index: 999;
+	position: absolute;
+	top: 10%;
+}
+.login-p{
+	text-align: center;
+}
+.login-p a{
+	color:white;
+}
+.login-p a:hover{
+	color:#69FFEB;
 }
 .close-login{
 	position: absolute;
@@ -334,7 +345,7 @@ a:hover{
 	margin-bottom:30px;
 	border: 1px solid rgba(102,136,153,.18);
     box-shadow: 0 5px 9px -1px #ebf2ff;
-	width:125%;
+	width:100%;
 }
 .answer-img{
 	border-radius: 50%;

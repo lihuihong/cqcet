@@ -49,32 +49,7 @@ public class IndexController {
 
         return "show/index";
     }
-    /**
-     * 用户登录
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/login.json",method = RequestMethod.POST)
-    @ResponseBody
-    public Result login(HttpServletRequest request) throws Exception {
 
-        Map<String, Object> info = userService.selectUser(request);
-        return Result.success().add("info", info);
-    }
-
-    /**
-     * 用户注册
-     * @throws Exception
-     */
-    @RequestMapping(value = "/register.json",method = RequestMethod.POST)
-    @ResponseBody
-    public Result show_register(HttpServletRequest request) throws Exception {
-
-        Map<String, Object> info = userService.show_regist(request);
-
-        return Result.success().add("info", info);
-    }
 
     /**
      * 帖子保存

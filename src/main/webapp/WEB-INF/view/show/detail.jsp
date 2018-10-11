@@ -22,7 +22,7 @@
     <div class="container content">
         <div class="row">
             <div class="col-md-3">
-                <div  id="float_left" style="width: 16%">
+                <div id="float_left">
                     <div class="answer-item">
                         <img class="answer-img" src="${article.avatar}" />
                         <div class="answer-bod">

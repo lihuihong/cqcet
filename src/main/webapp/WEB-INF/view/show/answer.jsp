@@ -130,7 +130,7 @@
                                     <p class="dark-p"></p><br>
                                 </div>
                                 <div class="answer-bod">
-                                    <a href="<%=request.getContextPath()%>/show/posted.action" class="btn btn-info btn-sm">
+                                    <a class="btn btn-info btn-sm loginbtn">
                                         请 登 陆
                                     </a>
                                 </div>

@@ -44,10 +44,11 @@
                         </div>
                     </div>
                     <br/><br/>
-
-                    <div class="fb-div-sub">
-                        <div class="bor-rai fb-sub"><a href="javascript:document.form1.submit();">提交</a></div>
-                    </div>
+                    <a href="javascript:document.form1.submit();">
+                        <div class="fb-div-sub">
+                            <div class="bor-rai fb-sub">提交</div>
+                        </div>
+                    </a>
                     </form>
                 </div>
             </div>
