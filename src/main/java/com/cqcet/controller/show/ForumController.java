@@ -159,7 +159,7 @@ public class ForumController {
                        @RequestParam(value = "title") String title,
                        @RequestParam(value = "type") String type) {
         //得到当前用户登录的id
-        String userId =  String.valueOf(request.getSession().getAttribute("user"));
+        String userId = String.valueOf(request.getSession().getAttribute("user"));
         Article article = new Article();
         article.setContent(stem);
         article.setTitle(title);
