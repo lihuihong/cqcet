@@ -16,7 +16,7 @@
             <a href="about.html">联系我们</a><i>|</i>
             <a href="feedback.html">常见问题</a><i>|</i>
             <a href="feedback.html">意见反馈</a><i>|</i>
-            <a href="">友情链接</a>
+            <a href="<%=request.getContextPath()%>/admin/list.action">后台管理</a>
         </nav>
         <div class="copyright"><p></p>Copyright © 2018-2020 www.heylhh.com All Rights Reserved.备案号： <a href="http://www.miitbeian.gov.cn/">渝ICP备18013192号</a></div>
     </div>
