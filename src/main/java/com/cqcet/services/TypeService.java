@@ -86,4 +86,13 @@ public class TypeService {
         // 删除该分类
         typeMapper.delete(idArr);
     }
+
+    /**
+     * 根据帖子名称获取帖子id以及学院id
+     * @param articleName
+     * @return
+     */
+    public Type selectByName(String articleName){
+        return typeMapper.selectByName(articleName);
+    }
 }

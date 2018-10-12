@@ -153,7 +153,7 @@
                             delCookie("userToken");
                             setCookie("userToken", info.userToken);
                             helper.toast({
-                                content: "登录成功，即将为您跳转到首页",
+                                content: "登录成功，即将为您跳转",
                                 type: "success"
                             });
                             window.location.href = "${refererUrl}";
@@ -235,7 +235,7 @@
                         if (rtn.code == "000000") {
                             var info = rtn.data.info;
                             helper.toast({
-                                content: "注册成功，即将为您跳转到首页",
+                                content: "注册成功，即将为您跳转",
                                 type: "success"
                             });
                             delCookie("userToken");

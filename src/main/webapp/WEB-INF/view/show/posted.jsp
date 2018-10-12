@@ -6,6 +6,9 @@
   发帖页面
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html>
 <head>
     <title>发布帖子</title>
@@ -24,27 +27,20 @@
                     <h3>发布帖子</h3>
                     <br/><hr/><br/>
                     <div>
-                        <textarea name="title" class="answer-input form-control" rows="2" placeholder="请输入标题"></textarea>
+                        <textarea name="title" id="title" class="answer-input form-control" rows="2" placeholder="请输入标题"></textarea>
                         <br/>
-                        <textarea name="content"></textarea>
+                        <textarea name="content" id="content"></textarea>
                         <script type="text/javascript">CKEDITOR.replace('content');</script>
                         <div style="padding-top: 10px;padding-bottom: 10px">
-                            <label class="radio-inline">
-                                <input type="radio" name="optionsRadiosinline"  value="option1" checked> 内容意见
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optionsRadiosinline"  value="option2"> 产品建议
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optionsRadiosinline"  value="option3"> 技术问题
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="optionsRadiosinline"  value="option4"> 其它
-                            </label>
+                                <c:forEach items="${typeList}" var="entity" varStatus="status" >
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionsRadiosinline" id="${entity.id}" value="${entity.name}" >
+                                    </label>
+                                </c:forEach>
                         </div>
                     </div>
                     <br/><br/>
-                    <a href="javascript:document.form1.submit();">
+                    <a href="javascript:post();" >
                         <div class="fb-div-sub">
                             <div class="bor-rai fb-sub">提交</div>
                         </div>
@@ -69,8 +65,46 @@
             </div>
         </div>
     </div>
-
-
     <jsp:include page="footer.jsp" flush="true" />
 </body>
+
+<script>
+    //获取编辑器的内容
+    var stem = CKEDITOR.instances.content.getData();
+    var title = $("#title").val();
+    //获取帖子分类类型
+    var type = $('input:radio:checked').val();
+
+    function post () {
+        $.ajax({
+            url : "save_article.json",
+            type : "POST",
+            dataType : "json",
+            data : {
+                "stem" : stem,
+                "title" : title,
+                "type" : type
+            },
+            success : function(rtn) {
+                if (rtn.code=="000000") {
+                    javaex.optTip({
+                        content : rtn.message,
+                        type : "success"
+                    });
+                    // 刷新页面
+                    window.location.reload();
+                } else {
+                    javaex.optTip({
+                        content : rtn.message,
+                        type : "error"
+                    });
+                }
+            }
+        });
+    }
+
+
+
+
+</script>
 </html>

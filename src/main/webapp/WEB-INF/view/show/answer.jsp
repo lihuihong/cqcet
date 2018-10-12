@@ -180,6 +180,10 @@
             ;
         }
 
+        $('.loginbtn').click(function () {
+            window.location.href = "<%=request.getContextPath()%>/show/login.action";
+        });
+
     </script>
 </body>
 </html>
