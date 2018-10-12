@@ -2,6 +2,7 @@ package com.cqcet.controller.show;
 
 import com.cqcet.entity.Result;
 import com.cqcet.entity.User;
+import com.cqcet.exception.LException;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.TypeService;
 import com.cqcet.services.UserService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 
 /**
  * Created by 论坛 on 2018/9/11.
@@ -42,12 +44,38 @@ public class UserInfoController {
         return "show/user";
     }
 
+    /**
+     * 个人信息页面
+     * @param map
+     * @param request
+     * @return
+     */
     @RequestMapping("/dashboard.action")
-    public String index(ModelMap map,@RequestParam(value = "userId") String userId){
-
+    public String index(ModelMap map,HttpServletRequest request) throws ParseException {
+        //得到当前用户登录的id
+        String userId = String.valueOf(request.getSession().getAttribute("user"));
         User user = userService.selectById(userId);
         map.put("user",user);
         return "show/dashboard";
+    }
+
+    /**
+     * 保存修改密码
+     * @param oldPassword
+     * @param newPassword1
+     * @param newPassword2
+     * @return
+     * @throws LException
+     */
+    @RequestMapping(value = "/save_password.json",method={RequestMethod.POST})
+    @ResponseBody
+    public Result save(HttpServletRequest request,
+                       @RequestParam(value="oldPassword") String oldPassword,
+                       @RequestParam(value="newPassword1") String newPassword1,
+                       @RequestParam(value="newPassword2") String newPassword2) throws LException {
+        userService.updateNewPassword(request,oldPassword.trim(),newPassword1.trim(),newPassword2.trim());
+
+        return Result.success();
     }
 
     /**

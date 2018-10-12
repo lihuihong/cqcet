@@ -10,8 +10,8 @@
         <result column="student_id" property="studentId"/>
         <result column="college" property="college"/>
         <result column="level" property="level"/>
-        <result column="register_time" property="registerTime"/>
-        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="register_time" jdbcType="TIMESTAMP" property="registerTime"/>
+        <result column="last_login_time" jdbcType="TIMESTAMP"  property="lastLoginTime"/>
 
         <result column="avatar" property="avatar"/>
         <result column="grade_id" property="groupId"/>
@@ -175,7 +175,8 @@
             ui.avatar,
             ug.name AS group_name,
             ug.id   AS grade_id,
-            pi.id   AS professional_id
+            pi.id   AS professional_id,
+            pi.name   AS professionalName
         FROM
             user u,
             user_info ui,
@@ -198,5 +199,16 @@
             #{item}
         </foreach>
     </update>
+
+    <!-- 根据旧密码，判断查询用户 -->
+    <select id="selectByPassword" resultMap="User">
+        SELECT
+        *
+        FROM
+        user
+        WHERE
+        password = #{password}
+        AND id = #{id}
+    </select>
 
 </mapper>
