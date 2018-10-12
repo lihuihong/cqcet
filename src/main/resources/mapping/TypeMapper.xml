@@ -14,6 +14,16 @@
         ORDER BY
             sort
     </select>
+    <!--根据帖子名称获取帖子id以及学院id-->
+    <select id="selectByName" resultMap="BaseResultMap">
+        SELECT
+            id,
+            college_id
+        FROM
+        type
+            WHERE
+                name = #{articleName}
+    </select>
 
     <!--插入一条新的数据  -->
     <insert id="insert">

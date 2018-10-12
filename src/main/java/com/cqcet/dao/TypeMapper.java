@@ -51,4 +51,11 @@ public interface TypeMapper {
      * @return
      */
     int countByCollegeId(@Param("collegeId") String collegeId);
+
+    /**
+     * 根据帖子名称获取帖子id以及学院id
+     * @param articleName
+     * @return
+     */
+    Type selectByName(String articleName);
 }

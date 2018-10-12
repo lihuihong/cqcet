@@ -3,6 +3,7 @@ package com.cqcet.controller.show;
 import com.cqcet.entity.*;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.CollegeService;
+import com.cqcet.services.TypeService;
 import com.cqcet.services.UserService;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
@@ -33,6 +34,8 @@ public class ForumController {
     private CollegeService collegeService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TypeService typeService;
 
 
     /**
@@ -134,40 +137,38 @@ public class ForumController {
         return "show/app";
     }
 
-
     /**
      * 发布帖子
      *
      * @param map
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @RequestMapping("/posted.action")
-    public String posted(ModelMap map,
-                         @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                         @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
-
+    public String posted(ModelMap map) {
+        map.put("typeList",typeService.list());
         return "show/posted";
     }
-
-
 
     /**
      * 帖子保存
      *
-     * @param article
      * @return
      */
-    @RequestMapping("/save.json")
-    public Result save(Article article) {
-
+    @RequestMapping("/save_article.json")
+    public Result save(HttpServletRequest request,@RequestParam(value = "stem") String stem,
+                       @RequestParam(value = "title") String title,
+                       @RequestParam(value = "type") String type) {
+        //得到当前用户登录的id
+        String userId = String.valueOf(request.getSession().getAttribute("user"));
+        Article article = new Article();
+        article.setContent(stem);
+        article.setTitle(title);
+        article.setUserId(Integer.valueOf(userId));
+        Type typeName = typeService.selectByName(type);
+        article.setCollegeId(typeName.getCollegeId());
+        article.setTypeId(Integer.valueOf(typeName.getId()));
         articleService.save(article);
-
         return Result.success();
     }
 
-    public void edit() {
-
-    }
 }
