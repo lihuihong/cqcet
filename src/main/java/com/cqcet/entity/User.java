@@ -3,6 +3,7 @@ package com.cqcet.entity;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 public class User implements Serializable {
@@ -24,9 +25,9 @@ public class User implements Serializable {
 
     private String college;
 
-    private String registerTime;
+    private Date registerTime;
 
-    private String lastLoginTime;
+    private Date lastLoginTime;
 
     private static final long serialVersionUID = 1L;
 

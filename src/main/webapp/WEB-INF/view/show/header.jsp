@@ -107,7 +107,7 @@
                 <c:choose>
                     <c:when test="${sessionScope.get(\"userInfo\") != null}">
                         <div class="user" id="oklogin">
-                            <a href="<%=request.getContextPath()%>/show/user/user.action?userId=<%=session.getAttribute("user")%>">
+                            <a href="<%=request.getContextPath()%>/show/user/dashboard.action">
                                 <img src="<%=session.getAttribute("avatar")%>"/>
                                 <span><%=session.getAttribute("username")%></span>
                             </a>

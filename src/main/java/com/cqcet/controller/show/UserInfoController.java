@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 
 /**
  * Created by 论坛 on 2018/9/11.
@@ -43,9 +44,16 @@ public class UserInfoController {
         return "show/user";
     }
 
+    /**
+     * 个人信息页面
+     * @param map
+     * @param request
+     * @return
+     */
     @RequestMapping("/dashboard.action")
-    public String index(ModelMap map,@RequestParam(value = "userId") String userId){
-
+    public String index(ModelMap map,HttpServletRequest request) throws ParseException {
+        //得到当前用户登录的id
+        String userId = String.valueOf(request.getSession().getAttribute("user"));
         User user = userService.selectById(userId);
         map.put("user",user);
         return "show/dashboard";

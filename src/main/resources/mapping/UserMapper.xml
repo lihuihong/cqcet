@@ -10,8 +10,8 @@
         <result column="student_id" property="studentId"/>
         <result column="college" property="college"/>
         <result column="level" property="level"/>
-        <result column="register_time" property="registerTime"/>
-        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="register_time" jdbcType="TIMESTAMP" property="registerTime"/>
+        <result column="last_login_time" jdbcType="TIMESTAMP"  property="lastLoginTime"/>
 
         <result column="avatar" property="avatar"/>
         <result column="grade_id" property="groupId"/>

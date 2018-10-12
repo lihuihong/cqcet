@@ -188,16 +188,16 @@ public class UserService {
 
             //添加用户
             Date currentTime = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String now = formatter.format(currentTime);
+            /*SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String format = formatter.format(currentTime);*/
 
             // 注册时间
             if (StringUtils.isEmpty(user.getRegisterTime())) {
-                user.setRegisterTime(now);
+                user.setRegisterTime(currentTime);
             }
             // 上次访问时间
             if (StringUtils.isEmpty(user.getLastLoginTime())) {
-                user.setLastLoginTime(now);
+                user.setLastLoginTime(currentTime);
             }
             user.setPassword(MD5.md5(password));    // 密码加密
             user.setStatus("0");    // 正常状态
@@ -302,17 +302,17 @@ public class UserService {
 
         //添加用户
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String now = formatter.format(currentTime);
+       /* SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String now = formatter.format(currentTime);*/
 
         User user = new User();
         // 注册时间
         if (StringUtils.isEmpty(user.getRegisterTime())) {
-            user.setRegisterTime(now);
+            user.setRegisterTime(currentTime);
         }
         // 上次访问时间
         if (StringUtils.isEmpty(user.getLastLoginTime())) {
-            user.setLastLoginTime(now);
+            user.setLastLoginTime(currentTime);
         }
         user.setPassword(MD5.md5(password));    // 密码加密
         user.setStatus("0");    // 正常状态

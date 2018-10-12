@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <head>
     <title>个人中心</title>
@@ -26,21 +28,21 @@
                             <span class="account-name">${user.username}</span>
                             <span class="account-role">${user.groupName}</span>
                             <span class="account-actions">
-                                <a href="javascript:;">Profile</a> |
-                                <a href="javascript:;">Edit Settings</a>
+                                <a href="javascript:;">最近登录</a> |
+                                <a href="javascript:;"><fmt:formatDate value="${user.lastLoginTime}" pattern="yyyy/MM/dd HH:mm:ss" /></a>
                             </span>
                         </div>
                     </div>
                     <hr />
                     <ul id="main-nav" class="nav nav-tabs nav-stacked">
-                        <li class="active">
+                        <li >
                             <a href="<%=request.getContextPath()%>/show/user/dashboard.action">
                                 <i class="icon-home"></i>
                                 总览
                             </a>
                         </li>
                         <li>
-                            <a href="faq.html" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/faq.html">
+                            <a href="<%=request.getContextPath()%>/show/user/postCenter.action" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/faq.html">
                                 <i class="icon-pushpin"></i>
                                 我的帖子
                             </a>
@@ -58,7 +60,7 @@
                                 <span class="label label-warning pull-right">5</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="#" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/account.html">
                                 <i class="icon-user"></i>
                                 个人信息
