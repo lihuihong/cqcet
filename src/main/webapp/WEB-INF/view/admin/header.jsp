@@ -29,6 +29,6 @@
 		<a href="${pageContext.request.contextPath}/article/index.action">退出</a>
 	</li>
 	<li>
-		<a href="${pageContext.request.contextPath}/article/index.action">首页</a>
+		<a href="${pageContext.request.contextPath}/show/index/index.action">首页</a>
 	</li>
 </ul>

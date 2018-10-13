@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-md-9">
                 <div class="article-content" style="padding: 20px 40px;">
-                    <form action="" method="post" name="form1">
+                    <form action="">
                     <h3>发布帖子</h3>
                     <br/><hr/><br/>
                     <div>
@@ -71,7 +71,7 @@
 <script>
     //获取编辑器的内容
     var stem = CKEDITOR.instances.content.getData();
-    var title = $("#title").val();
+    var title = $("#title").text();
     //获取帖子分类类型
     var type = $('input:radio:checked').val();
 
