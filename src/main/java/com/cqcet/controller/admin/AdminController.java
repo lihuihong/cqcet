@@ -97,7 +97,6 @@ public class AdminController {
         map.put("startDate", startDate);
         map.put("endDate", endDate);
         map.put("keyWord", keyWord);
-
         return "admin/list_normal";
     }
 

@@ -24,10 +24,9 @@
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/show/scroll.js"></script>
     <script src="${pageContext.request.contextPath}/resources/javaex/pc/js/cookie.js"></script>
-</head>
-
 
 </head>
+
 <body>
 <header id="header">
     <div class="container">
@@ -107,7 +106,7 @@
                 <c:choose>
                     <c:when test="${sessionScope.get(\"userInfo\") != null}">
                         <div class="user" id="oklogin">
-                            <a href="<%=request.getContextPath()%>/show/user/dashboard.action">
+                            <a href="<%=request.getContextPath()%>/show/user/user.action">
                                 <img src="<%=session.getAttribute("avatar")%>"/>
                                 <span><%=session.getAttribute("username")%></span>
                             </a>

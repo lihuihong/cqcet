@@ -6,124 +6,61 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html>
 <head>
-    <title>个人中心</title>
+    <title>我的帖子</title>
 </head>
 <body>
     <jsp:include page="header.jsp" flush="true" />
 
     <div class="content">
         <div class="container">
-
             <div class="row">
-                <div class="col-md-3">
-                    <div class="account-container">
-                        <div class="account-avatar">
-                            <img src="<%=request.getContextPath()%>/resources/show/img/headimg1.png"  alt="" class="thumbnail" />
-                        </div>
-                        <div class="account-details">
-                            <span class="account-name">zcq1314</span>
-                            <span class="account-role">普通用户</span>
-                            <span class="account-actions">
-                                <a href="javascript:;">Profile</a> |
-                                <a href="javascript:;">Edit Settings</a>
-                            </span>
-                        </div>
-                    </div>
-                    <hr />
-                    <ul id="main-nav" class="nav nav-tabs nav-stacked">
-                        <li>
-                            <a href="<%=request.getContextPath()%>/show/user/dashboard.action">
-                                <i class="icon-home"></i>
-                                总览
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="<%=request.getContextPath()%>/show/user/postCenter.action">
-                                <i class="icon-pushpin"></i>
-                                我的帖子
-                            </a>
-                        </li>
-                        <li>
-                            <a href="plans.html" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/plans.html">
-                                <i class="icon-th-list"></i>
-                                我的回复
-                            </a>
-                        </li>
-                        <li>
-                            <a href="grid.html" >
-                                <i class="icon-th-large"></i>
-                                最新消息
-                                <span class="label label-warning pull-right">5</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="<%=request.getContextPath()%>/show/user/user.action">
-                                <i class="icon-user"></i>
-                                个人信息
-                            </a>
-                        </li>
-                        <li>
-                            <a href="<%=request.getContextPath()%>/show/user/login_out.action">
-                                <i class="icon-lock"></i>
-                                退出登录
-                            </a>
-                        </li>
-                    </ul>
-                    <hr />
-                    <div class="sidebar-extra">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
-                    </div>
-                    <br/>
-                </div>
+                <jsp:include page="meun.jsp" flush="true" />
                 <div class="col-md-9">
                     <div class="widget">
                         <div class="widget-header">
                             <h3>我的帖子</h3>
                         </div>
                         <div class="widget-content">
+                        <c:choose>
+                            <c:when test="${fn:length(pageInfo.list)==0}">
+
+                                <div  style="text-align:center;">暂无帖子</div>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${pageInfo.list}" var="entity" varStatus="status" >
                             <div class="form-group">
                                 <div class="news-content shadow-bg">
-                                    <a href="#">
-                                        <img src="<%=request.getContextPath()%>/resources/show/img/headimg1.png" />
+                                    <a href="${pageContext.request.contextPath}/show/detail.action?id=${entity.id}">
+                                        <c:if test="${entity.cover==null}">
+                                            <img src="http://heylhh.com/FgWPzwwYEQRoBYYvx1lL3epPtIws" />
+                                        </c:if>
+                                        <c:if test="${entity.cover!=null}">
+                                            <img src="${entity.cover}" />
+                                        </c:if>
                                         <div class="news-title">
-                                            <h3>『中级篇』docker Image概述（13）</h3>
-                                            <span>最新文章/日常生活</span>
-                                            <div class="right">06.06 00:39</span>
+                                            <h3 style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;">${entity.title}</h3>
+                                            <span>${entity.name}</span>
+                                            <div class="right"><span style="color: #0f74a8">阅读（${entity.viewCount}）</span>&nbsp&nbsp<span><fmt:formatDate value="${entity.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" /></span>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="news-content shadow-bg">
-                                    <a href="#">
-                                        <img src="<%=request.getContextPath()%>/resources/show/img/headimg1.png" />
-                                        <div class="news-title">
-                                            <h3>『中级篇』docker Image概述（13）</h3>
-                                            <span>最新文章/日常生活</span>
-                                            <div class="right">06.06 00:39</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
+
+                            <hr/>
+                            <!-- 分页 -->
+                            <div class="page">
+                                <ul id="page" class="pagination"></ul>
                             </div>
 
-                            <div class="form-actions" style="padding: 0px;">
-                                <nav class="ul-center">
-                                    <ul class="pagination">
-                                        <li><a href="#">&laquo;</a></li>
-                                        <li class="active"><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li><a href="#">&raquo;</a></li>
-                                    </ul>
-                                </nav>
-                                <!--<button type="submit" class="btn btn-primary">保存</button> <button class="btn">取消</button> -->
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -134,8 +71,32 @@
         </div>
     </div>
 
-
-
     <jsp:include page="footer.jsp" flush="true" />
+
+    <script>
+        var currentPage = "${pageInfo.pageNum}";
+        var pageCount = "${pageInfo.pages}";
+
+        helper.page({
+            id : "page",
+            pageCount : pageCount,	// 总页数
+            currentPage : currentPage,// 默认选中第几页
+            // 返回当前选中的页数
+            callback:function(rtn) {
+                search(rtn);
+            }
+        });
+
+        function search(pageNum) {
+            if (pageNum==undefined) {
+                pageNum = 1;
+            }
+            window.location.href = "/show/answer.action"
+                + "?pageNum="+pageNum
+
+            ;
+        }
+
+    </script>
 </body>
 </html>

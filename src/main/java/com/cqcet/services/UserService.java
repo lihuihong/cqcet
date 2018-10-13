@@ -16,10 +16,15 @@ import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -375,5 +380,93 @@ public class UserService {
         user.setId(userId);
         userMapper.update(user);
 
+    }
+
+    /**
+     * 获取用户信息
+     * @param request
+     * @return
+     */
+    public User getUserInfo(HttpServletRequest request) {
+        // 从session中取用户信息
+        // 判断session
+        HttpSession session  = request.getSession();
+        // 从session中取出用户身份信息
+        User user = (User)session.getAttribute("userInfo");
+        if (user!=null) {
+            request.getSession().setAttribute("avatar", user.getAvatar());
+            request.getSession().setAttribute("username", user.getUsername());
+            // 根据主键查询用户信息
+            return selectById(user.getId());
+        }
+        // session失效时，获取cookie
+        String userToken = "";
+        Cookie[] cookieArr = request.getCookies();
+        if (cookieArr!=null && cookieArr.length>0) {
+            for (int i=0; i<cookieArr.length; i++) {
+                Cookie cookie = cookieArr[i];
+                if ("userToken".equals(cookie.getName())) {
+                    try {
+                        userToken = URLDecoder.decode(cookie.getValue(), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
+        // 指定cookie不存在时，直接返回null
+        if (StringUtils.isEmpty(userToken)) {
+            return null;
+        }
+
+        // 指定cookie存在时，模拟登录，获取用户信息
+        try {
+            user = getUserInfoByUserToken(userToken);
+            // 将用户信息保存进session
+            request.getSession().setAttribute("userInfo", user);
+            request.getSession().setAttribute("avatar", user.getAvatar());
+            request.getSession().setAttribute("username", user.getUsername());
+        } catch (LException e) {
+            return null;
+        }
+
+        return user;
+    }
+
+    /**
+     * 根据userToken，自动登录
+     * @param userToken
+     * @return
+     * @throws LException
+     */
+    public User getUserInfoByUserToken(String userToken) throws LException {
+        // userToken编码转换
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] decoderBase64;
+        try {
+            decoderBase64 = decoder.decodeBuffer(userToken);
+            userToken = new String(decoderBase64);
+        } catch (IOException e) {
+            throw new LException("未登录");
+        }
+
+        String[] arr = userToken.split("&&");
+        if (arr.length<=1) {
+            throw new LException("未登录");
+        }
+
+        // userToken解密
+        String username = Jiami.getInstance().decrypt(arr[0]);
+        String password = Jiami.getInstance().decrypt(arr[1]);
+
+        // 自动登陆
+        User  user1= selectUser(username, MD5.md5(password));
+        // 根据主键查询用户信息
+        User user = selectById(user1.getId());
+        if (user==null) {
+            throw new LException("未登录");
+        }
+        return user;
     }
 }

@@ -26,7 +26,7 @@
                     <form action="">
                     <h3>发布帖子</h3>
                     <br/><hr/><br/>
-                    <div>
+                    <div name="form1">
                         <textarea name="title" id="title" class="answer-input form-control" rows="2" placeholder="请输入标题"></textarea>
                         <br/>
                         <textarea name="content" id="content"></textarea>
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <br/><br/>
-                    <a href="javascript:post();" >
+                    <a href="javascript:post()" >
                         <div class="fb-div-sub">
                             <div class="bor-rai fb-sub">提交</div>
                         </div>
@@ -54,12 +54,12 @@
                     <h4>常见反馈</h4>
                     <hr/>
                     <div class="ans-hot">
-                        <p><a href="">购买了课程可以退换课么？</a></p>
-                        <p><a href="">视频播放相关问题</a></p>
-                        <p><a href="">购买了课程可以退换课么？</a></p>
-                        <p><a href="">视频播放相关问题</a></p>
-                        <p><a href="">购买了课程可以退换课么？</a></p>
-                        <p><a href="">视频播放相关问题</a></p>
+                        <p><a href="">论坛意见提交？</a></p>
+                        <p><a href="">BUG告知</a></p>
+                        <p><a href="">通知通告？</a></p>
+                        <p><a href="">合作交谈？</a></p>
+                        <p><a href="">账号帖子相关问题？</a></p>
+                        <p><a href="">嗯。。。。？</a></p>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
 <script>
     //获取编辑器的内容
     var stem = CKEDITOR.instances.content.getData();
-    var title = $("#title").text();
+    var title = $("#title").val();
     //获取帖子分类类型
     var type = $('input:radio:checked').val();
 
