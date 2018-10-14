@@ -1,6 +1,7 @@
 package com.cqcet.controller.show;
 
 import com.cqcet.entity.*;
+import com.cqcet.exception.LException;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.CollegeService;
 import com.cqcet.services.TypeService;
@@ -65,11 +66,16 @@ public class ForumController {
     @RequestMapping(value = "/answer.action", method = {RequestMethod.GET})
     public String answer(ModelMap map, HttpServletRequest request, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                          @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
-                         @RequestParam(value = "collegeId") String collegeId) {
+                         @RequestParam(value = "collegeId") String collegeId) throws LException {
 
         List<Article> list;
+        User userInfo = userService.getUserInfo(request);
+        if (userInfo==null) {
+
+            throw new LException("未登录");
+        }
         //得到当前用户登录的id
-        String userId = String.valueOf(request.getSession().getAttribute("user"));
+        String userId = userInfo.getId();
         Map<String,Object> param = new HashMap<>();
         if (!(userId.equals("null"))){
             User user = userService.selectById(userId);

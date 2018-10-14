@@ -1,12 +1,11 @@
 package com.cqcet.controller.show;
 
-import com.cqcet.entity.Article;
-import com.cqcet.entity.Result;
-import com.cqcet.entity.User;
-import com.cqcet.entity.UserInfo;
+import com.cqcet.dao.UserInfoMapper;
+import com.cqcet.entity.*;
 import com.cqcet.exception.LException;
 import com.cqcet.services.ArticleService;
 import com.cqcet.services.TypeService;
+import com.cqcet.services.UploadInfoService;
 import com.cqcet.services.UserService;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +41,10 @@ public class UserInfoController {
 
     @Autowired
     private TypeService typeService;
+
+    @Autowired
+    private UploadInfoService uploadInfoService;
+
 
     /**
      * 个人信息中心
@@ -105,11 +109,15 @@ public class UserInfoController {
     public String postCenter(ModelMap map, HttpServletRequest request,
                              @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                              @RequestParam(value = "pageSize", defaultValue = "8") int pageSize) {
-        //得到当前用户登录的id
-        String userId = String.valueOf(request.getSession().getAttribute("user"));
+        //得到当前用户登录的信息
+        User userInfo = userService.getUserInfo(request);
+        if (userInfo==null) {
+            // 非法访问，重定向到登录页
+            return "redirect:login.action";
+        }
 
         Map<String, Object> param = new HashMap<String, Object>();
-        param.put("userId",userId);
+        param.put("userId",userInfo.getId());
         param.put("status", 0);
 
         // pageHelper分页插件
@@ -126,20 +134,32 @@ public class UserInfoController {
     }
 
     /**
-     * 修改头像
-     * @param map
+     * 保存用户头像
+     * @param avatar
      * @param request
      * @return
      */
-    @RequestMapping("head_avatar.action")
-    public String headAvatar(ModelMap map, HttpServletRequest request) {
+    @RequestMapping(value = "/head_avatar.json",method = RequestMethod.POST)
+    @ResponseBody
+    public Result headAvatar(HttpServletRequest request,
+                             @RequestParam(value="avatar") String avatar) throws LException, IOException {
         User user = userService.getUserInfo(request);
         if (user==null) {
-            // 非法访问，重定向到登录页
-            return "redirect:/show/login.action";
+            throw new LException("未登录");
         }
-        map.put("user",user);
-        return "show/head";
+        UploadInfo uploadInfo = uploadInfoService.selectByType("qiniu");
+        String imgUrl = uploadInfoService.uploadAvatarByBase64(avatar, uploadInfo);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(user.getId());
+        userInfo.setAvatar(imgUrl);
+        userService.updateByUserInfo(userInfo);
+        //更新用户session
+        User userInfoSession = userService.updateUserInfoSession(request);
+        request.getSession().setAttribute("userInfo", userInfoSession);
+        request.getSession().setAttribute("user", userInfoSession.getId());
+        request.getSession().setAttribute("avatar", userInfoSession.getAvatar());
+        request.getSession().setAttribute("username", userInfoSession.getUsername());
+        return Result.success();
     }
 
     /**

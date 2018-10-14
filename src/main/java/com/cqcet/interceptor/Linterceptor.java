@@ -33,7 +33,7 @@ public class Linterceptor implements HandlerInterceptor {
 
 
         //  对特殊地址，直接放行
-        if (url.indexOf("show") > 0 || url.indexOf("resources") > 0) {
+        if (url.indexOf("show") > 0 || url.indexOf("resources") > 0 || url.indexOf("upload") > 0) {
             return true;
         }
 
