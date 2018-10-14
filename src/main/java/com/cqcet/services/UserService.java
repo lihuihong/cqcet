@@ -74,6 +74,12 @@ public class UserService {
             throw new LException("该账号已被管理员封禁");
         }
 
+        //更新最后一次登陆时间
+        Date currentTime = new Date();
+        user.setLastLoginTime(currentTime);
+        userMapper.update(user);
+
+
         //将用户信息保存进session
         request.getSession().setAttribute("userInfo", user);
         request.getSession().setAttribute("user", user.getId());
@@ -173,7 +179,7 @@ public class UserService {
             }
             // 校验学号长度
             studentId = studentId.replaceAll("\\s*", "");
-            ;
+
             if (studentId.length() < 2 || studentId.length() > 11) {
                 throw new LException("学号长度应该是2到10个");
             }
@@ -415,8 +421,9 @@ public class UserService {
             request.getSession().setAttribute("user", user.getId());
             request.getSession().setAttribute("avatar", user.getAvatar());
             request.getSession().setAttribute("username", user.getUsername());
+            User user1 = selectById(user.getId());
             // 根据主键查询用户信息
-            return selectById(user.getId());
+            return user1;
         }
         // session失效时，获取cookie
         String userToken = "";
@@ -447,21 +454,21 @@ public class UserService {
             request.getSession().setAttribute("user", user.getId());
             request.getSession().setAttribute("avatar", user.getAvatar());
             request.getSession().setAttribute("username", user.getUsername());
-        } catch (LException e) {
-            return null;
+} catch (LException e) {
+        return null;
         }
 
         return user;
-    }
+        }
 
-    /**
-     * 更新用户session
-     * @param request
-     * @return
-     */
+/**
+ * 更新用户session
+ * @param request
+ * @return
+ */
     public User updateUserInfoSession(HttpServletRequest request) {
         User userInfo = null;
-        // 1.0 获取cookie
+        // 获取cookie
         String userToken = "";
         Cookie[] cookieArr = request.getCookies();
         if (cookieArr!=null && cookieArr.length>0) {
@@ -478,13 +485,13 @@ public class UserService {
             }
         }
 
-        // 2.0 根据userToken重新获取用户信息
-        // 2.1 指定cookie不存在时，直接返回null
+        // 根据userToken重新获取用户信息
+        // 指定cookie不存在时，直接返回null
         if (StringUtils.isEmpty(userToken)) {
             return null;
         }
 
-        // 2.2 指定cookie存在时，模拟登录，获取用户信息
+        // 指定cookie存在时，模拟登录，获取用户信息
         try {
             userInfo = getUserInfoByUserToken(userToken);
             // 将用户信息保存进session

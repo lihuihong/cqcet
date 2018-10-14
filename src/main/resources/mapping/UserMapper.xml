@@ -173,7 +173,7 @@
             u.register_time,
             u.last_login_time,
             ui.avatar,
-            ug.name AS group_name,
+            ug.name AS groupName,
             ug.id   AS grade_id,
             pi.id   AS professional_id,
             pi.name   AS professionalName

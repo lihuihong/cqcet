@@ -25,6 +25,10 @@
                 <div id="float_left">
                     <div class="answer-item">
                         <img class="answer-img" src="${article.avatar}" />
+                        <div style="margin-left: 50%">
+                            <h3 style="color: #269abc">${user.username}</h3>
+                            <p class="dark-p">${user.groupName}</p><br>
+                        </div>
                         <div class="answer-bod">
                             <a href="#" class="btn btn-info btn-sm">
                                 查 看 更 多

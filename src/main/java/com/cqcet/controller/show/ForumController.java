@@ -77,7 +77,7 @@ public class ForumController {
         //得到当前用户登录的id
         String userId = userInfo.getId();
         Map<String,Object> param = new HashMap<>();
-        if (!(userId.equals("null"))){
+        if (!(userId.equals(null))){
             User user = userService.selectById(userId);
             map.put("user",user);
             param.put("userId",userId);
@@ -114,16 +114,24 @@ public class ForumController {
      * @return
      */
     @RequestMapping("/detail.action")
-    public String type(ModelMap map, @RequestParam(value = "id", defaultValue = "") String id,
+    public String type(ModelMap map,HttpServletRequest request, @RequestParam(value = "id", defaultValue = "") String id,
                        @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                       @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
+                       @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) throws LException {
+
+        User userInfo = userService.getUserInfo(request);
+        if (userInfo==null) {
+            throw new LException("未登录");
+        }
         //该学院下帖子信息详情
         Article article = articleService.selectById(id);
+        User user = userService.selectById(String.valueOf(article.getUserId()));
+        map.put("user",user);
         Map<String,Object> param = new HashMap<>();
         param.put("userId",article.getUserId());
         param.put("status","0");
         map.put("article", article);
         map.put("articleList",articleService.list(param));
+
         return "show/detail";
     }
 
