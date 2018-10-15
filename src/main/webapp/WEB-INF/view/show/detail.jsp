@@ -64,6 +64,14 @@
 
                             <p>${article.title}</p>
 
+                            <div class="right">
+                                <c:if test="${user.id eq sessionScope.get(\"user\")}">
+                                    <button type="button" id="editor" class="btn btn-success" onclick="editor()">编辑</button>
+                                    <button type="button" id="delete" class="btn btn-danger" onclick="move()">删除</button>
+                                </c:if>
+
+                            </div>
+
                             <div class="dark-p">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -72,7 +80,7 @@
                                     <div class="col-md-4">
                                         <p>回复 <span style="color:#ff82e4;">3018</span> / 查看 <span style="color:#ff82e4;">${article.viewCount}</span> </p>
                                     </div>
-                                    <div class="col-md-4" style="text-align:right">
+                                    <div class="col-md-4" style="text-align:left">
                                         <p>时间 <span style="color:#ff82e4;"><fmt:formatDate value="${article.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" /></span> </p>
                                     </div>
 
@@ -130,5 +138,47 @@
         </div>
     </div>
     <jsp:include page="footer.jsp" flush="true" />
+
+<script>
+    var articleId = new Array();
+    articleId.push(${article.id});
+    //编辑帖子
+    function editor() {
+
+    }
+    //删除帖子
+    function move() {
+        $.ajax({
+            url : "delete.json",
+            type : "POST",
+            dataType : "json",
+            traditional : "true",
+            data : {
+                "articleId" : articleId,
+                "status" : "0"
+            },
+            success : function(rtn) {
+                if (rtn.code=="000000") {
+                    helper.toast({
+                        content : rtn.message
+                    });
+                    // 建议延迟加载
+                    setTimeout(function() {
+                        // 返回到上一个页面
+                        window.history.go(-1);
+                    }, 2000);
+                } else {
+                    helper.toast({
+                        content : rtn.message,
+                        type : "error"
+                    });
+                }
+            }
+        });
+
+    }
+
+
+</script>
 </body>
 </html>
