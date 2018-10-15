@@ -95,4 +95,13 @@ public class TypeService {
     public Type selectByName(String articleName){
         return typeMapper.selectByName(articleName);
     }
+
+    /**
+     * 根据所有帖子分类id查询所有帖子分类类型
+     * @param typeId
+     * @return
+     */
+    public Type articleTypeByTypeId(String typeId) {
+        return typeMapper.articleTypeByTypeId(typeId);
+    }
 }

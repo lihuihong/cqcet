@@ -14,19 +14,17 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by 论坛 on 2018/9/11.
  * 帖子
  */
 @Controller
-@RequestMapping(value = "/show", method = {RequestMethod.GET})
+@RequestMapping(value = "/show")
 public class ForumController {
 
     @Autowired
@@ -46,7 +44,13 @@ public class ForumController {
      * @return
      */
     @RequestMapping("/forum.action")
-    public String index(ModelMap map) {
+    public String index(ModelMap map, HttpServletRequest request) throws LException {
+
+        User userInfo = userService.getUserInfo(request);
+        if (userInfo==null) {
+            return "/show/login";
+        }
+
         List<College> list = collegeService.list();
         List<Forum> forums = new ArrayList<Forum>();
         for (College college : list) {
@@ -72,7 +76,7 @@ public class ForumController {
         User userInfo = userService.getUserInfo(request);
         if (userInfo==null) {
 
-            throw new LException("未登录");
+            return "/show/login";
         }
         //得到当前用户登录的id
         String userId = userInfo.getId();
@@ -120,7 +124,7 @@ public class ForumController {
 
         User userInfo = userService.getUserInfo(request);
         if (userInfo==null) {
-            throw new LException("未登录");
+            return "/show/login";
         }
         //该学院下帖子信息详情
         Article article = articleService.selectById(id);
@@ -133,6 +137,62 @@ public class ForumController {
         map.put("articleList",articleService.list(param));
 
         return "show/detail";
+    }
+
+    /**
+     * 根据用户id查询用户全部帖子
+     *
+     * @param map
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping("/personArticle.action")
+    public String personArticle(ModelMap map,HttpServletRequest request, @RequestParam(value = "id", defaultValue = "") String id,
+                       @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                       @RequestParam(value = "pageSize", defaultValue = "8") int pageSize){
+
+        User userInfo = userService.getUserInfo(request);
+        if (userInfo==null) {
+            return "/show/login";
+        }
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("userId",id);
+        param.put("status", 0);
+
+        List<Article> articles = articleService.list(param);
+        List<List> allTypes = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        for (Article article : articles) {
+            List<Object> types = new ArrayList();
+            //根据所有帖子分类id查询所有帖子分类类型
+            Type type = typeService.articleTypeByTypeId(String.valueOf(article.getTypeId()));
+            //根据typeId查询帖子总数
+            int count = articleService.countByTypeId(type.getId(),id ,"0");
+            //去掉重复的帖子分类名
+            if(!(set.contains(type.getName())))
+            {
+                types.add(type);
+                types.add(count);
+                allTypes.add(types);
+                set.add(type.getName());
+            }
+        }
+        // pageHelper分页插件
+        // 只需要在查询之前调用，传入当前页码，以及每一页显示多少条
+        PageMethod.startPage(pageNum, pageSize);
+        List<Article> list = articleService.list(param);
+
+        PageInfo<Article> pageInfo = new PageInfo<Article>(list);
+        map.put("pageInfo", pageInfo);
+        User user = userService.selectById(id);
+        map.put("user",user);
+        //List<Type> types = typeService.list();
+
+        // 查询所有帖子分类
+        map.put("typeList", allTypes);
+
+        return "show/personArticle";
     }
 
     /**
@@ -158,7 +218,12 @@ public class ForumController {
      * @return
      */
     @RequestMapping("/posted.action")
-    public String posted(ModelMap map) {
+    public String posted(ModelMap map,HttpServletRequest request) throws LException {
+
+        User userInfo = userService.getUserInfo(request);
+        if (userInfo==null) {
+            return "/show/login";
+        }
         map.put("typeList",typeService.list());
         return "show/posted";
     }
@@ -168,18 +233,22 @@ public class ForumController {
      *
      * @return
      */
-    @RequestMapping("/save_article.json")
+    @RequestMapping(value = "/save_article.json", method = {RequestMethod.POST})
+    @ResponseBody
     public Result save(HttpServletRequest request,@RequestParam(value = "stem") String stem,
                        @RequestParam(value = "title") String title,
-                       @RequestParam(value = "type") String type) {
+                       @RequestParam(value = "type") String type) throws LException{
         //得到当前用户登录的id
-        String userId = String.valueOf(request.getSession().getAttribute("user"));
+        User userInfo = userService.getUserInfo(request);
+        if (userInfo==null) {
+            throw new LException("未登录");
+        }
         Article article = new Article();
-        article.setContent(stem);
+        article.setContent(stem.replaceAll("(\r\n|\n)", "<br/>"));
         article.setTitle(title);
-        article.setUserId(Integer.valueOf(userId));
+        article.setUserId(Integer.valueOf(userInfo.getId()));
         Type typeName = typeService.selectByName(type);
-        article.setCollegeId(typeName.getCollegeId());
+        article.setCollegeId(userInfo.getCollege());
         article.setTypeId(Integer.valueOf(typeName.getId()));
         articleService.save(article);
         return Result.success();

@@ -30,13 +30,19 @@
                             <p class="dark-p">${user.groupName}</p><br>
                         </div>
                         <div class="answer-bod">
-                            <a href="#" class="btn btn-info btn-sm">
+                            <a href="${pageContext.request.contextPath}/show/personArticle.action?id=${user.id}" class="btn btn-info btn-sm">
                                 查 看 更 多
                             </a>
                         </div>
                     </div>
                     <div class="answer-item">
-                        <h4>他的更多帖子</h4>
+                        <c:if test="${user.id eq sessionScope.get(\"user\")}">
+                            <h4>Wo的更多帖子</h4>
+                        </c:if>
+                        <c:if test="${user.id != sessionScope.get(\"user\")}">
+                            <h4>Ta的更多帖子</h4>
+                        </c:if>
+
                         <hr/>
                         <c:forEach items="${articleList}" begin="0" end="1" var="entity" varStatus="status" >
                             <div class="ans-hot">

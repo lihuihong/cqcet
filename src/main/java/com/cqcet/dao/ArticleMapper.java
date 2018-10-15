@@ -96,8 +96,10 @@ public interface ArticleMapper {
      */
     List<Article> articleByCollegeId(@Param("collegeId") String collegeId, @Param("status") String status);
 
-
-
-
-
+    /**
+     * 根据typeId查询帖子总数
+     * @param typeId
+     * @return
+     */
+    int countByTypeId(@Param("typeId") String typeId,@Param("userId") String userId,@Param("status") String status);
 }

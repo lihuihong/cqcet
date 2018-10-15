@@ -240,8 +240,6 @@
                             });
                             delCookie("userToken");
                             setCookie("userToken", info.userToken);
-                            // 跳转到首页
-
                             window.location.href = "${refererUrl}";
                         } else {
                             helper.toast({

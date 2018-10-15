@@ -14,15 +14,25 @@
         ORDER BY
             sort
     </select>
+
+
+    <select id="articleTypeByTypeId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            type
+        WHERE
+            id = #{typeId}
+    </select>
     <!--根据帖子名称获取帖子id以及学院id-->
     <select id="selectByName" resultMap="BaseResultMap">
         SELECT
             id,
             college_id
         FROM
-        type
-            WHERE
-                name = #{articleName}
+            type
+        WHERE
+            name = #{articleName}
     </select>
 
     <!--插入一条新的数据  -->

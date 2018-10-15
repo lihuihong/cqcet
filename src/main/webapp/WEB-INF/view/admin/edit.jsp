@@ -208,7 +208,7 @@
 			rtn : "rtnData",	// 后台返回的数据对象，在前面页面用该名字存储
 			imgUrl : "data.imgUrl"	// 根据返回的数据对象，获取图片地址。  例如后台返回的数据为：{code: "000000", message: "操作成功！", data: {imgUrl: "1.jpg"}}
 		},
-		content : content,	// 这里必须是单引号，因为html代码中都是双引号，会产生冲突
+		content : content.trim(),	// 这里必须是单引号，因为html代码中都是双引号，会产生冲突
 		callback : function(rtn) {
 			console.log(rtn);
 			$("#content").val(rtn.html);
