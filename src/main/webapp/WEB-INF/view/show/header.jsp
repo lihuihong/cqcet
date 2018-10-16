@@ -42,18 +42,18 @@
                     <div class="input-group">
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default
-                                            dropdown-toggle" data-toggle="dropdown"><a id="">全部</a>
+                                            dropdown-toggle" data-toggle="dropdown"><a id="select_name">全部</a>
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="javascript:;">全部</a>
+                                    <a href="javascript:selectName('全部');">全部</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">用户</a>
+                                    <a href="javascript:selectName('用户');">用户</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">文章</a>
+                                    <a href="javascript:selectName('文章');">文章</a>
                                 </li>
                             </ul>
                         </div>
@@ -131,6 +131,9 @@
     $('.registerbtn').click(function () {
         window.location.href = "<%=request.getContextPath()%>/show/register.action";
     });
+    function selectName(name){
+        $('#select_name').text(name);
+    }
 </script>
 </body>
 </html>
