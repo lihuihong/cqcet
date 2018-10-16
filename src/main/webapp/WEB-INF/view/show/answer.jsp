@@ -46,7 +46,7 @@
                 <c:choose>
                     <c:when test="${fn:length(articles.list)==0}">
 
-                            <div  style="text-align:center;">暂无记录</div>
+                            <div  style="text-align:center;">暂无帖子</div>
                     </c:when>
                     <c:otherwise>
                         <c:forEach items="${articles.list}" var="entity" varStatus="status" >

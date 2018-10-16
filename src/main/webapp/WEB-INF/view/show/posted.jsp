@@ -103,34 +103,52 @@
         var title = $("#title").val();
         //获取帖子分类类型
         var type = $("input[type='radio']:checked").val();
-
+        if (stem == null || stem == ""){
+            helper.toast({
+                content: "编辑内容不能为空",
+                type: "error"
+            });
+        }else if (title == null || title == "" ){
+            helper.toast({
+                content: "帖子标题不能为空",
+                type: "error"
+            });
+        }else if (type == null){
+            helper.toast({
+                content: "帖子类型不能为空",
+                type: "error"
+            });
+        }else {
             $.ajax({
-            url: "save_article.json",
-            type: "POST",
-            dataType: "json",
-            data: {
-                "stem": stem,
-                "title": title,
-                "id" : "${article.id}",
-                "type": type
-            },
-            success: function (rtn) {
-                if (rtn.code == "000000") {
-                    helper.toast({
-                        content: "发布成功",
-                        type: "success"
-                    });
-                    // 刷新页面
-                    window.location.href = "${refererUrl}";
-                } else {
-                    helper.toast({
-                        content: rtn.message,
-                        type: "error"
-                    });
-                }
-            },
+                url: "save_article.json",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "stem": stem,
+                    "title": title,
+                    "id" : "${article.id}",
+                    "type": type
+                },
+                success: function (rtn) {
+                    if (rtn.code == "000000") {
+                        helper.toast({
+                            content: "发布成功",
+                            type: "success"
+                        });
+                        // 刷新页面
+                        window.location.href = "${refererUrl}";
+                    } else {
+                        helper.toast({
+                            content: rtn.message,
+                            type: "error"
+                        });
+                    }
+                },
 
-    });
+            });
+        }
+
+
     }
 
 

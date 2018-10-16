@@ -59,7 +59,7 @@
                         </div>
                         <input type="text" class="form-control">
                         <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button">搜 索</button>
+                            <button class="btn btn-primary" type="button" onclick="search()">搜 索</button>
                         </span>
                     </div>
 
@@ -131,6 +131,10 @@
     $('.registerbtn').click(function () {
         window.location.href = "<%=request.getContextPath()%>/show/register.action";
     });
+
+    function search() {
+
+    }
 </script>
 </body>
 </html>

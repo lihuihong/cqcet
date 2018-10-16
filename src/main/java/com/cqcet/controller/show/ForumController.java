@@ -264,12 +264,16 @@ public class ForumController {
      */
     @RequestMapping("/search.action")
     public String search(ModelMap map,@RequestParam(value = "keyWord")String keyWord,
+                         @RequestParam(required = false, value = "typeId") String typeId,
                          @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
-                         @RequestParam(value = "pageSize",defaultValue = "4")int pageSize){
+                         @RequestParam(value = "pageSize",defaultValue = "8")int pageSize){
 
         Map<String, Object> param = new HashMap<String, Object>();
         if (!StringUtils.isEmpty(keyWord)) {
             param.put("keyWord", "%" + keyWord.trim() + "%");
+        }
+        if (!StringUtils.isEmpty(typeId)) {
+            param.put("typeId", "%" + typeId.trim() + "%");
         }
         param.put("status", 0);
 
@@ -305,7 +309,9 @@ public class ForumController {
      * @return
      */
     @RequestMapping("/posted.action")
-    public String posted(ModelMap map, HttpServletRequest request, @RequestParam(required = false, value = "id") String id) throws LException {
+    public String posted(ModelMap map,
+                         HttpServletRequest request,
+                         @RequestParam(required = false, value = "id") String id) throws LException {
 
         User userInfo = userService.getUserInfo(request);
         if (userInfo == null) {
@@ -340,8 +346,11 @@ public class ForumController {
         article.setContent(stem.replaceAll("(\r\n|\n)", "<br/>"));
         article.setTitle(title);
         article.setUserId(Integer.valueOf(userInfo.getId()));
-        article.setId(Integer.valueOf(id));
-        Type typeName = typeService.selectByName(type);
+        //判断帖子id
+        if (id != ""){
+            article.setId(Integer.valueOf(id));
+        }
+        Type typeName = typeService.articleTypeByTypeId(type);
         article.setCollegeId(userInfo.getCollege());
         article.setTypeId(Integer.valueOf(typeName.getId()));
         articleService.save(article);
