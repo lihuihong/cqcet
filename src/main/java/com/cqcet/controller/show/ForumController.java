@@ -8,6 +8,7 @@ import com.cqcet.services.TypeService;
 import com.cqcet.services.UserService;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.ErrorMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -341,6 +342,10 @@ public class ForumController {
         User userInfo = userService.getUserInfo(request);
         if (userInfo == null) {
             throw new LException("未登录");
+        }
+        // 校验标题长度
+        if (title.length()>80) {
+            throw new LException("标题超过了80个");
         }
         Article article = new Article();
         article.setContent(stem.replaceAll("(\r\n|\n)", "<br/>"));
