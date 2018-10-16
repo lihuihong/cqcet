@@ -27,14 +27,14 @@
                     <h3>发布帖子</h3>
                     <br/><hr/><br/>
                     <div>
-                        <textarea name="title" id="title" class="answer-input form-control" rows="2" placeholder="请输入标题"></textarea>
+                        <textarea name="title" id="title" class="answer-input form-control" rows="2" placeholder="请输入标题">aaa</textarea>
                         <br/>
                         <textarea name="content" id="content"></textarea>
                         <script type="text/javascript">CKEDITOR.replace('content');</script>
                         <div style="padding-top: 10px;padding-bottom: 10px">
                                 <c:forEach items="${typeList}" var="entity" varStatus="status" >
                                     <label class="radio-inline">
-                                        <input type="radio" name="optionsRadiosinline" id="${entity.id}" value="${entity.name}" >
+                                        <input type="radio" name="optionsRadiosinline" id="${entity.id}" value="${entity.name}" >${entity.name}
                                     </label>
                                 </c:forEach>
                         </div>
@@ -69,13 +69,12 @@
 </body>
 
 <script>
-    //获取编辑器的内容
-    var stem = CKEDITOR.instances.content.getData();
-    var title = $("#title").text();
-    //获取帖子分类类型
-    var type = $('input:radio:checked').val();
-
     function post () {
+        //获取编辑器的内容
+        var stem = CKEDITOR.instances.content.getData();
+        var title = $("#title").text();
+        //获取帖子分类类型
+        var type = $('input:radio:checked').val();
         $.ajax({
             url : "save_article.json",
             type : "POST",
