@@ -166,14 +166,11 @@
                         }
                     },
 
+
                 });
             }
         });
         $("#reg-button-submit").on('click', function () {
-            helper.toast({
-                content: "注册中...",
-                type: "success"
-            });
             var username = $("#reg-user");
             var usernameValue = $("#reg-user").val();
             var password = $("#reg-pwd");
@@ -219,7 +216,10 @@
                 student.focus();
                 return false;
             } else {
-                
+                helper.toast({
+                    content: "注册中...",
+                    type: "success"
+                });
                 $.ajax({
                     url: "/show/register.json",
                     type: "POST",
@@ -240,8 +240,6 @@
                             });
                             delCookie("userToken");
                             setCookie("userToken", info.userToken);
-                            // 跳转到首页
-
                             window.location.href = "${refererUrl}";
                         } else {
                             helper.toast({

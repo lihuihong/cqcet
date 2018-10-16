@@ -11,21 +11,56 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html>
 <head>
-    <title>我的帖子</title>
+    <c:if test="${user.id eq sessionScope.get(\"user\")}">
+    <title>Wo的帖子</title>
+    </c:if>
+    <c:if test="${user.id != sessionScope.get(\"user\")}">
+        <title>Ta的帖子</title>
+    </c:if>
 </head>
 <body>
     <jsp:include page="header.jsp" flush="true" />
 
-    <div class="content">
+    <div class="content" style="padding-top:30px;">
         <div class="container">
             <div class="row">
-                <jsp:include page="meun.jsp" flush="true" />
-                <div class="col-md-9">
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3>我的帖子</h3>
+                <div class="col-md-3">
+                    <div id="float_left">
+                        <div class="answer-item">
+                            <img class="answer-img" src="${user.avatar}" />
+                            <div style="margin-left: 50%">
+                                <h3 style="color: #269abc">${user.username}</h3>
+                                <p class="dark-p">${user.groupName}</p><br>
+                            </div>
                         </div>
-                        <div class="widget-content">
+                        <div class="answer-item">
+                            <c:if test="${user.id eq sessionScope.get(\"user\")}">
+                            <h4>Wo的帖子分类</h4>
+                            </c:if>
+                            <c:if test="${user.id != sessionScope.get(\"user\")}">
+                                <h4>Ta的帖子分类</h4>
+                            </c:if>
+                            <hr/>
+                            <c:forEach items="${typeList}" begin="0" end="10" var="entity" varStatus="status" >
+                                <div class="ans-hot">
+                                    <p><a href="${pageContext.request.contextPath}/show/article_type.action?id=${user.id}&typeId=${entity.get(0).id}">${entity.get(0).name}</a>（${entity.get(1)}）</p>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="article-content">
+                        <div class="navbar-default nav-title" style="border-top-left-radius: 15px;border-top-right-radius: 15px">
+                            <c:if test="${user.id eq sessionScope.get(\"user\")}">
+                                <p>Wo的帖子</p>
+                            </c:if>
+                            <c:if test="${user.id != sessionScope.get(\"user\")}">
+                                <p>Ta的帖子</p>
+                            </c:if>
+
+                        </div>
+                        <div class="answer-content">
                         <c:choose>
                             <c:when test="${fn:length(pageInfo.list)==0}">
 
@@ -76,6 +111,7 @@
     <script>
         var currentPage = "${pageInfo.pageNum}";
         var pageCount = "${pageInfo.pages}";
+        var id = "${user.id}";
 
         helper.page({
             id : "page",
@@ -91,8 +127,9 @@
             if (pageNum==undefined) {
                 pageNum = 1;
             }
-            window.location.href = "/show/answer.action"
+            window.location.href = "/show/personArticle.action"
                 + "?pageNum="+pageNum
+                + "&id="+id
 
             ;
         }

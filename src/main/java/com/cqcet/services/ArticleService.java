@@ -118,4 +118,12 @@ public class ArticleService {
         return forum;
     }
 
+    /**
+     * 根据typeId查询帖子总数
+     * @param typeId
+     * @return
+     */
+    public int countByTypeId(String typeId,String userId,String status) {
+        return articleMapper.countByTypeId(typeId,userId,status);
+    }
 }

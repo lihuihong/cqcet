@@ -18,6 +18,7 @@
         <result column="group_name" property="groupName"/>
         <result column="professional_name" property="professionalName"/>
         <result column="professional_id" property="professionalId"/>
+        <result column="college" property="college"/>
     </resultMap>
 
     <!--查询全部用户-->
@@ -173,10 +174,11 @@
             u.register_time,
             u.last_login_time,
             ui.avatar,
-            ug.name AS group_name,
+            ug.name AS groupName,
             ug.id   AS grade_id,
             pi.id   AS professional_id,
-            pi.name   AS professionalName
+            pi.name   AS professionalName,
+            u.college AS college
         FROM
             user u,
             user_info ui,

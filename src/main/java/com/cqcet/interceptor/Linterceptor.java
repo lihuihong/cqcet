@@ -33,7 +33,7 @@ public class Linterceptor implements HandlerInterceptor {
 
 
         //  对特殊地址，直接放行
-        if (url.indexOf("show") > 0 || url.indexOf("resources") > 0) {
+        if (url.indexOf("show") > 0 || url.indexOf("resources") > 0 || url.indexOf("upload") > 0) {
             return true;
         }
 
@@ -47,7 +47,7 @@ public class Linterceptor implements HandlerInterceptor {
 
 
         //ִ 执行这里表示用户身份需要验证，跳转到登录界面
-        request.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/show/login.jsp").forward(request, response);
 
         return false;
     }

@@ -191,6 +191,19 @@
         </foreach>
     </select>
 
+
+    <!-- 根据typeId查询帖子总数 -->
+    <select id="countByTypeId" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        article
+        WHERE
+        status = #{status}
+        <if test="typeId!=null and typeId!=''">AND type_id=#{typeId}</if>
+        <if test="userId!=null and userId!=''">AND user_id=#{userId}</if>
+    </select>
+
     <!-- 根据学院id查询该学院下帖子的数量 -->
     <select id="countByCollegeId" resultType="java.lang.Integer">
         SELECT

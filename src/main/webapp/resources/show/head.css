@@ -1,0 +1,223 @@
+/*提示*/
+.unit .hint {
+    font-size: 12px;
+}
+
+.unit .hint {
+    color: #999;
+    font-size: 12px;
+    margin: 8px 0;
+}
+
+.tip {
+    position: relative;
+    display: block;
+    margin: 4px auto;
+    padding: 8px;
+    border: 1px solid #bce8f1;
+    border-radius: 2px;
+    background-color: #d9edf7;
+    color: #31708f;
+    text-align: left;
+    font-size: 14px;
+}
+
+.tip.success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #3c763d;
+}
+
+.tip.warning {
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    color: #8a6d3b;
+}
+
+.tip.danger {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+}
+
+/*图片上传*/
+.upload-images-thumbnail {
+    position: relative;
+    overflow: hidden;
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin: 10px 20px 20px 0;
+}
+
+.img-trash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    overflow: hidden;
+}
+
+.img-trash span {
+    width: 24px;
+    height: 24px;
+    float: right;
+    margin-top: 5px;
+    font-size: 20px;
+    color: #2196f3;
+}
+
+/*头像上传*/
+a.indigo {
+    color: #fff;
+}
+
+.button.indigo input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.image-box {
+    position: relative;
+    height: 300px;
+    width: 300px;
+    border: 1px solid #aaa;
+    background: #fff;
+    overflow: hidden;
+    background-repeat: no-repeat;
+}
+
+.image-box .cut-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    margin-top: -100px;
+    border-radius: 200px;
+    margin-left: -100px;
+    box-sizing: border-box;
+    border: 1px solid rgb(102, 102, 102);
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+    background: none repeat scroll 0% 0% transparent;
+}
+
+.image-box .move-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: url(../javaex/pc/images/upAvatar.jpg);
+}
+
+.unit .original {
+    float: left;
+    padding: 20px 30px;
+    border-right: 1px solid #ddd;
+}
+
+.unit .preview {
+    float: left;
+    padding: 30px;
+}
+
+.preview .view {
+    position: relative;
+    margin-top: 20px;
+}
+
+.view-avatar180 {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.avatar180 {
+    width: 180px;
+    height: 180px;
+    border-radius: 180px;
+}
+
+.view-avatar50 {
+    position: absolute;
+    left: 230px;
+    top: 0;
+}
+
+.avatar50 {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+
+.view-avatar30 {
+    position: absolute;
+    left: 230px;
+    top: 150px;
+}
+
+.avatar30 {
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+}
+
+/*头像上传*/
+.image-box {
+    border: 1px solid #aaa;
+    background: #fff;
+}
+.image-box .cut-box {
+    border: 1px solid rgb(102, 102, 102);
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+    background: none repeat scroll 0% 0% transparent;
+}
+.avatar180, .avatar50, .avatar30 {
+    border: 1px solid #ddd;
+}
+
+/*图片上传*/
+.img-trash span {
+    color: #2196f3;
+}
+/*--------------------------------*/
+
+.button {
+    height: 32px;
+    font-size: 12px;
+    line-height: 32px;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    display: inline-block;
+    cursor: pointer;
+    box-sizing: content-box;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    outline: none;
+    padding: 0px 12px;
+    overflow: hidden;
+    border-radius: 0px;
+    transition: all 0.3s;
+    zoom: 1;
+}
+
+.indigo {
+    color: #fff;
+    background-color: #3a9bd9;
+}
+
+.divider {
+    height: 1px;
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 8px auto;
+}

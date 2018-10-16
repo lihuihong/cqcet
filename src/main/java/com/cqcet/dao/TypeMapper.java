@@ -58,4 +58,11 @@ public interface TypeMapper {
      * @return
      */
     Type selectByName(String articleName);
+
+    /**
+     * 根据所有帖子分类id查询所有帖子分类类型
+     * @param typeId
+     * @return
+     */
+    Type articleTypeByTypeId(@Param("typeId") String typeId);
 }

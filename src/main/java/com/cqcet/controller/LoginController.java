@@ -24,8 +24,6 @@ import java.util.Map;
 @RequestMapping("/show")
 public class LoginController {
 
-    @Autowired
-    private ArticleService articleService;
 
     @Autowired
     private UserService userService;

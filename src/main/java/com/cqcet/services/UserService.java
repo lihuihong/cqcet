@@ -16,10 +16,15 @@ import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,6 +73,12 @@ public class UserService {
         if ("1".equals(user.getStatus())) {
             throw new LException("该账号已被管理员封禁");
         }
+
+        //更新最后一次登陆时间
+        Date currentTime = new Date();
+        user.setLastLoginTime(currentTime);
+        userMapper.update(user);
+
 
         //将用户信息保存进session
         request.getSession().setAttribute("userInfo", user);
@@ -128,12 +139,20 @@ public class UserService {
 
     /**
      * 根据用户id查询信息
-     *
      * @param id
      * @return
      */
     public User selectById(String id) {
         return userMapper.selectById(id);
+    }
+
+    /**
+     * 根据用户id更新用户扩展信息
+     * @param userInfo
+     * @return
+     */
+    public void updateByUserInfo(UserInfo userInfo) {
+       userInfoMapper.update(userInfo);
     }
 
     /**
@@ -160,7 +179,7 @@ public class UserService {
             }
             // 校验学号长度
             studentId = studentId.replaceAll("\\s*", "");
-            ;
+
             if (studentId.length() < 2 || studentId.length() > 11) {
                 throw new LException("学号长度应该是2到10个");
             }
@@ -355,9 +374,18 @@ public class UserService {
     public void updateNewPassword(HttpServletRequest request,String oldPassword, String newPassword1, String newPassword2) throws LException {
         //得到当前用户登录的id
         String userId = String.valueOf(request.getSession().getAttribute("user"));
+        if (oldPassword==null &&oldPassword == ""){
+            throw new LException("输入旧密码不能为空");
+        }
+        if (newPassword1==null &&newPassword1 == ""){
+            throw new LException("输入新密码不能为空");
+        }
+        if (newPassword2==null &&newPassword2 == ""){
+            throw new LException("再次输入新密码不能为空");
+        }
+        User user1 = getUserInfo(request);
         //根据旧密码，判断查询用户
-        String pass = MD5.md5(oldPassword);
-        User user = userMapper.selectByPassword(MD5.md5(oldPassword),userId);
+        User user = userMapper.selectByPassword(MD5.md5(oldPassword),user1.getId());
         if (user == null){
             throw new LException("旧密码错误");
         }
@@ -376,4 +404,144 @@ public class UserService {
         userMapper.update(user);
 
     }
+
+    /**
+     * 获取用户信息
+     * @param request
+     * @return
+     */
+    public User getUserInfo(HttpServletRequest request) {
+        // 从session中取用户信息
+        // 判断session
+        HttpSession session  = request.getSession();
+        // 从session中取出用户身份信息
+        User user = (User)session.getAttribute("userInfo");
+        if (user!=null) {
+            request.getSession().setAttribute("userInfo", user);
+            request.getSession().setAttribute("user", user.getId());
+            request.getSession().setAttribute("avatar", user.getAvatar());
+            request.getSession().setAttribute("username", user.getUsername());
+            User user1 = selectById(user.getId());
+            // 根据主键查询用户信息
+            return user1;
+        }
+        // session失效时，获取cookie
+        String userToken = "";
+        Cookie[] cookieArr = request.getCookies();
+        if (cookieArr!=null && cookieArr.length>0) {
+            for (int i=0; i<cookieArr.length; i++) {
+                Cookie cookie = cookieArr[i];
+                if ("userToken".equals(cookie.getName())) {
+                    try {
+                        userToken = URLDecoder.decode(cookie.getValue(), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
+        // 指定cookie不存在时，直接返回null
+        if (StringUtils.isEmpty(userToken)) {
+            return null;
+        }
+
+        // 指定cookie存在时，模拟登录，获取用户信息
+        try {
+            user = getUserInfoByUserToken(userToken);
+            // 将用户信息保存进session
+            request.getSession().setAttribute("userInfo", user);
+            request.getSession().setAttribute("user", user.getId());
+            request.getSession().setAttribute("avatar", user.getAvatar());
+            request.getSession().setAttribute("username", user.getUsername());
+} catch (LException e) {
+        return null;
+        }
+
+        return user;
+        }
+
+/**
+ * 更新用户session
+ * @param request
+ * @return
+ */
+    public User updateUserInfoSession(HttpServletRequest request) {
+        User userInfo = null;
+        // 获取cookie
+        String userToken = "";
+        Cookie[] cookieArr = request.getCookies();
+        if (cookieArr!=null && cookieArr.length>0) {
+            for (int i=0; i<cookieArr.length; i++) {
+                Cookie cookie = cookieArr[i];
+                if ("userToken".equals(cookie.getName())) {
+                    try {
+                        userToken = URLDecoder.decode(cookie.getValue(), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
+
+        // 根据userToken重新获取用户信息
+        // 指定cookie不存在时，直接返回null
+        if (StringUtils.isEmpty(userToken)) {
+            return null;
+        }
+
+        // 指定cookie存在时，模拟登录，获取用户信息
+        try {
+            userInfo = getUserInfoByUserToken(userToken);
+            // 将用户信息保存进session
+            request.getSession().setAttribute("userInfo", userInfo);
+            request.getSession().setAttribute("user", userInfo.getId());
+            request.getSession().setAttribute("avatar", userInfo.getAvatar());
+            request.getSession().setAttribute("username", userInfo.getUsername());
+        } catch (LException e) {
+            // 用户凭证是伪造的
+            return null;
+        }
+
+        return userInfo;
+    }
+
+
+    /**
+     * 根据userToken，自动登录
+     * @param userToken
+     * @return
+     * @throws LException
+     */
+    public User getUserInfoByUserToken(String userToken) throws LException {
+        // userToken编码转换
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] decoderBase64;
+        try {
+            decoderBase64 = decoder.decodeBuffer(userToken);
+            userToken = new String(decoderBase64);
+        } catch (IOException e) {
+            throw new LException("未登录");
+        }
+
+        String[] arr = userToken.split("&&");
+        if (arr.length<=1) {
+            throw new LException("未登录");
+        }
+
+        // userToken解密
+        String username = Jiami.getInstance().decrypt(arr[0]);
+        String password = Jiami.getInstance().decrypt(arr[1]);
+
+        // 自动登陆
+        User  user1= selectUser(username, MD5.md5(password));
+        // 根据主键查询用户信息
+        User user = selectById(user1.getId());
+        if (user==null) {
+            throw new LException("未登录");
+        }
+        return user;
+    }
+
 }
