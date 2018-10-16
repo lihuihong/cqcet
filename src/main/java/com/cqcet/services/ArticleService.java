@@ -83,7 +83,7 @@ public class ArticleService {
     public void save(Article article) {
         Date currentTime = new Date();
         // 判断是新增还是更新
-        if (StringUtils.isEmpty(article.getId())) {
+        if (StringUtils.isEmpty(article.getId()) || article.getUserId()==null || String.valueOf(article.getUserId()) == "null") {
             // 新增
             article.setStatus("0");
             article.setUpdateTime(currentTime);

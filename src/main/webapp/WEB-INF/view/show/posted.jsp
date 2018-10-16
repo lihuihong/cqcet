@@ -30,15 +30,15 @@
                     <br/>
                     <div name="form1">
                         <textarea name="title" id="title" class="answer-input form-control" rows="2"
-                                  placeholder="请输入标题"></textarea>
+                                  placeholder="请输入标题">${article.title}</textarea>
                         <br/>
-                        <textarea name="content" id="content"></textarea>
+                        <textarea name="content" id="content">${article.content}</textarea>
                         <script type="text/javascript">CKEDITOR.replace('content');</script>
                         <div style="padding-top: 10px;padding-bottom: 10px">
                             <c:forEach items="${typeList}" var="entity" varStatus="status">
                                 <label class="radio-inline">
-                                    <input type="radio" name="optionsRadiosinline" id="${entity.id}"
-                                           value="${entity.name}">${entity.name}
+                                    <input type="radio" name="type" id="${entity.id}"
+                                           value="${entity.id}">${entity.name}
                                 </label>
                             </c:forEach>
                         </div>
@@ -72,7 +72,29 @@
 <jsp:include page="footer.jsp" flush="true"/>
 </body>
 
+
+
 <script>
+    function setType(rName,rValue){
+
+        /*通过传递的元素名获取元素对象*/
+
+        var rObj = document.getElementsByName(rName);
+
+        /*获取到的对象是数组对象，逐一进行遍历，寻找值等于所获取数据值的子对象*/
+        for(var i = 0;i < rObj.length;i++){
+            if(rObj[i].value == rValue){
+
+                /*寻找到子对象后，对他进行如下操作就可以实现后台数据显示到单选钮中*/
+
+                rObj[i].checked =  'checked';
+            }
+        }
+    }
+
+    /*本函数传递两个参数，*/
+
+    setType('type','${article.typeId}');
 
 
     function post() {
@@ -81,13 +103,15 @@
         var title = $("#title").val();
         //获取帖子分类类型
         var type = $("input[type='radio']:checked").val();
-        $.ajax({
+
+            $.ajax({
             url: "save_article.json",
             type: "POST",
             dataType: "json",
             data: {
                 "stem": stem,
                 "title": title,
+                "id" : "${article.id}",
                 "type": type
             },
             success: function (rtn) {
@@ -107,15 +131,6 @@
             },
 
     });
-
-        function Trim(str, is_global){
-            var result;
-            result = str.replace(/(^\s+)|(\s+$)/g, "");
-            if (is_global.toLowerCase() == "g") {
-                result = result.replace(/\s/g, "");
-            }
-            return result;
-        };
     }
 
 

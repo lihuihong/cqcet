@@ -305,11 +305,16 @@ public class ForumController {
      * @return
      */
     @RequestMapping("/posted.action")
-    public String posted(ModelMap map, HttpServletRequest request) throws LException {
+    public String posted(ModelMap map, HttpServletRequest request, @RequestParam(required = false, value = "id") String id) throws LException {
 
         User userInfo = userService.getUserInfo(request);
         if (userInfo == null) {
             return "/show/login";
+        }
+        // 单个文章的信息
+        if (!StringUtils.isEmpty(id)) {
+            Article article = articleService.selectById(id);
+            map.put("article", article);
         }
         map.put("typeList", typeService.list());
         return "show/posted";
@@ -324,7 +329,8 @@ public class ForumController {
     @ResponseBody
     public Result save(HttpServletRequest request, @RequestParam(value = "stem") String stem,
                        @RequestParam(value = "title") String title,
-                       @RequestParam(value = "type") String type) throws LException {
+                       @RequestParam(value = "type") String type,
+                       @RequestParam(value = "id") String id) throws LException {
         //得到当前用户登录的id
         User userInfo = userService.getUserInfo(request);
         if (userInfo == null) {
@@ -334,6 +340,7 @@ public class ForumController {
         article.setContent(stem.replaceAll("(\r\n|\n)", "<br/>"));
         article.setTitle(title);
         article.setUserId(Integer.valueOf(userInfo.getId()));
+        article.setId(Integer.valueOf(id));
         Type typeName = typeService.selectByName(type);
         article.setCollegeId(userInfo.getCollege());
         article.setTypeId(Integer.valueOf(typeName.getId()));

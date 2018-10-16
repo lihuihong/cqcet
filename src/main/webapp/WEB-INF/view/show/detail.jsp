@@ -144,7 +144,7 @@
     articleId.push(${article.id});
     //编辑帖子
     function editor() {
-
+        window.location.href = "<%=request.getContextPath()%>/show/posted.action?id=${article.id}";
     }
     //删除帖子
     function move() {
@@ -160,7 +160,7 @@
             success : function(rtn) {
                 if (rtn.code=="000000") {
                     helper.toast({
-                        content : rtn.message
+                        content : "删除"+rtn.message
                     });
                     // 建议延迟加载
                     setTimeout(function() {
