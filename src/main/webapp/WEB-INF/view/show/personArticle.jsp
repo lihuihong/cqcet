@@ -43,7 +43,7 @@
                             <hr/>
                             <c:forEach items="${typeList}" begin="0" end="10" var="entity" varStatus="status" >
                                 <div class="ans-hot">
-                                    <p><a href="${pageContext.request.contextPath}/show/detail.action?id=${entity.get(0).id}">${entity.get(0).name}</a>（${entity.get(1)}）</p>
+                                    <p><a href="${pageContext.request.contextPath}/show/article_type.action?id=${user.id}&typeId=${entity.get(0).id}">${entity.get(0).name}</a>（${entity.get(1)}）</p>
                                 </div>
                             </c:forEach>
                         </div>
