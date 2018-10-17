@@ -5,6 +5,7 @@ import com.cqcet.dao.TypeMapper;
 import com.cqcet.entity.Article;
 import com.cqcet.entity.College;
 import com.cqcet.entity.Forum;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -31,7 +32,15 @@ public class ArticleService {
      * @return
      */
     public List<Article> list(Map<String, Object> param){
-        return articleMapper.list(param);
+        String subject = (String) param.get("alias");
+        if (subject.equals("") ||  subject==null){
+            return articleMapper.list(param);
+        }else if (subject.equals("1")){
+            return articleMapper.list_newest(param);
+        }else {
+            return articleMapper.list(param);
+        }
+
     }
 
     /**

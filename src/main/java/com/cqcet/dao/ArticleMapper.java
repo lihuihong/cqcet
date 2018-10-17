@@ -23,6 +23,13 @@ public interface ArticleMapper {
     List<Article> list(Map<String, Object> param);
 
     /**
+     * 查询最新帖子 前20条
+     * @param param
+     * @return
+     */
+    List<Article> list_newest(Map<String, Object> param);
+
+    /**
      * 浏览量自增
      * @param id 主键
      * @param viewCount 浏览量

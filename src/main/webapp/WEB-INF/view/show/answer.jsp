@@ -40,7 +40,11 @@
             <div class="col-md-9">
                 <div class="article-content">
                     <div class="navbar-default nav-title" style="border-top-left-radius: 15px;border-top-right-radius: 15px">
-                        <a href="">全部帖子</a>    <a href="">精品专区</a>     <a href="">最新帖子</a>
+
+                        <a href="">全部帖子</a>
+                        <a href="<%=request.getContextPath()%>/show/answer.action?collegeId=${college.id}&subject=0">精品专区</a>
+                        <a href="<%=request.getContextPath()%>/show/answer.action?collegeId=${college.id}&subject=1">最新帖子</a>
+
                     </div>
                     <hr/>
                 <c:choose>

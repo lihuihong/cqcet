@@ -72,7 +72,8 @@ public class ForumController {
     @RequestMapping(value = "/answer.action", method = {RequestMethod.GET})
     public String answer(ModelMap map, HttpServletRequest request, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                          @RequestParam(value = "pageSize", defaultValue = "8") int pageSize,
-                         @RequestParam(value = "collegeId") String collegeId) throws LException {
+                         @RequestParam(value = "collegeId") String collegeId,
+                         @RequestParam(required = false,value = "subject",defaultValue = "0") String subject) throws LException {
 
         List<Article> list;
         User userInfo = userService.getUserInfo(request);
@@ -89,11 +90,15 @@ public class ForumController {
             param.put("userId", userId);
             param.put("status", "0");
             param.put("collegeId", collegeId);
+            //帖子
+            param.put("alias",subject);
             list = articleService.list(param);
             map.put("userId", userId);
             map.put("articleList", list);
         } else {
             param.put("status", "0");
+            //帖子
+            param.put("alias",subject);
             param.put("collegeId", collegeId);
             list = articleService.list(param);
             map.put("articleList", list);
