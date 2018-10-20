@@ -32,15 +32,7 @@ public class ArticleService {
      * @return
      */
     public List<Article> list(Map<String, Object> param){
-        String subject = (String) param.get("alias");
-        if (subject.equals("") ||  subject==null){
             return articleMapper.list(param);
-        }else if (subject.equals("1")){
-            return articleMapper.list_newest(param);
-        }else {
-            return articleMapper.list(param);
-        }
-
     }
 
     /**
