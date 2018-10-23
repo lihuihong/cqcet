@@ -24,6 +24,7 @@
     <!-- 包括所有已编译的插件 -->
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/show/scroll.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/show/ewin.js"></script>
     <script src="${pageContext.request.contextPath}/resources/javaex/pc/js/cookie.js"></script>
 
 </head>
