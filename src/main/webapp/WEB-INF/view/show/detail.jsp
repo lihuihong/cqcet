@@ -256,6 +256,7 @@
             type : "POST",
             dataType : "json",
             traditional : "true",
+            async:false,
             data : {
                 "articleId" : articleId,
                 "status" : "0"
@@ -267,8 +268,8 @@
                     });
                     // 建议延迟加载
                     setTimeout(function() {
-                        // 返回到上一个页面
-                        window.parent.history.go(-1);
+                        window.location.href=document.referrer;
+
                     }, 2000);
                 } else {
                     helper.toast({
@@ -280,7 +281,6 @@
         });
         })
     }
-
 
 
 </script>
