@@ -173,6 +173,8 @@
                 data: {
                     "acticleId": acticleId,
                     "content": content,
+                    "answerId":null,
+                    "childId":null
                 },
                 success: function (rtn) {
                     if (rtn.code == "000000") {
