@@ -109,8 +109,36 @@
                         <div class="user" id="oklogin">
                             <a href="<%=request.getContextPath()%>/show/user/user.action">
                                 <img src="<%=session.getAttribute("avatar")%>"/>
-                                <span><%=session.getAttribute("username")%></span>
                             </a>
+                            <div class="card-user">
+                                <div class="card-top clearfix">
+                                    <a href="<%=request.getContextPath()%>/show/user/user.action" class="l">
+                                        <img src="<%=session.getAttribute("avatar")%>" alt="<%=session.getAttribute("username")%>">
+
+                                    </a>
+                                    <div class="card-top-right-box l">
+                                        <p><%=session.getAttribute("username")%></p>
+                                        <p>新手上路</p>
+                                    </div>
+                                </div>
+                                <div class="user-center-box">
+                                    <ul class="clearfix" style="padding: 0px;">
+                                        <li class="l"><a href="" target="_blank"><span class="glyphicon glyphicon-user"></span> 我的信息</a></li>
+                                        <li class="l"><a href="" target="_blank"><span class="glyphicon glyphicon-book"></span> 我的帖子</a></li>
+                                    </ul>
+                                </div>
+                                <div class="card-history">
+                                    <span class="history-item">
+                                        <span class="tit">最近帖子</span>
+                                        <span class="media-name">3-3 Spring Bean装配之Aware接口</span>
+                                        <div style="text-align: right;margin-top: 10px;"><a href="<%=request.getContextPath()%>/show/posted.action">点击发帖</a></div>
+                                        <span class="glyphicon glyphicon-time abs-span"></span>
+                                    </span>
+                                </div>
+                                <div class="card-sets">
+                                    <a href="/passport/user/logout?referer=//www.imooc.com" class="l">安全退出</a>
+                                </div>
+                            </div>
                         </div>
                     </c:when>
                     <c:otherwise>

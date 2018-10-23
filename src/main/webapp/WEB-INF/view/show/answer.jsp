@@ -71,9 +71,9 @@
                                 </div>
 
                             </div>
-                            <input type="text" class="answer-input" />
+                            <input type="text" class="answer-input" id="content"/>
                             <p class="ans-other">
-                                <a href="#" class="btn btn-info btn-sm">
+                                <a href="javascript:post('${entity.id}');" class="btn btn-info btn-sm">
                                     <span class="glyphicon glyphicon-tint"></span> 快速回帖
                                 </a>
                                 <a href="${pageContext.request.contextPath}/show/detail.action?id=${entity.id}" class="btn btn-default btn-sm">
@@ -154,7 +154,40 @@
         </div>
     </div>
     <jsp:include page="footer.jsp" flush="true" />
+
     <script>
+
+        function post(acticleId) {
+
+            //获取编辑器的内容
+            var content = $("#content").val();
+
+            $.ajax({
+                url: "/show/saveAnswer.json",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "acticleId": acticleId,
+                    "content": content,
+                },
+                success: function (rtn) {
+                    if (rtn.code == "000000") {
+                        helper.toast({
+                            content: "回帖成功，跳转查看",
+                            type: "success"
+                        });
+                        // 刷新页面
+                        window.location.href = "${pageContext.request.contextPath}/show/detail.action?id="+acticleId;
+                    } else {
+                        helper.toast({
+                            content: rtn.message,
+                            type: "error"
+                        });
+                    }
+                },
+
+            });
+        }
 
         var currentPage = "${articles.pageNum}";
         var pageCount = "${articles.pages}";

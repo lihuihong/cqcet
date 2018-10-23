@@ -11,34 +11,18 @@ import java.util.Date;
 @Data
 public class Article implements Serializable {
     private Integer id;
-
     private String title;
-
     private String content;
-
     private String cover;
-
     private Integer viewCount;
-
     private Date updateTime;
-
     private String status;
-
     private Integer typeId;
-
     private Integer userId;
-
     private String name;
-
     private String username;
-
     private String collegeId;
-
-
     private String avatar;
-
-
-
     private static final long serialVersionUID = 1L;
 
     @Override

@@ -51,6 +51,7 @@
             AND u.id = ui.user_id
     </select>
 
+
     <!--增加用户名和密码进行注册  -->
     <insert id="regist">
         INSERT
@@ -164,6 +165,7 @@
         ORDER BY
         u.register_time DESC
     </select>
+
     <!--根据主键查询用户信息-->
     <select id="selectById" resultMap="User">
         SELECT

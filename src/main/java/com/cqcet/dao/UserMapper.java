@@ -24,6 +24,13 @@ public interface UserMapper {
     User checkUser(@Param("userName") String userName, @Param("passWord") String passWord);
 
     /**
+     * 根据用户id获取用户信息
+     * @param userId 用户id
+     * @return
+     */
+    User getUserInfoById(@Param("userId") Integer userId);
+
+    /**
      * 用户注册
      * @param user
      */
