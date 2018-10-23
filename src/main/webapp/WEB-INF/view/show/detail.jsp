@@ -158,8 +158,7 @@
                                     <span style="margin-top: 10px;display: inline-block;">
                                         回复 : <span id="spId${status.index}" style="color:#fe6900"></span>
                                     </span>
-                                    <input type="hidden" id="answer_info" />
-                                    <input type="hidden" id="child_id" />
+
                                     <a href="javascript:close_reply(${status.index})" class="btn btn-info btn-sm" style="float: right;margin-top: 10px;margin-left: 10px">
                                         <span class="glyphicon glyphicon-tint"></span> 收起回复
                                     </a>
@@ -171,6 +170,9 @@
                         </div>
                         <hr/>
                     </c:forEach>
+
+                    <input type="hidden" id="answer_info" />
+                    <input type="hidden" id="child_id" />
 
                     <nav class="ul-center">
                         <ul class="pagination">
