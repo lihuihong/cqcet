@@ -2,10 +2,7 @@ package com.cqcet.controller.show;
 
 import com.cqcet.entity.*;
 import com.cqcet.exception.LException;
-import com.cqcet.services.ArticleService;
-import com.cqcet.services.CollegeService;
-import com.cqcet.services.TypeService;
-import com.cqcet.services.UserService;
+import com.cqcet.services.*;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.beans.factory.annotation.Autowired;
