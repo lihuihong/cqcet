@@ -32,7 +32,7 @@
         FROM
             type
         WHERE
-            name = #{articleName}
+            id = #{articleName}
     </select>
 
     <!--插入一条新的数据  -->
