@@ -2,10 +2,12 @@ package com.cqcet.controller.show;
 
 import com.cqcet.entity.*;
 import com.cqcet.exception.LException;
-import com.cqcet.services.*;
+import com.cqcet.services.ArticleService;
+import com.cqcet.services.CollegeService;
+import com.cqcet.services.TypeService;
+import com.cqcet.services.UserService;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
-import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -346,15 +348,21 @@ public class ForumController {
      * @return
      */
     @RequestMapping("/search.action")
-    public String search(ModelMap map,@RequestParam(value = "keyWord")String keyWord,
+    public String search(ModelMap map,@RequestParam(required = false,value = "keyWord")String keyWord,
+                         @RequestParam(required = false, value = "typeId") String typeId,
                          @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
-                         @RequestParam(value = "pageSize",defaultValue = "4")int pageSize){
+                         @RequestParam(value = "pageSize",defaultValue = "8")int pageSize){
 
         Map<String, Object> param = new HashMap<String, Object>();
         if (!StringUtils.isEmpty(keyWord)) {
             param.put("keyWord", "%" + keyWord.trim() + "%");
         }
+        if (!StringUtils.isEmpty(typeId)) {
+            param.put("typeId",typeId);
+        }
         param.put("status", 0);
+
+        map.put("articleList",articleService.list(null));
 
         // pageHelper分页插件
         // 只需要在查询之前调用，传入当前页码，以及每一页显示多少条
@@ -363,6 +371,20 @@ public class ForumController {
         PageInfo<Article> pageInfo = new PageInfo<Article>(list);
         map.put("pageInfo", pageInfo);
         map.put("keyWord", keyWord);
+
+        // 查询所有帖子分类以及该分类下条数
+        List<List> lists = new ArrayList<>();
+        List<Type> types = typeService.list();
+        for (Type type : types) {
+            List<Object> typeList = new ArrayList<>();
+            int countByTypeId = articleService.countByTypeId(type.getId(), null, "0");
+            typeList.add(countByTypeId);
+            typeList.add(type);
+            lists.add(typeList);
+        }
+
+        map.put("typeList", lists);
+
         return "show/search";
     }
 

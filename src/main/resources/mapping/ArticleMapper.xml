@@ -12,6 +12,7 @@
         <result column="type_id" jdbcType="INTEGER" property="typeId"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="college_id" jdbcType="VARCHAR" property="collegeId"/>
+        <result column="alias" jdbcType="VARCHAR" property="alias"/>
         <result column="name" property="name"/>
         <result column="username" property="username"/>
         <result column="avatar" property="avatar"/>
@@ -44,8 +45,41 @@
         <if test="keyWord!=null and keyWord!=''">AND ai.title LIKE #{keyWord}</if>
         <if test="userId!=null and userId!=''">AND ai.user_id = #{userId}</if>
         <if test="collegeId!=null and collegeId!=''">AND ai.college_id = #{collegeId}</if>
+        <if test="alias!=null and alias!=''">AND ai.alias = #{alias}</if>
         ORDER BY
         ai.update_time DESC
+    </select>
+
+    <!-- 根据条件查询最新帖子 -->
+    <select id="list_newest" resultMap="BaseResultMap">
+        SELECT
+        ai.id,
+        ai.type_id,
+        ai.title,
+        ai.cover,
+        ai.content,
+        ai.view_count,
+        ai.user_id,
+        ai.update_time,
+        ti.name,
+        ui.username
+        FROM
+        article ai,
+        type ti,
+        user ui
+        WHERE
+        ai.user_id = ui.id
+        AND
+        ai.type_id = ti.id
+
+        <if test="status!=null and status!=''">AND ai.status=#{status}</if>
+        <if test="typeId!=null and typeId!=''">AND ai.type_id=#{typeId}</if>
+        <if test="keyWord!=null and keyWord!=''">AND ai.title LIKE #{keyWord}</if>
+        <if test="userId!=null and userId!=''">AND ai.user_id = #{userId}</if>
+        <if test="collegeId!=null and collegeId!=''">AND ai.college_id = #{collegeId}</if>
+        ORDER BY
+        ai.update_time DESC
+        LIMIT 5
     </select>
 
     <!-- 更新帖子浏览量 -->
@@ -80,6 +114,8 @@
         and ai.user_id = ui.user_id
         AND ai.user_id = user.id
         <if test="collegeId!=null and collegeId!=''">AND ai.college_id=#{collegeId}</if>
+        ORDER BY
+        ai.update_time DESC
     </select>
 
     <!-- 根据主键查询单个帖子的信息 -->

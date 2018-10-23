@@ -18,7 +18,7 @@
 <body>
     <jsp:include page="header.jsp" flush="true" />
 
-    <div class="content" >&nbsp;</div>
+        <div class="content" >&nbsp;</div>
     <div class="container content">
         <div class="row">
             <div class="col-md-3">
@@ -207,7 +207,7 @@
     articleId.push(${article.id});
     //编辑帖子
     function editor() {
-
+        window.location.href = "<%=request.getContextPath()%>/show/posted.action?id=${article.id}";
     }
     //回复帖子
     function post(acticleId,input_id) {
@@ -247,6 +247,10 @@
     }
     //删除帖子
     function move() {
+        Ewin.confirm({ message: "确认要删除帖子？" }).on(function (e) {
+            if (!e) {
+                return;
+            }
         $.ajax({
             url : "delete.json",
             type : "POST",
@@ -259,12 +263,12 @@
             success : function(rtn) {
                 if (rtn.code=="000000") {
                     helper.toast({
-                        content : rtn.message
+                        content : "删除"+rtn.message
                     });
                     // 建议延迟加载
                     setTimeout(function() {
                         // 返回到上一个页面
-                        window.history.go(-1);
+                        window.parent.history.go(-1);
                     }, 2000);
                 } else {
                     helper.toast({
@@ -274,8 +278,9 @@
                 }
             }
         });
-
+        })
     }
+
 
 
 </script>

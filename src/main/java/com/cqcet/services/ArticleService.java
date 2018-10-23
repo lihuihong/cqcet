@@ -5,6 +5,7 @@ import com.cqcet.dao.TypeMapper;
 import com.cqcet.entity.Article;
 import com.cqcet.entity.College;
 import com.cqcet.entity.Forum;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -31,7 +32,7 @@ public class ArticleService {
      * @return
      */
     public List<Article> list(Map<String, Object> param){
-        return articleMapper.list(param);
+            return articleMapper.list(param);
     }
 
     /**
@@ -83,7 +84,7 @@ public class ArticleService {
     public void save(Article article) {
         Date currentTime = new Date();
         // 判断是新增还是更新
-        if (StringUtils.isEmpty(article.getId())) {
+        if (StringUtils.isEmpty(article.getId()) || article.getUserId()==null || String.valueOf(article.getUserId()) == "null") {
             // 新增
             article.setStatus("0");
             article.setUpdateTime(currentTime);
