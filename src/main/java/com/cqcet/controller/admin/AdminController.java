@@ -78,6 +78,7 @@ public class AdminController {
         param.put("startDate", startDate);
         param.put("endDate", endDate);
         if (!StringUtils.isEmpty(keyWord)) {
+
             param.put("keyWord", "%" + keyWord.trim() + "%");
         }
 
