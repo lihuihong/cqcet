@@ -227,7 +227,7 @@
                 "acticleId": acticleId,
                 "content": content,
                 "answerId" : answer_id,
-                "childId" : child_id
+                "childId" :
             },
             success: function (rtn) {
                 if (rtn.code == "000000") {

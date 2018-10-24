@@ -16,6 +16,7 @@
         <result column="name" property="name"/>
         <result column="username" property="username"/>
         <result column="avatar" property="avatar"/>
+        <result column="college_name" property="collegeName"/>
     </resultMap>
 
     <!-- 根据条件查询所有帖子 -->
@@ -30,19 +31,28 @@
         ai.user_id,
         ai.update_time,
         ti.name,
-        ui.username
+        ui.username,
+        info.avatar as avatar,
+        ci.name as collegeName
         FROM
         article ai,
         type ti,
-        user ui
+        user ui,
+        user_info info,
+        college_info ci
         WHERE
         ai.user_id = ui.id
         AND
         ai.type_id = ti.id
+        AND
+        info.user_id = ui.id
+        AND
+        info.grade_id = ci.id
 
         <if test="status!=null and status!=''">AND ai.status=#{status}</if>
         <if test="typeId!=null and typeId!=''">AND ai.type_id=#{typeId}</if>
         <if test="keyWord!=null and keyWord!=''">AND ai.title LIKE #{keyWord}</if>
+        <if test="username!=null and username!=''">AND ui.username LIKE #{username}</if>
         <if test="userId!=null and userId!=''">AND ai.user_id = #{userId}</if>
         <if test="collegeId!=null and collegeId!=''">AND ai.college_id = #{collegeId}</if>
         <if test="alias!=null and alias!=''">AND ai.alias = #{alias}</if>

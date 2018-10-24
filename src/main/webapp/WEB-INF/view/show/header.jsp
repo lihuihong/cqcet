@@ -54,13 +54,13 @@
                                     <a href="javascript:selectName('用户');">用户</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:selectName('文章');">文章</a>
+                                    <a href="javascript:selectName('帖子');">帖子</a>
                                 </li>
                             </ul>
                         </div>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" id="keyWord">
                         <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button">搜 索</button>
+                            <button class="btn btn-primary" type="button" onclick="search()">搜 索</button>
                         </span>
                     </div>
 
@@ -160,9 +160,36 @@
     $('.registerbtn').click(function () {
         window.location.href = "<%=request.getContextPath()%>/show/register.action";
     });
+    var type;
     function selectName(name){
-        $('#select_name').text(name);
+        type = $('#select_name').text(name);
+    };
+    function search() {
+            var keyWord = $('#keyWord').val();
+            $.ajax({
+                url: "/show/search.action",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "type": "帖子",
+                    "keyWord":keyWord,
+                },
+                success: function (rtn) {
+                    if (rtn.code == "000000") {
+                        helper.toast({
+                            content: "搜索"+rtn.message,
+                            type: "success"
+                        });
+                    } else {
+                        helper.toast({
+                            content: rtn.message,
+                            type: "error"
+                        });
+                    }
+                },
+            });
     }
+
 </script>
 </body>
 </html>

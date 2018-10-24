@@ -9,9 +9,13 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <html>
 <head>
     <title>帖子搜索</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/card/css/htmleaf-demo.css">
 </head>
 <body>
 <jsp:include page="header.jsp" flush="true"/>
@@ -23,37 +27,57 @@
                     <div class="article-content">
                         <div class="navbar-default nav-title"
                              style="border-top-left-radius: 15px;border-top-right-radius: 15px">
-                            <h4>搜索帖子结果</h4>
+                            <h4>搜索${name}结果</h4>
                         </div>
                         <hr/>
                         <div class="answer-content">
                             <c:choose>
-                                <c:when test="${fn:length(pageInfo.list)==0}">
-
-                                    <div style="text-align:center;">暂无帖子</div>
+                                <c:when test="${fn:length(pageInfo.list) == 0 && name == '帖子'}">
+                                <div style="text-align:center;">暂无${name}</div>
                                 </c:when>
                                 <c:otherwise>
-                                    <c:forEach items="${pageInfo.list}" var="entity" varStatus="status">
-                                        <div class="form-group">
-                                            <div class="news-content shadow-bg">
-                                                <a href="${pageContext.request.contextPath}/show/detail.action?id=${entity.id}">
-                                                    <c:if test="${entity.cover==null}">
-                                                        <img src="http://heylhh.com/FgWPzwwYEQRoBYYvx1lL3epPtIws"/>
-                                                    </c:if>
-                                                    <c:if test="${entity.cover!=null}">
-                                                        <img src="${entity.cover}"/>
-                                                    </c:if>
-                                                    <div class="news-title">
-                                                        <h4 style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;margin-top:10px;padding-top: 10px;padding-bottom: 14px;">${entity.title}</h4>
-                                                        <span>${entity.name}</span>
-                                                        <div class="right"><span
-                                                                style="color: #0f74a8">阅读（${entity.viewCount}）</span>&nbsp&nbsp<span><fmt:formatDate
-                                                                value="${entity.updateTime}"
-                                                                pattern="yyyy/MM/dd  HH:mm:ss"/></span>
+                                     <c:forEach items="${pageInfo.list}" var="entity" varStatus="status">
+                                            <div class="form-group">
+                                                <div class="news-content shadow-bg">
+                                                    <a href="${pageContext.request.contextPath}/show/detail.action?id=${entity.id}">
+                                                        <c:if test="${entity.cover==null}">
+                                                            <img src="http://heylhh.com/FgWPzwwYEQRoBYYvx1lL3epPtIws"/>
+                                                        </c:if>
+                                                        <c:if test="${entity.cover!=null}">
+                                                            <img src="${entity.cover}"/>
+                                                        </c:if>
+                                                        <div class="news-title">
+                                                            <h4 style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;margin-top:10px;padding-top: 10px;padding-bottom: 14px;">${entity.title}</h4>
+                                                            <span>${entity.name}</span>
+                                                            <div class="right"><span
+                                                                    style="color: #0f74a8">阅读（${entity.viewCount}）</span>&nbsp&nbsp<span><fmt:formatDate
+                                                                    value="${entity.updateTime}"
+                                                                    pattern="yyyy/MM/dd  HH:mm:ss"/></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </a>
+                                                    </a>
+                                                </div>
                                             </div>
+                                        </c:forEach>
+                                    </c:otherwise>
+                            </c:choose>
+                            <hr/>
+                            <c:choose>
+                                <c:when test="${fn:length(pageInfo.list) == 0 && name == '用户'}">
+                                    <div style="text-align:center;">暂无${name}</div>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach items="${userlist}" var="entity" varStatus="status">
+                                        <div class="col-md-3 col-sm-6">
+                                        <div class="our-team">
+                                            <div class="pic">
+                                                <img src="${entity.avatar}">
+                                            </div>
+                                            <div class="team-content">
+                                                <h3 class="title">${entity.username}</h3>
+                                                <%--<span class="post">${entity.collegeName}</span>--%>
+                                            </div>
+                                        </div>
                                         </div>
                                     </c:forEach>
                                 </c:otherwise>

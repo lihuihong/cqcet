@@ -18,18 +18,61 @@
         <result column="group_name" property="groupName"/>
         <result column="professional_name" property="professionalName"/>
         <result column="professional_id" property="professionalId"/>
-        <result column="college" property="college"/>
+        <result column="college_name" property="collegeName"/>
     </resultMap>
 
     <!--查询全部用户-->
     <select id="listArticle" resultMap="User">
         SELECT
-            *
+            ui.id,
+            ui.password,
+            ui.student_id,
+            ui.college,
+            ui.level,
+            ui.register_time,
+            ui.last_login_time,
+            ui.username,
+            info.avatar as avatar,
+            ci.name as collegeName
         FROM
-        user
+        user_info info,
+        college_info ci,
+        user ui
+            WHERE
+                info.grade_id = ci.id
+                AND
+                info.user_id = ui.id
         ORDER BY
             register_time
     </select>
+
+
+    <select id="userList" resultMap="User">
+        SELECT
+        ui.id,
+        ui.password,
+        ui.student_id,
+        ui.college,
+        ui.level,
+        ui.register_time,
+        ui.last_login_time,
+        ui.username,
+        info.avatar as avatar,
+        ci.name as collegeName
+        FROM
+        user_info info,
+        college_info ci,
+        user ui
+        WHERE
+        info.grade_id = ci.id
+        AND
+        info.user_id = ui.id
+        <if test="keyWord!=null and keyWord!=''">AND ui.username LIKE #{keyWord}</if>
+        ORDER BY
+        register_time
+    </select>
+
+
     <!-- 校验用户 -->
     <select id="checkUser" resultMap="User">
         SELECT

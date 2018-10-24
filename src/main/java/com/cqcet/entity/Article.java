@@ -34,6 +34,8 @@ public class Article implements Serializable {
 
     private String collegeId;
 
+    private String collegeName;
+
 
     private String avatar;
 

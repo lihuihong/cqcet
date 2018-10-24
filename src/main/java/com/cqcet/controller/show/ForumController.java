@@ -346,16 +346,24 @@ public class ForumController {
      */
     @RequestMapping("/search.action")
     public String search(ModelMap map,@RequestParam(required = false,value = "keyWord")String keyWord,
-                         @RequestParam(required = false, value = "typeId") String typeId,
+                         @RequestParam(required = false, value = "type") String typeName,
                          @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
                          @RequestParam(value = "pageSize",defaultValue = "8")int pageSize){
 
         Map<String, Object> param = new HashMap<String, Object>();
-        if (!StringUtils.isEmpty(keyWord)) {
-            param.put("keyWord", "%" + keyWord.trim() + "%");
-        }
-        if (!StringUtils.isEmpty(typeId)) {
-            param.put("typeId",typeId);
+        if (!StringUtils.isEmpty(typeName)) {
+            if ("用户".equals(typeName)){
+                param.put("username","%" + keyWord.trim() + "%");
+                map.put("name",typeName);
+                List<User> userList = userService.usernameList("%" + keyWord.trim() + "%");
+                map.put("userlist", userList);
+            }else if ("帖子".equals(typeName)){
+                param.put("keyWord", "%" + keyWord.trim() + "%");
+                map.put("name",typeName);
+            }else {
+                param.put("userlist", userService.list_article());
+            }
+
         }
         param.put("status", 0);
 
@@ -436,7 +444,7 @@ public class ForumController {
         article.setContent(stem.replaceAll("(\r\n|\n)", "<br/>"));
         article.setTitle(title);
         article.setUserId(Integer.valueOf(userInfo.getId()));
-        Type typeName = typeService.selectByName(type);
+        Type typeName = typeService.articleTypeByTypeId(type);
         article.setCollegeId(userInfo.getCollege());
         article.setTypeId(Integer.valueOf(typeName.getId()));
         articleService.save(article);
