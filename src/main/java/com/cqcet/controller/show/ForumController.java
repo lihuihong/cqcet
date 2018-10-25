@@ -135,8 +135,7 @@ public class ForumController {
         map.put("user", user);
         Map<String, Object> param = new HashMap<>();
         param.put("userId", article.getUserId());
-        System.out.println("____________________userId_"+article.getUserId());
-        param.put("status", 0);
+        param.put("status", "0");
         map.put("article", article);
         map.put("articleList", articleService.list(param));
         //System.out.println(articleService.list(param).size());

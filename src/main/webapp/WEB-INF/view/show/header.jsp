@@ -24,8 +24,8 @@
     <!-- 包括所有已编译的插件 -->
     <script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/show/scroll.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/show/ewin.js"></script>
     <script src="${pageContext.request.contextPath}/resources/javaex/pc/js/cookie.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/show/ewin.js"></script>
 
 </head>
 
@@ -43,22 +43,22 @@
                     <div class="input-group">
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default
-                                            dropdown-toggle" data-toggle="dropdown"><a id="">全部</a>
+                                            dropdown-toggle" data-toggle="dropdown"><a id="select_name">全部</a>
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="javascript:;">全部</a>
+                                    <a href="javascript:selectName('全部');">全部</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">用户</a>
+                                    <a href="javascript:selectName('用户');">用户</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">文章</a>
+                                    <a href="javascript:selectName('帖子');">帖子</a>
                                 </li>
                             </ul>
                         </div>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" id="keyWord">
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button" onclick="search()">搜 索</button>
                         </span>
@@ -110,8 +110,36 @@
                         <div class="user" id="oklogin">
                             <a href="<%=request.getContextPath()%>/show/user/user.action">
                                 <img src="<%=session.getAttribute("avatar")%>"/>
-                                <span><%=session.getAttribute("username")%></span>
                             </a>
+                            <div class="card-user">
+                                <div class="card-top clearfix">
+                                    <a href="<%=request.getContextPath()%>/show/user/user.action" class="l">
+                                        <img src="<%=session.getAttribute("avatar")%>" alt="<%=session.getAttribute("username")%>">
+
+                                    </a>
+                                    <div class="card-top-right-box l">
+                                        <p><%=session.getAttribute("username")%></p>
+                                        <p>新手上路</p>
+                                    </div>
+                                </div>
+                                <div class="user-center-box">
+                                    <ul class="clearfix" style="padding: 0px;">
+                                        <li class="l"><a href="" target="_blank"><span class="glyphicon glyphicon-user"></span> 我的信息</a></li>
+                                        <li class="l"><a href="" target="_blank"><span class="glyphicon glyphicon-book"></span> 我的帖子</a></li>
+                                    </ul>
+                                </div>
+                                <div class="card-history">
+                                    <span class="history-item">
+                                        <span class="tit">最近帖子</span>
+                                        <span class="media-name">3-3 Spring Bean装配之Aware接口</span>
+                                        <div style="text-align: right;margin-top: 10px;"><a href="<%=request.getContextPath()%>/show/posted.action">点击发帖</a></div>
+                                        <span class="glyphicon glyphicon-time abs-span"></span>
+                                    </span>
+                                </div>
+                                <div class="card-sets">
+                                    <a href="/passport/user/logout?referer=//www.imooc.com" class="l">安全退出</a>
+                                </div>
+                            </div>
                         </div>
                     </c:when>
                     <c:otherwise>
@@ -132,11 +160,36 @@
     $('.registerbtn').click(function () {
         window.location.href = "<%=request.getContextPath()%>/show/register.action";
     });
-
+    var type;
+    function selectName(name){
+        type = $('#select_name').text(name);
+    };
     function search() {
-
-
+            var keyWord = $('#keyWord').val();
+            $.ajax({
+                url: "/show/search.action",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "type": "帖子",
+                    "keyWord":keyWord,
+                },
+                success: function (rtn) {
+                    if (rtn.code == "000000") {
+                        helper.toast({
+                            content: "搜索"+rtn.message,
+                            type: "success"
+                        });
+                    } else {
+                        helper.toast({
+                            content: rtn.message,
+                            type: "error"
+                        });
+                    }
+                },
+            });
     }
+
 </script>
 </body>
 </html>

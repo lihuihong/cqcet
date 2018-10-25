@@ -93,9 +93,9 @@
                             <img src="${article.cover}">
                             <p>${article.content}</p>
                             </div>
-                            <input type="text" class="answer-input" />
+                            <input type="text" class="answer-input" id="ans-text"/>
                             <p class="ans-other">
-                                <a href="#" class="btn btn-info btn-sm">
+                                <a href="javascript:post('${article.id}','ans-text',null,null)" class="btn btn-info btn-sm">
                                     <span class="glyphicon glyphicon-tint"></span> 快速回帖
                                 </a>
 
@@ -103,24 +103,77 @@
                         </div>
                     </div>
                     <hr/>
-                    <div class="answer-content">
-                        <div class="left">
-                            <div class="bor-rai" style="background: #fe6900;">后台</div>
+                    <c:forEach items="${answerList}" var="answer" varStatus="status">
+
+                        <div class="answer-content">
+                            <div class="left">
+                                <div class="answer-left">
+                                    <img src="${answer.user.avatar}" />
+                                </div>
+                            </div>
+                            <div class="left" style="margin-left: 20px;width: 90%;">
+                                <div>
+                                    <p class="dark-p" ><a href="#" style="color:#fe6900;">${answer.user.username}</a></p>
+                                    <p>${answer.answer.content}</p>
+                                    <p class="dark-p" style="text-align: right;letter-spacing: 0px;">
+                                        <a href="javascript:opup_reply('${status.index}','${answer.user.username}','${answer.answer.id}','${answer.answer.childId}')">回复</a>&nbsp;&nbsp;
+                                        <fmt:formatDate value="${answer.answer.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" />
+                                    </p>
+                                </div>
+
+                                <div>
+                                <c:forEach items="${answer.child}" var="child" varStatus="status1">
+                                    <div class="child_content">
+                                        <div class="left">
+                                            <div class="answer-left">
+                                                <img src="${child.childUser.avatar}" />
+                                            </div>
+                                        </div>
+                                        <div class="left" style="margin-left: 20px;width: 90%;">
+                                            <div class="content_p">
+                                                <c:choose>
+                                                    <c:when test="${answer.answer.childId eq child.answer.parentId || child.childUser.username eq child.parentUser.username}">
+                                                        <p class="dark-p" ><a href="#" style="color:#fe6900;">${child.childUser.username}</a></p>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <p class="dark-p">
+                                                            <a href="#" style="color:#fe6900;">${child.childUser.username}</a>&nbsp;回复&nbsp;
+                                                            <a href="#" style="color:#fe6900;">${child.parentUser.username}</a>
+                                                        </p>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <p>${child.answer.content}</p>
+                                                <p class="dark-p" style="text-align: right;letter-spacing: 0px;">
+                                                    <a href="javascript:opup_reply('${status.index}','${child.childUser.username}','${child.answer.id}','${child.answer.childId}')">回复</a>&nbsp;&nbsp;
+                                                    <fmt:formatDate value="${child.answer.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                                </div>
+
+                                <div class="input_ans" id="id${status.index}">
+                                    <input type="text" class="answer-input" id="input_${status.index}"/>
+                                    <span style="margin-top: 10px;display: inline-block;">
+                                        回复 : <span id="spId${status.index}" style="color:#fe6900"></span>
+                                    </span>
+
+                                    <a href="javascript:close_reply(${status.index})" class="btn btn-info btn-sm" style="float: right;margin-top: 10px;margin-left: 10px">
+                                        <span class="glyphicon glyphicon-tint"></span> 收起回复
+                                    </a>
+                                    <a href="javascript:post('${article.id}','input_${status.index}')" class="btn btn-info btn-sm" style="float: right;margin-top: 10px;">
+                                        <span class="glyphicon glyphicon-tint"></span> 回复
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="left ans-con-rig">
-                            <p class="dark-p" >来自 <a href="#" style="color:#fe6900;">后台</a></p>
-                            <p>对于一个，只想更好的使用电脑和手机，并对它们进行维护的学生一枚，应该学什么？</p>
-                            <input type="text" class="answer-input" />
-                            <p class="ans-other">
-                                <a href="#" class="btn btn-info btn-sm">
-                                    <span class="glyphicon glyphicon-tint"></span> 快速回帖
-                                </a>
-                                <a href="#" class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-globe"></span> 查看详情
-                                </a>
-                            </p>
-                        </div>
-                    </div>
+                        <hr/>
+                    </c:forEach>
+
+                    <input type="hidden" id="answer_info" />
+                    <input type="hidden" id="child_id" />
+
                     <nav class="ul-center">
                         <ul class="pagination">
                             <li><a href="#">&laquo;</a></li>
@@ -140,11 +193,59 @@
     <jsp:include page="footer.jsp" flush="true" />
 
 <script>
+    
+    function opup_reply(id,name,answer_id,child_id) {
+        $("#id"+id).css("height","70px");
+        $("#spId"+id).text(name);
+        $("#answer_info").val(answer_id);
+        $("#child_id").val(child_id);
+    }
+
+    function close_reply(id) {
+        $("#id"+id).css("height","0px");
+    }
+
     var articleId = new Array();
     articleId.push(${article.id});
     //编辑帖子
     function editor() {
         window.location.href = "<%=request.getContextPath()%>/show/posted.action?id=${article.id}";
+    }
+    //回复帖子
+    function post(acticleId,input_id) {
+
+        //获取编辑器的内容
+        var content = $("#"+input_id).val();
+        var answer_id =  $('#answer_info').val();
+        var child_id =  $('#child_id').val();
+
+        $.ajax({
+            url: "/show/saveAnswer.json",
+            type: "POST",
+            dataType: "json",
+            data: {
+                "acticleId": acticleId,
+                "content": content,
+                "answerId" : answer_id,
+                "childId" :
+            },
+            success: function (rtn) {
+                if (rtn.code == "000000") {
+                    helper.toast({
+                        content: "回帖成功，跳转查看",
+                        type: "success"
+                    });
+                    // 刷新页面
+                    window.location.reload();
+                } else {
+                    helper.toast({
+                        content: rtn.message,
+                        type: "error"
+                    });
+                }
+            },
+
+        });
     }
     //删除帖子
     function move() {
@@ -157,6 +258,7 @@
             type : "POST",
             dataType : "json",
             traditional : "true",
+            async:false,
             data : {
                 "articleId" : articleId,
                 "status" : "0"
@@ -168,8 +270,8 @@
                     });
                     // 建议延迟加载
                     setTimeout(function() {
-                        // 返回到上一个页面
-                        window.parent.history.go(-1);
+                        window.location.href=document.referrer;
+
                     }, 2000);
                 } else {
                     helper.toast({
@@ -181,7 +283,6 @@
         });
         })
     }
-
 
 
 </script>

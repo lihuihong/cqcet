@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcet.dao.AnswerMapper">
+    <resultMap id="BaseResultMap" type="com.cqcet.entity.Answer">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="acticle_id" jdbcType="INTEGER" property="acticleId"/>
+        <result column="child_id" jdbcType="INTEGER" property="childId"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- 新增回复 -->
+    <insert id="insert" parameterType="com.cqcet.entity.Answer">
+        INSERT INTO answer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="acticleId!=null and acticleId!=''">acticle_id,</if>
+            <if test="childId!=null and childId!=''">child_id,</if>
+            <if test="parentId!=null and parentId!=''">parent_id,</if>
+            <if test="content!=null and content!=''">content,</if>
+            <if test="userId!=null and userId!=''">user_id,</if>
+            <if test="updateTime!=null and updateTime!='' ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="acticleId!=null and acticleId!=''">#{acticleId},</if>
+            <if test="childId!=null and childId!=''">#{childId},</if>
+            <if test="parentId!=null and parentId!=''">#{parentId},</if>
+            <if test="content!=null and content!=''">#{content},</if>
+            <if test="userId!=null and userId!=''">#{userId},</if>
+            <if test="updateTime!=null and updateTime!=''">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.cqcet.entity.Answer">
+        UPDATE answer SET
+        <if test="childId!=null and childId != ''">child_id = #{childId}</if>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryAnswerById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT * FROM answer WHERE acticle_id = #{acticleId}
+    </select>
+
+
+    <select id="queryAnswerByChildId" resultType="java.util.ArrayList">
+        SELECT * FROM answer WHERE
+        acticle_id = #{0}
+        AND
+        parent_id = #{1}
+    </select>
+
+
+</mapper>
