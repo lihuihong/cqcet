@@ -109,4 +109,13 @@ public interface ArticleMapper {
      * @return
      */
     int countByTypeId(@Param("typeId") String typeId,@Param("userId") String userId,@Param("status") String status);
+
+    /**
+     * 根据typeId查询帖子总数
+     * @param userId
+     * @return
+     */
+    Article selectArticleByUserIdNow(@Param("userId") String userId);
+
+
 }

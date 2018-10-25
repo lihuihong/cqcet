@@ -1,6 +1,7 @@
 package com.cqcet.controller;
 
 
+import com.cqcet.entity.Article;
 import com.cqcet.entity.Result;
 import com.cqcet.entity.Type;
 import com.cqcet.services.ArticleService;
@@ -27,6 +28,8 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ArticleService articleService;
 
     /**
      * 登录界面跳转
@@ -59,6 +62,7 @@ public class LoginController {
     public Result login(HttpServletRequest request) throws Exception {
 
         Map<String, Object> info = userService.selectUser(request);
+
         return Result.success().add("info", info);
     }
 

@@ -16,12 +16,26 @@ public interface UserMapper {
     List<User> listArticle();
 
     /**
+     * 模糊查询
+     * @param keyWord
+     * @return
+     */
+    List<User> userList(@Param("keyWord")String keyWord);
+
+    /**
      * 校验用户
      * @param userName 登录名
      * @param passWord 登录密码
      * @return
      */
     User checkUser(@Param("userName") String userName, @Param("passWord") String passWord);
+
+    /**
+     * 根据用户id获取用户信息
+     * @param userId 用户id
+     * @return
+     */
+    User getUserInfoById(@Param("userId") Integer userId);
 
     /**
      * 用户注册

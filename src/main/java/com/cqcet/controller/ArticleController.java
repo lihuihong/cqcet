@@ -6,8 +6,11 @@ import com.cqcet.services.ArticleService;
 import com.cqcet.services.TypeService;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -15,7 +18,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,5 +153,15 @@ public class ArticleController {
 
     public void edit(){
 
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/new_article.json",method = RequestMethod.GET)
+    public Result new_article(HttpServletRequest request){
+
+        Article article = articleService.selectArticleByUserIdNow((String) (request.getSession().getAttribute("user")));
+        //request.getSession().setAttribute("new_article",article);
+        String  json = new Gson().toJson(article);
+        return new Result().success().add("article_id",article.getId()).add("title",article.getTitle());
     }
 }

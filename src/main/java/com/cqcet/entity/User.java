@@ -36,6 +36,7 @@ public class User implements Serializable {
     private String groupName;
     private String professionalName;
     private String professionalId;
+    private String collegeIdName;
 
 
     @Override

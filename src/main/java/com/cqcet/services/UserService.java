@@ -138,6 +138,15 @@ public class UserService {
     }
 
     /**
+     * 用户名模糊查询
+     * @param keyWord
+     * @return
+     */
+    public List<User> usernameList(String keyWord){
+        return userMapper.userList(keyWord);
+    }
+
+    /**
      * 根据用户id查询信息
      * @param id
      * @return

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Ìû×Ó
+ * ï¿½ï¿½ï¿½ï¿½
  */
 @Data
 public class Article implements Serializable {
@@ -34,8 +34,9 @@ public class Article implements Serializable {
 
     private String collegeId;
 
-    private String alias;
+    private String collegeName;
 
+    private String alias;
 
     private String avatar;
 

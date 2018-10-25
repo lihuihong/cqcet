@@ -6,6 +6,7 @@ import com.cqcet.entity.Article;
 import com.cqcet.entity.College;
 import com.cqcet.entity.Forum;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -32,7 +33,8 @@ public class ArticleService {
      * @return
      */
     public List<Article> list(Map<String, Object> param){
-            return articleMapper.list(param);
+        List<Article> list = articleMapper.list(param);
+        return list;
     }
 
     /**
@@ -127,4 +129,15 @@ public class ArticleService {
     public int countByTypeId(String typeId,String userId,String status) {
         return articleMapper.countByTypeId(typeId,userId,status);
     }
+
+    /**
+     * 查询用户最近的一篇帖子
+     * @param userId
+     * @return
+     */
+    public Article selectArticleByUserIdNow(String userId) {
+        return articleMapper.selectArticleByUserIdNow(userId);
+    }
+
+
 }

@@ -2,13 +2,9 @@ package com.cqcet.controller.show;
 
 import com.cqcet.entity.*;
 import com.cqcet.exception.LException;
-import com.cqcet.services.ArticleService;
-import com.cqcet.services.CollegeService;
-import com.cqcet.services.TypeService;
-import com.cqcet.services.UserService;
+import com.cqcet.services.*;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.ErrorMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -37,6 +33,8 @@ public class ForumController {
     private UserService userService;
     @Autowired
     private TypeService typeService;
+    @Autowired
+    private AnswerService answerService;
 
 
     /**
@@ -137,12 +135,98 @@ public class ForumController {
         map.put("user", user);
         Map<String, Object> param = new HashMap<>();
         param.put("userId", article.getUserId());
-        param.put("status", "0");
+        System.out.println("____________________userId_"+article.getUserId());
+        param.put("status", 0);
         map.put("article", article);
         map.put("articleList", articleService.list(param));
+        //System.out.println(articleService.list(param).size());
+
+        List<Answer> answers = answerService.queryAnswerById(Integer.parseInt(id));
+
+        if(answers.size()!=0){
+            flag = new boolean[answers.get(answers.size()-1).getId()+1];
+
+            List<Map<String,Object>> list = printf(answers);
+        /*for(Map<String,Object> maps : list){
+            System.out.println(((User)maps.get("user")).getUsername()+","+maps.get("answer"));
+
+            if(maps.get("child")==null)
+                continue;
+            List<Map<String,Object>> childs = (List<Map<String,Object>>)maps.get("child");
+            for(Map<String,Object> child : childs){
+                System.out.println(child.get("answer"));
+                //System.out.println("____"+((User)child.get("chiildUser")).getUsername()+"回复了 "+((User)child.get("parentUser")).getUsername()+": "+((Answer)child.get("answer")).getContent());
+            }
+        }*/
+
+            map.put("answerList",list);
+        }
+
 
         return "show/detail";
     }
+
+    private boolean[] flag;
+
+
+    public List<Map<String,Object>> printf(List<Answer> answers){
+
+        List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+
+        for(Answer child : answers){
+            if(flag[child.getId()])
+                continue;
+            flag[child.getId()] = true;
+            Map<String,Object> map = new HashMap<>();
+            User user = userService.selectById(String.valueOf(child.getUserId()));
+            map.put("user",user);
+            map.put("answer",child);
+            //map.put("num",0);
+
+            if(child.getChildId()!=null){
+                List<Map<String,Object>> childs = new ArrayList<Map<String,Object>>();
+                printf(childs,answers,1,child);
+                map.put("child",childs);
+            }
+
+            //System.out.println(a.toString());
+
+            list.add(map);
+        }
+        return list;
+    }
+
+    public void printf(List<Map<String,Object>> list,List<Answer> answers,int i,Answer child){
+
+        for(Answer a : answers){
+            if(flag[a.getId()])
+                continue;
+            if(a.getParentId() == child.getChildId()){
+                //System.out.println(get(i) + a.toString());
+                Map<String,Object> map = new HashMap<>();
+                User parentUser = userService.selectById(String.valueOf(child.getUserId()));
+                User chiildUser = userService.selectById(String.valueOf(a.getUserId()));
+                map.put("parentUser",parentUser);
+                map.put("childUser",chiildUser);
+                map.put("answer",a);
+                //map.put("num",i);
+                list.add(map);
+                flag[a.getId()] = true;
+                if(a.getChildId() != null){
+                    printf(list,answers,i+1,a);
+                }
+                printf(list,answers,i,child);
+            }
+        }
+    }
+
+    public String get(int n){
+        String line = "";
+        for(int i = 0;i < n;i++)
+            line += "-";
+        return line;
+    }
+
 
     /**
      * 根据用户id查询用户全部帖子
@@ -268,16 +352,29 @@ public class ForumController {
      */
     @RequestMapping("/search.action")
     public String search(ModelMap map,@RequestParam(required = false,value = "keyWord")String keyWord,
-                         @RequestParam(required = false, value = "typeId") String typeId,
+                         @RequestParam(required = false, value = "type") String typeName,
                          @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
                          @RequestParam(value = "pageSize",defaultValue = "8")int pageSize){
 
         Map<String, Object> param = new HashMap<String, Object>();
-        if (!StringUtils.isEmpty(keyWord)) {
-            param.put("keyWord", "%" + keyWord.trim() + "%");
-        }
-        if (!StringUtils.isEmpty(typeId)) {
-            param.put("typeId",typeId);
+        if (!StringUtils.isEmpty(typeName)) {
+
+            map.put("name",typeName);
+            if ("用户".equals(typeName)){
+
+
+                List<User> userList = userService.usernameList("%" + keyWord.trim() + "%");
+                map.put("userlist", userList);
+                return "show/search_user";
+
+            }else if ("帖子".equals(typeName)){
+                param.put("username","%" + keyWord.trim() + "%");
+                param.put("keyWord", "%" + keyWord.trim() + "%");
+
+            }else {
+                param.put("userlist", userService.list_article());
+            }
+
         }
         param.put("status", 0);
 
