@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcet.dao.MessageMapper">
+    <resultMap id="BaseResultMap" type="com.cqcet.entity.Message">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="from_id" jdbcType="INTEGER" property="fromId"/>
+        <result column="to_id" jdbcType="INTEGER" property="toId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="has_read" jdbcType="VARCHAR" property="hasRead"/>
+        <result column="conversation_id" jdbcType="INTEGER" property="conversationId"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+    </resultMap>
+    <insert id="addMessage" >
+        INSERT INTO message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fromId!=null and fromId!=''">from_id,</if>
+            <if test="toId!=null and toId!=''">to_id,</if>
+            <if test="hasRead!=null and hasRead!='' ">has_read,</if>
+            <if test="content!=null and content!=''">content,</if>
+            <if test="conversationId!=null and conversationId!=''">conversation_id,</if>
+            <if test="createdDate!=null and createdDate!='' ">created_date,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fromId!=null and fromId!=''">#{fromId},</if>
+            <if test="toId!=null and toId!=''">#{toId},</if>
+            <if test="hasRead!=null and hasRead!=''">#{hasRead},</if>
+            <if test="content!=null and content!=''">#{content},</if>
+            <if test="conversationId!=null and conversationId!=''">#{conversationId},</if>
+            <if test="createdDate!=null and createdDate!=''">#{viewCount},</if>
+
+        </trim>
+    </insert>
+
+    <select id="getConversationDetail" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        message
+        WHERE
+        conversation_id=#{conversationId}
+        order by id desc
+    </select>
+
+    <select id="getConvesationUnreadCount" resultType="java.lang.Integer">
+        SELECT
+            count(*)
+        FROM
+            message
+        WHERE
+            chas_read=0
+            and
+            to_id=#{userId}
+            and
+            conversation_id=#{conversationId}
+        order by id desc
+    </select>
+
+    <select id="getConversationList" resultMap="BaseResultMap">
+        SELECT
+            *
+            ,count(id) as id
+        FROM
+            message
+        WHERE
+        from_id=#{userId} or to_id=#{userId}
+        order by id desc
+
+    </select>
+</mapper>

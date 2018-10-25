@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -35,6 +36,8 @@ public class ForumController {
     private TypeService typeService;
     @Autowired
     private AnswerService answerService;
+    @Autowired
+    private SensitiveService sensitiveService;
 
 
     /**
@@ -138,7 +141,6 @@ public class ForumController {
         param.put("status", "0");
         map.put("article", article);
         map.put("articleList", articleService.list(param));
-        //System.out.println(articleService.list(param).size());
 
         List<Answer> answers = answerService.queryAnswerById(Integer.parseInt(id));
 
@@ -463,8 +465,10 @@ public class ForumController {
             throw new LException("标题超过了80个");
         }
         Article article = new Article();
-        article.setContent(stem.replaceAll("(\r\n|\n)", "<br/>"));
-        article.setTitle(title);
+        article.setContent(HtmlUtils.htmlEscape(stem.replaceAll("(\r\n|\n)", "<br/>")));
+        article.setTitle(HtmlUtils.htmlEscape(title));
+        article.setTitle(sensitiveService.filter(title));
+        article.setContent(sensitiveService.filter(stem.replaceAll("(\r\n|\n)", "<br/>")));
         article.setUserId(Integer.valueOf(userInfo.getId()));
         //判断帖子id
         if (id != ""){

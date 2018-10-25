@@ -38,6 +38,13 @@
 				<li><a href="${pageContext.request.contextPath}/admin/recycle.action"><span>回收站</span></a></li>
 			</ul>
 		</li>
+		<li class="menu-item">
+			<a href="javascript:;"><span>商品交易</span><i class="my-icon menu-more"></i></a>
+			<ul>
+				<li><a href="${pageContext.request.contextPath}/admin/list.action"><span>商品管理</span></a></li>
+				<li><a href="${pageContext.request.contextPath}/admin/recycle.action"><span>交易管理</span></a></li>
+			</ul>
+		</li>
 	</ul>
 </div>
 

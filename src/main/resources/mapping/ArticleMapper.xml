@@ -47,7 +47,7 @@
         AND
         info.user_id = ui.id
         AND
-        info.grade_id = ci.id
+        ai.college_id = ci.id
 
         <if test="status!=null and status!=''">AND ai.status=#{status}</if>
         <if test="typeId!=null and typeId!=''">AND ai.type_id=#{typeId}</if>

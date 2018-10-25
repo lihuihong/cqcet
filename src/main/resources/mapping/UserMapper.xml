@@ -90,7 +90,7 @@
             user_info ui
         WHERE
             username = #{userName}
-            AND password = #{passWord}
+        <if test="passWord!=null and passWord!=''">AND password = #{passWord}</if>
             AND u.id = ui.user_id
     </select>
 
