@@ -227,7 +227,7 @@
                 "acticleId": acticleId,
                 "content": content,
                 "answerId" : answer_id,
-                "childId" :
+                "childId" : child_id
             },
             success: function (rtn) {
                 if (rtn.code == "000000") {
@@ -253,6 +253,7 @@
             if (!e) {
                 return;
             }
+
         $.ajax({
             url : "delete.json",
             type : "POST",
@@ -281,7 +282,7 @@
                 }
             }
         });
-        })
+        });
     }
 
 
