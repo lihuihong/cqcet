@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * ����
+ * 帖子
  */
 @Data
 public class Article implements Serializable {
@@ -39,6 +39,10 @@ public class Article implements Serializable {
     private String alias;
 
     private String avatar;
+
+    private Long liked;
+
+    private Integer islike;
 
 
 

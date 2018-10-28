@@ -3,21 +3,12 @@ package com.cqcet.dao;
 import com.cqcet.entity.UploadInfo;
 
 /**
- * ÆßÅ£ÔÆ
- * Created by ÄÇ¸öË­ on 2018/10/14.
+ * Created by é‚£ä¸ªè° on 2018/10/14.
  */
 public interface UploadInfoMapper {
-    /**
-     * ¸ù¾İÀàĞÍ£¬²éÑ¯ÉÏ´«ÉèÖÃĞÅÏ¢
-     * @param type ÀàĞÍ
-     * @return
-     */
+
     UploadInfo selectByType(String type);
 
-    /**
-     * ¸üĞÂÉÏ´«ÉèÖÃ
-     * @param uploadInfo
-     * @return
-     */
+
     int update(UploadInfo uploadInfo);
 }

@@ -3,10 +3,7 @@ package com.cqcet.controller.show;
 import com.cqcet.dao.UserInfoMapper;
 import com.cqcet.entity.*;
 import com.cqcet.exception.LException;
-import com.cqcet.services.ArticleService;
-import com.cqcet.services.TypeService;
-import com.cqcet.services.UploadInfoService;
-import com.cqcet.services.UserService;
+import com.cqcet.services.*;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +41,9 @@ public class UserInfoController {
 
     @Autowired
     private UploadInfoService uploadInfoService;
+
+    @Autowired
+    private LikeService likeService;
 
 
     /**
@@ -124,6 +124,10 @@ public class UserInfoController {
         // 只需要在查询之前调用，传入当前页码，以及每一页显示多少条
         PageMethod.startPage(pageNum, pageSize);
         List<Article> list = articleService.list(param);
+        //添加点赞数
+        for (Article article : list) {
+            article.setLiked(likeService.getLikeCount(EntityType.ENTITY_ARTIUCLE,article.getId()));
+        }
         PageInfo<Article> pageInfo = new PageInfo<Article>(list);
         map.put("pageInfo", pageInfo);
         User user = userService.getUserInfo(request);

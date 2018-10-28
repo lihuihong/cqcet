@@ -6,7 +6,7 @@
         <result column="from_id" jdbcType="INTEGER" property="fromId"/>
         <result column="to_id" jdbcType="INTEGER" property="toId"/>
         <result column="content" jdbcType="VARCHAR" property="content"/>
-        <result column="has_read" jdbcType="VARCHAR" property="hasRead"/>
+        <result column="has_read" jdbcType="INTEGER" property="hasRead"/>
         <result column="conversation_id" jdbcType="INTEGER" property="conversationId"/>
         <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
     </resultMap>
@@ -27,7 +27,7 @@
             <if test="hasRead!=null and hasRead!=''">#{hasRead},</if>
             <if test="content!=null and content!=''">#{content},</if>
             <if test="conversationId!=null and conversationId!=''">#{conversationId},</if>
-            <if test="createdDate!=null and createdDate!=''">#{viewCount},</if>
+            <if test="createdDate!=null and createdDate!=''">#{createdDate},</if>
 
         </trim>
     </insert>
@@ -48,23 +48,37 @@
         FROM
             message
         WHERE
-            chas_read=0
+            has_read=0
             and
             to_id=#{userId}
             and
             conversation_id=#{conversationId}
-        order by id desc
+        order by
+            id
+        desc
     </select>
 
     <select id="getConversationList" resultMap="BaseResultMap">
         SELECT
-            *
-            ,count(id) as id
+            *,
+            count(id) as id
         FROM
-            message
-        WHERE
-        from_id=#{userId} or to_id=#{userId}
-        order by id desc
+            (SELECT
+                 *
+             FROM
+                 message
+             where
+                 from_id=#{userId}
+                 or
+                 to_id=#{userId}
+             order by
+                 id desc)
+            tt
+        group by
+            conversation_id
+        order by
+            created_date
+        desc
 
     </select>
 </mapper>

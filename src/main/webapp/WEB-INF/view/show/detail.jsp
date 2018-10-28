@@ -78,7 +78,7 @@
                                         <p>来自 <a href="#" style="color:#ff82e4;">${article.username}</a> </p>
                                     </div>
                                     <div class="col-md-4">
-                                        <p>回复 <span style="color:#ff82e4;">3018</span> / 查看 <span style="color:#ff82e4;">${article.viewCount}</span> </p>
+                                        <p>回复 <span style="color:#ff82e4;">3018</span> / 查看 <span style="color:#ff82e4;">${article.viewCount}</span> / 赞 <span style="color:#ff82e4;">${article.liked}</span>  </p>
                                     </div>
                                     <div class="col-md-4" style="text-align:left">
                                         <p>时间 <span style="color:#ff82e4;"><fmt:formatDate value="${article.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" /></span> </p>
@@ -98,7 +98,18 @@
                                 <a href="javascript:post('${article.id}','ans-text',null,null)" class="btn btn-info btn-sm">
                                     <span class="glyphicon glyphicon-tint"></span> 快速回帖
                                 </a>
-
+                                <c:choose>
+                                    <c:when test="${article.islike > 0}">
+                                        <a href="javascript:postdislike('${article.id}')" class="btn btn-info btn-sm">
+                                            <span class="glyphicon glyphicon-thumbs-up"></span> 已赞
+                                        </a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="javascript:postlike('${article.id}')" class="btn btn-info btn-sm">
+                                            <span class="glyphicon glyphicon-thumbs-up"></span> 赞一个
+                                        </a>
+                                    </c:otherwise>
+                                </c:choose>
                             </p>
                         </div>
                     </div>
@@ -231,10 +242,7 @@
             },
             success: function (rtn) {
                 if (rtn.code == "000000") {
-                    helper.toast({
-                        content: "回帖成功，跳转查看",
-                        type: "success"
-                    });
+
                     // 刷新页面
                     window.location.reload();
                 } else {
@@ -245,6 +253,53 @@
                 }
             },
 
+        });
+    }
+    //点赞
+    function postlike(acticleId) {
+
+            $.ajax({
+                url: "/show/like.json",
+                type: "POST",
+                dataType: "json",
+                data:{
+                    "acticleId":acticleId
+                },
+                success: function (rtn) {
+                    if (rtn.code == "000000") {
+
+                        // 刷新页面
+                        window.location.reload();
+                    } else {
+                        helper.toast({
+                            content: rtn.message,
+                            type: "error"
+                        });
+                    }
+                },
+            });
+
+        };
+    //取消点赞
+    function postdislike(acticleId) {
+        $.ajax({
+            url: "/show/dislike.json",
+            type: "POST",
+            dataType: "json",
+            data:{
+                "acticleId":acticleId
+            },
+            success: function (rtn) {
+                if (rtn.code == "000000") {
+                    // 刷新页面
+                    window.location.reload();
+                } else {
+                    helper.toast({
+                        content: rtn.message,
+                        type: "error"
+                    });
+                }
+            },
         });
     }
     //删除帖子

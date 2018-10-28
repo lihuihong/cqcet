@@ -3,8 +3,7 @@ package com.cqcet.entity;
 import lombok.Data;
 
 /**
- * רҵ
- * Created by �Ǹ�˭ on 2018/10/2.
+ * Created by 那个谁 on 2018/10/2.
  */
 @Data
 public class Professional {

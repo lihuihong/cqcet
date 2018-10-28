@@ -3,8 +3,7 @@ package com.cqcet.entity;
 import lombok.Data;
 
 /**
- * ÂÛÌ³
- * Created by ÄÇ¸öË­ on 2018/10/9.
+ * Created by é‚£ä¸ªè° on 2018/10/9.
  */
 @Data
 public class Forum {

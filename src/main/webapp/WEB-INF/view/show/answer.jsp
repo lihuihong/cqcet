@@ -66,7 +66,7 @@
                                         <p>来自 <a href="#" style="color:#ff82e4;">${entity.username}</a> </p>
                                     </div>
                                     <div class="col-md-4">
-                                        <p>回复 <span style="color:#ff82e4;">3018</span> / 查看 <span style="color:#ff82e4;">${entity.viewCount}</span> </p>
+                                        <p>回复 <span style="color:#ff82e4;">3018</span> / 查看 <span style="color:#ff82e4;">${entity.viewCount}</span> / 赞 <span style="color:#ff82e4;">${entity.liked}</span> </p>
                                     </div>
                                     <div class="col-md-4" style="text-align:right">
                                         <p>时间 <span style="color:#ff82e4;"><fmt:formatDate value="${entity.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" /></span> </p>

@@ -2,13 +2,14 @@ package com.cqcet.services;
 
 import com.cqcet.dao.MessageMapper;
 import com.cqcet.entity.Message;
+import com.cqcet.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * Created by ÄÇ¸öË­ on 2018/10/25.
+ * Created by é‚£ä¸ªè° on 2018/10/25.
  */
 @Service
 public class MessageService {
@@ -17,9 +18,11 @@ public class MessageService {
 
     @Autowired
     SensitiveService sensitiveService;
+    @Autowired
+    JedisAdapter jedisAdapter;
 
     /**
-     * ·¢ÏûÏ¢
+     * å‘å¸ƒç§ä¿¡
      * @param message
      * @return
      */
@@ -29,7 +32,7 @@ public class MessageService {
     }
 
     /**
-     * »á»°ÏêÇé
+     * ç§ä¿¡è¯¦æƒ…
      * @param conversationId
      * @return
      */
@@ -38,7 +41,7 @@ public class MessageService {
     }
 
     /**
-     * »á»°
+     * åˆ—è¡¨
      * @param userId
      * @return
      */
@@ -47,12 +50,19 @@ public class MessageService {
     }
 
     /**
-     * Î´¶ÁÏûÏ¢
+     * ç§ä¿¡æ€»æ•°
      * @param userId
      * @param conversationId
      * @return
      */
     public int getConvesationUnreadCount(int userId, String conversationId) {
         return messageMapper.getConvesationUnreadCount(userId, conversationId);
+    }
+
+    public long message(int userId, int entityType, int entityId) {
+        String likeKey = RedisKeyUtil.getMessage(entityType, userId);
+        jedisAdapter.sadd(likeKey, String.valueOf(entityId));
+
+        return jedisAdapter.scard(likeKey);
     }
 }

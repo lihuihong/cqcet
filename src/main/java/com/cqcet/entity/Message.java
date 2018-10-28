@@ -5,8 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * Õ¾ÄÚĞÅ
- * Created by ÄÇ¸öË­ on 2018/10/25.
+ * Created by é‚£ä¸ªè° on 2018/10/25.
  */
 @Data
 public class Message {
@@ -17,4 +16,17 @@ public class Message {
     private Date createdDate;
     private int hasRead;
     private String conversationId;
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", fromId=" + fromId +
+                ", toId=" + toId +
+                ", content='" + content + '\'' +
+                ", createdDate=" + createdDate +
+                ", hasRead=" + hasRead +
+                ", conversationId='" + conversationId + '\'' +
+                '}';
+    }
 }

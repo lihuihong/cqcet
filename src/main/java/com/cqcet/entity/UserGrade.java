@@ -5,8 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * ÓÃ»§»áÔ±×é
- * Created by ÄÇ¸öË­ on 2018/9/30.
+ * Created by é‚£ä¸ªè° on 2018/9/30.
  */
 @Data
 public class UserGrade implements Serializable {

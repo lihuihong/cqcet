@@ -463,7 +463,7 @@ public class UserService {
             request.getSession().setAttribute("user", user.getId());
             request.getSession().setAttribute("avatar", user.getAvatar());
             request.getSession().setAttribute("username", user.getUsername());
-} catch (LException e) {
+            } catch (LException e) {
         return null;
         }
 

@@ -14,6 +14,7 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 import com.qiniu.util.UrlSafeBase64;
+import com.sun.org.apache.bcel.internal.classfile.Code;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -26,344 +27,344 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
-/**
- * Created by ÄÇ¸öË­ on 2018/10/14.
- */
-@Service("UploadInfoService")
-public class UploadInfoService {
-    @Autowired
-    private UploadInfoMapper uploadInfoMapper;
-
     /**
-     * ¸ù¾İÀàĞÍ£¬²éÑ¯ÉÏ´«ÉèÖÃĞÅÏ¢
-     * @param type ÀàĞÍ
-     * @return
+     * Created by é‚£ä¸ªè° on 2018/10/14.
      */
-    public UploadInfo selectByType(String type) {
-        return uploadInfoMapper.selectByType(type);
-    }
+    @Service("UploadInfoService")
+    public class UploadInfoService {
+        @Autowired
+        private UploadInfoMapper uploadInfoMapper;
 
-    /**
-     * ±£´æÉÏ´«ÉèÖÃ
-     * @param boardInfo
-     */
-    public void save(UploadInfo boardInfo) {
-        uploadInfoMapper.update(boardInfo);
-    }
-
-    /**
-     * ÉÏ´«±¾µØÍ¼Æ¬µ½ÆßÅ£ÔÆ
-     * @param file
-     * @param uploadInfo
-     * @return
-     * @throws LException
-     * @throws IOException
-     */
-    public String uploadImage(MultipartFile file, UploadInfo uploadInfo) throws LException, IOException {
         /**
-         * ¹¹ÔìÒ»¸ö´øÖ¸¶¨Zone¶ÔÏóµÄÅäÖÃÀà
-         * »ª¶« : Zone.zone0()
-         * »ª±± : Zone.zone1()
-         * »ªÄÏ : Zone.zone2()
-         * ±±ÃÀ : Zone.zoneNa0()
+         * æ ¹æ®ç±»å‹ï¼ŒæŸ¥è¯¢ä¸Šä¼ è®¾ç½®ä¿¡æ¯
+         * @param type ç±»å‹
+         * @return
          */
-        Configuration cfg = new Configuration(Zone.zone0());
-        // ...ÆäËû²ÎÊı²Î¿¼Àà×¢ÊÍ
-        UploadManager uploadManager = new UploadManager(cfg);
-        // ...Éú³ÉÉÏ´«Æ¾Ö¤£¬È»ºó×¼±¸ÉÏ´«
-        String accessKey = uploadInfo.getAk();
-        String secretKey = uploadInfo.getSk();
-        String bucket = uploadInfo.getBucket();
-        String compress = uploadInfo.getCompress();
+        public UploadInfo selectByType(String type) {
+            return uploadInfoMapper.selectByType(type);
+        }
 
-        // Ä¬ÈÏ²»Ö¸¶¨keyµÄÇé¿öÏÂ£¬ÒÔÎÄ¼şÄÚÈİµÄhashÖµ×÷ÎªÎÄ¼şÃû
-        String key = null;
-        String imgUrl = "";
-        try {
-            // Êı¾İÁ÷ÉÏ´«
-            InputStream byteInputStream = file.getInputStream();
-            Auth auth = Auth.create(accessKey, secretKey);
-            String upToken = auth.uploadToken(bucket);
+        /**
+         * ä¿å­˜ä¸Šä¼ è®¾ç½®
+         * @param boardInfo
+         */
+        public void save(UploadInfo boardInfo) {
+            uploadInfoMapper.update(boardInfo);
+        }
+
+        /**
+         * ä¸Šä¼ æœ¬åœ°å›¾ç‰‡åˆ°ä¸ƒç‰›äº‘
+         * @param file
+         * @param uploadInfo
+         * @return
+         * @throws LException
+         * @throws IOException
+         */
+        public String uploadImage(MultipartFile file, UploadInfo uploadInfo) throws LException, IOException {
+            /**
+             * æ„é€ ä¸€ä¸ªå¸¦æŒ‡å®šZoneå¯¹è±¡çš„é…ç½®ç±»
+             * åä¸œ : Zone.zone0()
+             * ååŒ— : Zone.zone1()
+             * åå— : Zone.zone2()
+             * åŒ—ç¾ : Zone.zoneNa0()
+             */
+            Configuration cfg = new Configuration(Zone.zone0());
+            // ...å…¶ä»–å‚æ•°å‚è€ƒç±»æ³¨é‡Š
+            UploadManager uploadManager = new UploadManager(cfg);
+            // ...ç”Ÿæˆä¸Šä¼ å‡­è¯ï¼Œç„¶åå‡†å¤‡ä¸Šä¼ 
+            String accessKey = uploadInfo.getAk();
+            String secretKey = uploadInfo.getSk();
+            String bucket = uploadInfo.getBucket();
+            String compress = uploadInfo.getCompress();
+
+            // é»˜è®¤ä¸æŒ‡å®škeyçš„æƒ…å†µä¸‹ï¼Œä»¥æ–‡ä»¶å†…å®¹çš„hashå€¼ä½œä¸ºæ–‡ä»¶å
+            String key = null;
+            String imgUrl = "";
             try {
-                Response response = uploadManager.put(byteInputStream, key, upToken, null, null);
-                // ½âÎöÉÏ´«³É¹¦µÄ½á¹û
-                DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+                // æ•°æ®æµä¸Šä¼ 
+                InputStream byteInputStream = file.getInputStream();
+                Auth auth = Auth.create(accessKey, secretKey);
+                String upToken = auth.uploadToken(bucket);
+                try {
+                    Response response = uploadManager.put(byteInputStream, key, upToken, null, null);
+                    // è§£æä¸Šä¼ æˆåŠŸçš„ç»“æœ
+                    DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
 //				System.out.println(putRet.key);
 //				System.out.println(putRet.hash);
-                imgUrl = uploadInfo.getDomain() + putRet.hash;
+                    imgUrl = uploadInfo.getDomain() + putRet.hash;
 
-                // Í¼Æ¬Ñ¹ËõºóÔÙ´ÎÉÏ´«
-                if ("0".equals(compress) || "100".equals(compress)) {
-                    // ²»Ñ¹Ëõ
-                } else {
-                    imgUrl = uploadCompressImage(uploadInfo, auth, cfg, bucket, imgUrl);
-                    // É¾³ıÔ­Í¼
+                    // å›¾ç‰‡å‹ç¼©åå†æ¬¡ä¸Šä¼ 
+                    if ("0".equals(compress) || "100".equals(compress)) {
+                        // ä¸å‹ç¼©
+                    } else {
+                        imgUrl = uploadCompressImage(uploadInfo, auth, cfg, bucket, imgUrl);
+                        // åˆ é™¤åŸå›¾
+                        String deleteKey = putRet.hash;
+                        deleteFile(auth, cfg, bucket, deleteKey);
+                    }
+                } catch (QiniuException ex) {
+                    Response r = ex.response;
+                    System.err.println(r.toString());
+                    try {
+                        System.err.println(r.bodyString());
+                    } catch (QiniuException ex2) {
+                        // ignore
+                    }
+                    throw new LException("ä¸Šä¼ å¤±è´¥ï¼Œå¯èƒ½æ˜¯ç½‘ç»œä¸ç¨³å®š");
+                }
+            } catch (UnsupportedEncodingException ex) {
+                // ignore
+                throw new LException("ä¸Šä¼ å¤±è´¥ï¼Œå¯èƒ½æ˜¯ç½‘ç»œä¸ç¨³å®š");
+            }
+
+            return imgUrl;
+        }
+
+        /**
+         * å›¾ç‰‡å‹ç¼©åå†æ¬¡ä¸Šä¼ 
+         * @param uploadInfo
+         * @param auth
+         * @param cfg
+         * @param bucket
+         * @param imgUrl
+         * @return
+         * @throws LException
+         */
+        private String uploadCompressImage(UploadInfo uploadInfo, Auth auth, Configuration cfg, String bucket, String imgUrl) throws LException {
+            String compress = uploadInfo.getCompress();
+            String apiCut = "imageView2/0/q/"+compress+"|imageslim";
+
+            // å®ä¾‹åŒ–ä¸€ä¸ªBucketManagerå¯¹è±¡
+            BucketManager bucketManager = new BucketManager(auth, cfg);
+            // è¦fetchçš„url
+            String url = imgUrl + apiCut;
+//		System.out.println(url);
+
+            try {
+                // è°ƒç”¨fetchæ–¹æ³•æŠ“å–æ–‡ä»¶
+                String hash = bucketManager.fetch(url, bucket, null).hash;
+//			System.out.println(hash);
+
+                return uploadInfo.getDomain() + hash;
+            } catch (QiniuException e) {
+                e.printStackTrace();
+                throw new LException("ä¸Šä¼ å¤±è´¥ï¼Œå›¾ç‰‡è£å‰ªæ—¶å‘ç”Ÿå¼‚å¸¸");
+            }
+        }
+
+        /**
+         * ä¸Šä¼ å¤´åƒï¼ˆæœ¬åœ°ä¸Šä¼ ï¼‰
+         * @param file
+         * @param uploadInfo
+         * @return
+         * @throws LException
+         * @throws IOException
+         */
+        public String uploadAvatar(MultipartFile file, UploadInfo uploadInfo) throws LException, IOException {
+            /**
+             * æ„é€ ä¸€ä¸ªå¸¦æŒ‡å®šZoneå¯¹è±¡çš„é…ç½®ç±»
+             * åä¸œ : Zone.zone0()
+             * ååŒ— : Zone.zone1()
+             * åå— : Zone.zone2()
+             * åŒ—ç¾ : Zone.zoneNa0()
+             */
+            Configuration cfg = new Configuration(Zone.zone0());
+            // ...å…¶ä»–å‚æ•°å‚è€ƒç±»æ³¨é‡Š
+            UploadManager uploadManager = new UploadManager(cfg);
+            // ...ç”Ÿæˆä¸Šä¼ å‡­è¯ï¼Œç„¶åå‡†å¤‡ä¸Šä¼ 
+            String accessKey = uploadInfo.getAk();
+            String secretKey = uploadInfo.getSk();
+            String bucket = uploadInfo.getBucket();
+            // é»˜è®¤ä¸æŒ‡å®škeyçš„æƒ…å†µä¸‹ï¼Œä»¥æ–‡ä»¶å†…å®¹çš„hashå€¼ä½œä¸ºæ–‡ä»¶å
+            String key = null;
+
+            String imgUrl = "";
+            try {
+                // æ•°æ®æµä¸Šä¼ 
+                InputStream byteInputStream = file.getInputStream();
+                Auth auth = Auth.create(accessKey, secretKey);
+                String upToken = auth.uploadToken(bucket);
+                try {
+                    Response response = uploadManager.put(byteInputStream, key, upToken, null, null);
+                    // è§£æä¸Šä¼ æˆåŠŸçš„ç»“æœ
+                    DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+//				System.out.println(putRet.key);
+//				System.out.println(putRet.hash);
                     String deleteKey = putRet.hash;
+                    imgUrl = uploadInfo.getDomain() + putRet.hash;
+
+                    // å›¾ç‰‡è£å‰ªåå†æ¬¡ä¸Šä¼ 
+                    imgUrl = uploadCutImage(uploadInfo, auth, cfg, bucket, imgUrl);
+                    // åˆ é™¤åŸå›¾
                     deleteFile(auth, cfg, bucket, deleteKey);
+                } catch (QiniuException ex) {
+                    Response r = ex.response;
+                    System.err.println(r.toString());
+                    try {
+                        System.err.println(r.bodyString());
+                    } catch (QiniuException ex2) {
+                        // ignore
+                    }
+                    throw new LException("ä¸Šä¼ å¤±è´¥ï¼Œå¯èƒ½æ˜¯ç½‘ç»œä¸ç¨³å®š");
                 }
-            } catch (QiniuException ex) {
-                Response r = ex.response;
-                System.err.println(r.toString());
-                try {
-                    System.err.println(r.bodyString());
-                } catch (QiniuException ex2) {
-                    // ignore
-                }
-                throw new LException("ÉÏ´«Ê§°Ü£¬¿ÉÄÜÊÇÍøÂç²»ÎÈ¶¨");
+            } catch (UnsupportedEncodingException ex) {
+                // ignore
+                throw new LException("ä¸Šä¼ å¤±è´¥ï¼Œå¯èƒ½æ˜¯ç½‘ç»œä¸ç¨³å®š");
             }
-        } catch (UnsupportedEncodingException ex) {
-            // ignore
-            throw new LException("ÉÏ´«Ê§°Ü£¬¿ÉÄÜÊÇÍøÂç²»ÎÈ¶¨");
+
+            return imgUrl;
         }
 
-        return imgUrl;
-    }
-
-    /**
-     * Í¼Æ¬Ñ¹ËõºóÔÙ´ÎÉÏ´«
-     * @param uploadInfo
-     * @param auth
-     * @param cfg
-     * @param bucket
-     * @param imgUrl
-     * @return
-     * @throws LException
-     */
-    private String uploadCompressImage(UploadInfo uploadInfo, Auth auth, Configuration cfg, String bucket, String imgUrl) throws LException {
-        String compress = uploadInfo.getCompress();
-        String apiCut = "imageView2/0/q/"+compress+"|imageslim";
-
-        // ÊµÀı»¯Ò»¸öBucketManager¶ÔÏó
-        BucketManager bucketManager = new BucketManager(auth, cfg);
-        // ÒªfetchµÄurl
-        String url = imgUrl + apiCut;
-//		System.out.println(url);
-
-        try {
-            // µ÷ÓÃfetch·½·¨×¥È¡ÎÄ¼ş
-            String hash = bucketManager.fetch(url, bucket, null).hash;
-//			System.out.println(hash);
-
-            return uploadInfo.getDomain() + hash;
-        } catch (QiniuException e) {
-            e.printStackTrace();
-            throw new LException("ÉÏ´«Ê§°Ü£¬Í¼Æ¬²Ã¼ôÊ±·¢ÉúÒì³£");
-        }
-    }
-
-    /**
-     * ÉÏ´«Í·Ïñ£¨±¾µØÉÏ´«£©
-     * @param file
-     * @param uploadInfo
-     * @return
-     * @throws LException
-     * @throws IOException
-     */
-    public String uploadAvatar(MultipartFile file, UploadInfo uploadInfo) throws LException, IOException {
         /**
-         * ¹¹ÔìÒ»¸ö´øÖ¸¶¨Zone¶ÔÏóµÄÅäÖÃÀà
-         * »ª¶« : Zone.zone0()
-         * »ª±± : Zone.zone1()
-         * »ªÄÏ : Zone.zone2()
-         * ±±ÃÀ : Zone.zoneNa0()
+         * å›¾ç‰‡è£å‰ªåå†æ¬¡ä¸Šä¼ 
+         * @param uploadInfo
+         * @param auth
+         * @param cfg
+         * @param bucket
+         * @param imgUrl
+         * @return
+         * @throws LException
          */
-        Configuration cfg = new Configuration(Zone.zone0());
-        // ...ÆäËû²ÎÊı²Î¿¼Àà×¢ÊÍ
-        UploadManager uploadManager = new UploadManager(cfg);
-        // ...Éú³ÉÉÏ´«Æ¾Ö¤£¬È»ºó×¼±¸ÉÏ´«
-        String accessKey = uploadInfo.getAk();
-        String secretKey = uploadInfo.getSk();
-        String bucket = uploadInfo.getBucket();
-        // Ä¬ÈÏ²»Ö¸¶¨keyµÄÇé¿öÏÂ£¬ÒÔÎÄ¼şÄÚÈİµÄhashÖµ×÷ÎªÎÄ¼şÃû
-        String key = null;
+        public String uploadCutImage(UploadInfo uploadInfo, Auth auth, Configuration cfg, String bucket, String imgUrl) throws LException {
+            String width = "200";
+            String height = "200";
+            String apiCut = "?imageView2/1/w/"+width+"/h/"+height;
 
-        String imgUrl = "";
-        try {
-            // Êı¾İÁ÷ÉÏ´«
-            InputStream byteInputStream = file.getInputStream();
-            Auth auth = Auth.create(accessKey, secretKey);
-            String upToken = auth.uploadToken(bucket);
-            try {
-                Response response = uploadManager.put(byteInputStream, key, upToken, null, null);
-                // ½âÎöÉÏ´«³É¹¦µÄ½á¹û
-                DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-//				System.out.println(putRet.key);
-//				System.out.println(putRet.hash);
-                String deleteKey = putRet.hash;
-                imgUrl = uploadInfo.getDomain() + putRet.hash;
-
-                // Í¼Æ¬²Ã¼ôºóÔÙ´ÎÉÏ´«
-                imgUrl = uploadCutImage(uploadInfo, auth, cfg, bucket, imgUrl);
-                // É¾³ıÔ­Í¼
-                deleteFile(auth, cfg, bucket, deleteKey);
-            } catch (QiniuException ex) {
-                Response r = ex.response;
-                System.err.println(r.toString());
-                try {
-                    System.err.println(r.bodyString());
-                } catch (QiniuException ex2) {
-                    // ignore
-                }
-                throw new LException("ÉÏ´«Ê§°Ü£¬¿ÉÄÜÊÇÍøÂç²»ÎÈ¶¨");
-            }
-        } catch (UnsupportedEncodingException ex) {
-            // ignore
-            throw new LException("ÉÏ´«Ê§°Ü£¬¿ÉÄÜÊÇÍøÂç²»ÎÈ¶¨");
-        }
-
-        return imgUrl;
-    }
-
-    /**
-     * Í¼Æ¬²Ã¼ôºóÔÙ´ÎÉÏ´«
-     * @param uploadInfo
-     * @param auth
-     * @param cfg
-     * @param bucket
-     * @param imgUrl
-     * @return
-     * @throws LException
-     */
-    public String uploadCutImage(UploadInfo uploadInfo, Auth auth, Configuration cfg, String bucket, String imgUrl) throws LException {
-        String width = "200";
-        String height = "200";
-        String apiCut = "?imageView2/1/w/"+width+"/h/"+height;
-
-        // ÊµÀı»¯Ò»¸öBucketManager¶ÔÏó
-        BucketManager bucketManager = new BucketManager(auth, cfg);
-        // ÒªfetchµÄurl
-        String url = imgUrl + apiCut;
+            // å®ä¾‹åŒ–ä¸€ä¸ªBucketManagerå¯¹è±¡
+            BucketManager bucketManager = new BucketManager(auth, cfg);
+            // è¦fetchçš„url
+            String url = imgUrl + apiCut;
 //		System.out.println(url);
 
-        try {
-            // µ÷ÓÃfetch·½·¨×¥È¡ÎÄ¼ş
-            String hash = bucketManager.fetch(url, bucket, null).hash;
+            try {
+                // è°ƒç”¨fetchæ–¹æ³•æŠ“å–æ–‡ä»¶
+                String hash = bucketManager.fetch(url, bucket, null).hash;
 //			System.out.println(hash);
 
-            return uploadInfo.getDomain() + hash;
-        } catch (QiniuException e) {
-            e.printStackTrace();
-            throw new LException("ÉÏ´«Ê§°Ü£¬Í¼Æ¬²Ã¼ôÊ±·¢ÉúÒì³£");
+                return uploadInfo.getDomain() + hash;
+            } catch (QiniuException e) {
+                e.printStackTrace();
+                throw new LException("ä¸Šä¼ å¤±è´¥ï¼Œå›¾ç‰‡è£å‰ªæ—¶å‘ç”Ÿå¼‚å¸¸");
+            }
         }
-    }
 
-    /**
-     * É¾³ıÔ­Í¼
-     * @param auth
-     * @param cfg
-     * @param bucket
-     * @param fileName
-     */
-    private void deleteFile(Auth auth, Configuration cfg, String bucket, String fileName) {
-        //¹¹ÔìÒ»¸ö´øÖ¸¶¨Zone¶ÔÏóµÄÅäÖÃÀà
+        /**
+         * åˆ é™¤åŸå›¾
+         * @param auth
+         * @param cfg
+         * @param bucket
+         * @param fileName
+         */
+        private void deleteFile(Auth auth, Configuration cfg, String bucket, String fileName) {
+            //æ„é€ ä¸€ä¸ªå¸¦æŒ‡å®šZoneå¯¹è±¡çš„é…ç½®ç±»
 //		Configuration cfg = new Configuration(Zone.zone0());
-        //...ÆäËû²ÎÊı²Î¿¼Àà×¢ÊÍ
-        BucketManager bucketManager = new BucketManager(auth, cfg);
-        try {
-            bucketManager.delete(bucket, fileName);
-        } catch (QiniuException ex) {
-            // Èç¹ûÓöµ½Òì³££¬ËµÃ÷É¾³ıÊ§°Ü
-            System.err.println(ex.code());
-            System.err.println(ex.response.toString());
-        }
-    }
-
-    /**
-     * ÉÏ´«base64Í¼Æ¬
-     * @param file64
-     * @param uploadInfo
-     * @return
-     * @throws IOException
-     */
-    public String uploadAvatarByBase64(String file64, UploadInfo uploadInfo) throws IOException {
-        // ÃÜÔ¿ÅäÖÃ
-        String ak = uploadInfo.getAk();
-        String sk = uploadInfo.getSk();
-        Auth auth = Auth.create(ak, sk);
-
-        // ¿Õ¼äÃû
-        String bucketname = uploadInfo.getBucket();
-        // ÉÏ´«µÄÍ¼Æ¬Ãû
-        String key = UUID.randomUUID().toString().replace("-", "");
-
-        file64 = file64.substring(22);
-//		System.out.println("file64:"+file64);
-        String url = "http://upload.qiniu.com/putb64/" + -1 + "/key/" + UrlSafeBase64.encodeToString(key);
-        // ·Ç»ª¶«¿Õ¼äĞèÒª¸ù¾İ×¢ÒâÊÂÏî 1 ĞŞ¸ÄÉÏ´«ÓòÃû
-        RequestBody rb = RequestBody.create(null, file64);
-        String upToken  = auth.uploadToken(bucketname, null, 3600, new StringMap().put("insertOnly", 1));
-        Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Content-Type", "application/octet-stream")
-                .addHeader("Authorization", "UpToken " + upToken)
-                .post(rb).build();
-//		System.out.println(request.headers());
-        OkHttpClient client = new OkHttpClient();
-        okhttp3.Response response = client.newCall(request).execute();
-        System.out.println(response);
-
-        String imgUrl = uploadInfo.getDomain() + key;
-
-        return imgUrl;
-    }
-
-    /**
-     * ÉÏ´«ÎÄ¼ş
-     * @param file
-     * @param uploadInfo
-     * @return
-     * @throws LException
-     * @throws IOException
-     */
-    public String uploadFile(MultipartFile file, UploadInfo uploadInfo) throws LException, IOException {
-        /**
-         * ¹¹ÔìÒ»¸ö´øÖ¸¶¨Zone¶ÔÏóµÄÅäÖÃÀà
-         * »ª¶« : Zone.zone0()
-         * »ª±± : Zone.zone1()
-         * »ªÄÏ : Zone.zone2()
-         * ±±ÃÀ : Zone.zoneNa0()
-         */
-        Configuration cfg = new Configuration(Zone.zone0());
-        // ...ÆäËû²ÎÊı²Î¿¼Àà×¢ÊÍ
-        UploadManager uploadManager = new UploadManager(cfg);
-        // ...Éú³ÉÉÏ´«Æ¾Ö¤£¬È»ºó×¼±¸ÉÏ´«
-        String accessKey = uploadInfo.getAk();
-        String secretKey = uploadInfo.getSk();
-        String bucket = uploadInfo.getBucket();
-
-        // Ä¬ÈÏ²»Ö¸¶¨keyµÄÇé¿öÏÂ£¬ÒÔÎÄ¼şÄÚÈİµÄhashÖµ×÷ÎªÎÄ¼şÃû
-        // ÎÄ¼şÔ­Ãû³Æ
-        String fileName = file.getOriginalFilename();
-        String key = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
-        String fileUrl = "";
-        try {
-            // Êı¾İÁ÷ÉÏ´«
-            InputStream byteInputStream = file.getInputStream();
-            Auth auth = Auth.create(accessKey, secretKey);
-            String upToken = auth.uploadToken(bucket);
+            //...å…¶ä»–å‚æ•°å‚è€ƒç±»æ³¨é‡Š
+            BucketManager bucketManager = new BucketManager(auth, cfg);
             try {
-                Response response = uploadManager.put(byteInputStream, key, upToken, null, null);
-                // ½âÎöÉÏ´«³É¹¦µÄ½á¹û
-                DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+                bucketManager.delete(bucket, fileName);
+            } catch (QiniuException ex) {
+                // å¦‚æœé‡åˆ°å¼‚å¸¸ï¼Œè¯´æ˜åˆ é™¤å¤±è´¥
+                System.err.println(ex.code());
+                System.err.println(ex.response.toString());
+            }
+        }
+
+        /**
+         * ä¸Šä¼ base64å›¾ç‰‡
+         * @param file64
+         * @param uploadInfo
+         * @return
+         * @throws IOException
+         */
+        public String uploadAvatarByBase64(String file64, UploadInfo uploadInfo) throws IOException {
+            // å¯†é’¥é…ç½®
+            String ak = uploadInfo.getAk();
+            String sk = uploadInfo.getSk();
+            Auth auth = Auth.create(ak, sk);
+
+            // ç©ºé—´å
+            String bucketname = uploadInfo.getBucket();
+            // ä¸Šä¼ çš„å›¾ç‰‡å
+            String key = UUID.randomUUID().toString().replace("-", "");
+
+            file64 = file64.substring(22);
+//		System.out.println("file64:"+file64);
+            String url = "http://upload.qiniu.com/putb64/" + -1 + "/key/" + UrlSafeBase64.encodeToString(key);
+            // éåä¸œç©ºé—´éœ€è¦æ ¹æ®æ³¨æ„äº‹é¡¹ 1 ä¿®æ”¹ä¸Šä¼ åŸŸå
+            RequestBody rb = RequestBody.create(null, file64);
+            String upToken  = auth.uploadToken(bucketname, null, 3600, new StringMap().put("insertOnly", 1));
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Content-Type", "application/octet-stream")
+                    .addHeader("Authorization", "UpToken " + upToken)
+                    .post(rb).build();
+//		System.out.println(request.headers());
+            OkHttpClient client = new OkHttpClient();
+            okhttp3.Response response = client.newCall(request).execute();
+            System.out.println(response);
+
+            String imgUrl = uploadInfo.getDomain() + key;
+
+            return imgUrl;
+        }
+
+        /**
+         * ä¸Šä¼ æ–‡ä»¶
+         * @param file
+         * @param uploadInfo
+         * @return
+         * @throws LException
+         * @throws IOException
+         */
+        public String uploadFile(MultipartFile file, UploadInfo uploadInfo) throws LException, IOException {
+            /**
+             * æ„é€ ä¸€ä¸ªå¸¦æŒ‡å®šZoneå¯¹è±¡çš„é…ç½®ç±»
+             * åä¸œ : Zone.zone0()
+             * ååŒ— : Zone.zone1()
+             * åå— : Zone.zone2()
+             * åŒ—ç¾ : Zone.zoneNa0()
+             */
+            Configuration cfg = new Configuration(Zone.zone0());
+            // ...å…¶ä»–å‚æ•°å‚è€ƒç±»æ³¨é‡Š
+            UploadManager uploadManager = new UploadManager(cfg);
+            // ...ç”Ÿæˆä¸Šä¼ å‡­è¯ï¼Œç„¶åå‡†å¤‡ä¸Šä¼ 
+            String accessKey = uploadInfo.getAk();
+            String secretKey = uploadInfo.getSk();
+            String bucket = uploadInfo.getBucket();
+
+            // é»˜è®¤ä¸æŒ‡å®škeyçš„æƒ…å†µä¸‹ï¼Œä»¥æ–‡ä»¶å†…å®¹çš„hashå€¼ä½œä¸ºæ–‡ä»¶å
+            // æ–‡ä»¶åŸåç§°
+            String fileName = file.getOriginalFilename();
+            String key = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));
+            String fileUrl = "";
+            try {
+                // æ•°æ®æµä¸Šä¼ 
+                InputStream byteInputStream = file.getInputStream();
+                Auth auth = Auth.create(accessKey, secretKey);
+                String upToken = auth.uploadToken(bucket);
+                try {
+                    Response response = uploadManager.put(byteInputStream, key, upToken, null, null);
+                    // è§£æä¸Šä¼ æˆåŠŸçš„ç»“æœ
+                    DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
 //				System.out.println(putRet.key);
 //				System.out.println(putRet.hash);
-                fileUrl = uploadInfo.getDomain() + putRet.key;
-            } catch (QiniuException ex) {
-                Response r = ex.response;
-                System.err.println(r.toString());
-                try {
-                    System.err.println(r.bodyString());
-                } catch (QiniuException ex2) {
-                    // ignore
+                    fileUrl = uploadInfo.getDomain() + putRet.key;
+                } catch (QiniuException ex) {
+                    Response r = ex.response;
+                    System.err.println(r.toString());
+                    try {
+                        System.err.println(r.bodyString());
+                    } catch (QiniuException ex2) {
+                        // ignore
+                    }
+                    throw new LException("ä¸Šä¼ å¤±è´¥ï¼Œå¯èƒ½æ˜¯ç½‘ç»œä¸ç¨³å®š");
                 }
-                throw new LException("ÉÏ´«Ê§°Ü£¬¿ÉÄÜÊÇÍøÂç²»ÎÈ¶¨");
+            } catch (UnsupportedEncodingException ex) {
+                // ignore
+                throw new LException("ä¸Šä¼ å¤±è´¥ï¼Œå¯èƒ½æ˜¯ç½‘ç»œä¸ç¨³å®š");
             }
-        } catch (UnsupportedEncodingException ex) {
-            // ignore
-            throw new LException("ÉÏ´«Ê§°Ü£¬¿ÉÄÜÊÇÍøÂç²»ÎÈ¶¨");
-        }
 
-        return fileUrl;
-    }
+            return fileUrl;
+        }
 }
 

@@ -3,8 +3,7 @@ package com.cqcet.entity;
 import lombok.Data;
 
 /**
- * ÓÃ»§¸öÈËĞÅÏ¢
- * Created by ÄÇ¸öË­ on 2018/10/7.
+ * Created by é‚£ä¸ªè° on 2018/10/7.
  */
 @Data
 public class UserInfo {

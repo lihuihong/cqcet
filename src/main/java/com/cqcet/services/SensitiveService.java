@@ -13,41 +13,38 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by ÄÇ¸öË­ on 2018/10/25.
- */
 @Service
 public class SensitiveService implements InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(SensitiveService.class);
 
     /**
-     * Ä¬ÈÏÃô¸Ğ´ÊÌæ»»·û
+     * é»˜è®¤æ•æ„Ÿè¯æ›¿æ¢ç¬¦
      */
-    private static final String DEFAULT_REPLACEMENT = "***";
+    private static final String DEFAULT_REPLACEMENT = "æ•æ„Ÿè¯";
 
 
     private class TrieNode {
 
         /**
-         * true ¹Ø¼ü´ÊµÄÖÕ½á £» false ¼ÌĞø
+         * true å…³é”®è¯çš„ç»ˆç»“ ï¼› false ç»§ç»­
          */
         private boolean end = false;
 
         /**
-         * keyÏÂÒ»¸ö×Ö·û£¬valueÊÇ¶ÔÓ¦µÄ½Úµã
+         * keyä¸‹ä¸€ä¸ªå­—ç¬¦ï¼Œvalueæ˜¯å¯¹åº”çš„èŠ‚ç‚¹
          */
         private Map<Character, TrieNode> subNodes = new HashMap<>();
 
         /**
-         * ÏòÖ¸¶¨Î»ÖÃÌí¼Ó½ÚµãÊ÷
+         * å‘æŒ‡å®šä½ç½®æ·»åŠ èŠ‚ç‚¹æ ‘
          */
         void addSubNode(Character key, TrieNode node) {
             subNodes.put(key, node);
         }
 
         /**
-         * »ñÈ¡ÏÂ¸ö½Úµã
+         * è·å–ä¸‹ä¸ªèŠ‚ç‚¹
          */
         TrieNode getSubNode(Character key) {
             return subNodes.get(key);
@@ -70,23 +67,23 @@ public class SensitiveService implements InitializingBean {
 
 
     /**
-     * ¸ù½Úµã
+     * æ ¹èŠ‚ç‚¹
      */
     private TrieNode rootNode = new TrieNode();
 
 
     /**
-     * ÅĞ¶ÏÊÇ·ñÊÇÒ»¸ö·ûºÅ
+     * åˆ¤æ–­æ˜¯å¦æ˜¯ä¸€ä¸ªç¬¦å·
      */
     private boolean isSymbol(char c) {
         int ic = (int) c;
-        // 0x2E80-0x9FFF ¶«ÑÇÎÄ×Ö·¶Î§
+        // 0x2E80-0x9FFF ä¸œäºšæ–‡å­—èŒƒå›´
         return !CharUtils.isAsciiAlphanumeric(c) && (ic < 0x2E80 || ic > 0x9FFF);
     }
 
 
     /**
-     * ¹ıÂËÃô¸Ğ´Ê
+     * è¿‡æ»¤æ•æ„Ÿè¯
      */
     public String filter(String text) {
         if (StringUtils.isBlank(text)) {
@@ -96,12 +93,12 @@ public class SensitiveService implements InitializingBean {
         StringBuilder result = new StringBuilder();
 
         TrieNode tempNode = rootNode;
-        int begin = 0; // »Ø¹öÊı
-        int position = 0; // µ±Ç°±È½ÏµÄÎ»ÖÃ
+        int begin = 0; // å›æ»šæ•°
+        int position = 0; // å½“å‰æ¯”è¾ƒçš„ä½ç½®
 
         while (position < text.length()) {
             char c = text.charAt(position);
-            // ¿Õ¸ñÖ±½ÓÌø¹ı
+            // ç©ºæ ¼ç›´æ¥è·³è¿‡
             if (isSymbol(c)) {
                 if (tempNode == rootNode) {
                     result.append(c);
@@ -113,17 +110,17 @@ public class SensitiveService implements InitializingBean {
 
             tempNode = tempNode.getSubNode(c);
 
-            // µ±Ç°Î»ÖÃµÄÆ¥Åä½áÊø
+            // å½“å‰ä½ç½®çš„åŒ¹é…ç»“æŸ
             if (tempNode == null) {
-                // ÒÔbegin¿ªÊ¼µÄ×Ö·û´®²»´æÔÚÃô¸Ğ´Ê
+                // ä»¥beginå¼€å§‹çš„å­—ç¬¦ä¸²ä¸å­˜åœ¨æ•æ„Ÿè¯
                 result.append(text.charAt(begin));
-                // Ìøµ½ÏÂÒ»¸ö×Ö·û¿ªÊ¼²âÊÔ
+                // è·³åˆ°ä¸‹ä¸€ä¸ªå­—ç¬¦å¼€å§‹æµ‹è¯•
                 position = begin + 1;
                 begin = position;
-                // »Øµ½Ê÷³õÊ¼½Úµã
+                // å›åˆ°æ ‘åˆå§‹èŠ‚ç‚¹
                 tempNode = rootNode;
             } else if (tempNode.isKeywordEnd()) {
-                // ·¢ÏÖÃô¸Ğ´Ê£¬ ´Óbeginµ½positionµÄÎ»ÖÃÓÃreplacementÌæ»»µô
+                // å‘ç°æ•æ„Ÿè¯ï¼Œ ä»beginåˆ°positionçš„ä½ç½®ç”¨replacementæ›¿æ¢æ‰
                 result.append(replacement);
                 position = position + 1;
                 begin = position;
@@ -140,16 +137,16 @@ public class SensitiveService implements InitializingBean {
 
     private void addWord(String lineTxt) {
         TrieNode tempNode = rootNode;
-        // Ñ­»·Ã¿¸ö×Ö½Ú
+        // å¾ªç¯æ¯ä¸ªå­—èŠ‚
         for (int i = 0; i < lineTxt.length(); ++i) {
             Character c = lineTxt.charAt(i);
-            // ¹ıÂË¿Õ¸ñ
+            // è¿‡æ»¤ç©ºæ ¼
             if (isSymbol(c)) {
                 continue;
             }
             TrieNode node = tempNode.getSubNode(c);
 
-            if (node == null) { // Ã»³õÊ¼»¯
+            if (node == null) { // æ²¡åˆå§‹åŒ–
                 node = new TrieNode();
                 tempNode.addSubNode(c, node);
             }
@@ -157,7 +154,7 @@ public class SensitiveService implements InitializingBean {
             tempNode = node;
 
             if (i == lineTxt.length() - 1) {
-                // ¹Ø¼ü´Ê½áÊø£¬ ÉèÖÃ½áÊø±êÖ¾
+                // å…³é”®è¯ç»“æŸï¼Œ è®¾ç½®ç»“æŸæ ‡å¿—
                 tempNode.setKeywordEnd(true);
             }
         }
@@ -171,7 +168,7 @@ public class SensitiveService implements InitializingBean {
         try {
             InputStream is = Thread.currentThread().getContextClassLoader()
                     .getResourceAsStream("SensitiveWords.txt");
-            InputStreamReader read = new InputStreamReader(is,"UTF-8");
+            InputStreamReader read = new InputStreamReader(is);
             BufferedReader bufferedReader = new BufferedReader(read);
             String lineTxt;
             while ((lineTxt = bufferedReader.readLine()) != null) {
@@ -180,14 +177,14 @@ public class SensitiveService implements InitializingBean {
             }
             read.close();
         } catch (Exception e) {
-            logger.error("¶ÁÈ¡Ãô¸Ğ´ÊÎÄ¼şÊ§°Ü" + e.getMessage());
+            logger.error("è¯»å–æ•æ„Ÿè¯æ–‡ä»¶å¤±è´¥" + e.getMessage());
         }
     }
 
     public static void main(String[] argv) {
         SensitiveService s = new SensitiveService();
-        s.addWord("É«Çé");
-        s.addWord("ºÃÉ«");
-        System.out.print(s.filter("ÄãºÃXÉ«**ÇéXX"));
+        s.addWord("è‰²æƒ…");
+        s.addWord("å¥½è‰²");
+        System.out.print(s.filter("ä½ å¥½Xè‰²**æƒ…XX"));
     }
 }

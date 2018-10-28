@@ -69,6 +69,39 @@
         </div>
     </div>
 </header>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;left: 50%;
+     top: 40%;transform: translate(-50%,-50%);min-width:50%;overflow: visible;bottom: inherit; right: inherit;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">发送私信</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label >发给：</label>
+                    <input type="text" id="touser"  class="form-control"  placeholder="用户名">
+                </div>
+                <div class="form-group">
+                    <label >内容：</label>
+                    <textarea rows="3"  id="tocontent" class="form-control" placeholder="私信内容" ></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                </button>
+                <button type="button" id="btn_submit" class="btn btn-success" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> 发送
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <nav class="navbar navbar-default" role="navigation">
     <div class="container">
         <div class="row">
@@ -101,6 +134,17 @@
                                 <li><a href="#">另一个分离的链接</a></li>
                             </ul>
                         </li>
+                        <c:choose>
+                            <c:when test="${sessionScope.get(\"userInfo\") != null}">
+                                <li>
+                                    <a class="zu-top-nav-link" href="#" id="zh-top-nav-count-wrap" role="button"><span
+                                            class="mobi-arrow"></span>消息<span id="zh-top-nav-count" class="zu-top-nav-count zg-noti-number" style="display: none;">0</span></a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                            </c:otherwise>
+                        </c:choose>
+
                     </ul>
                 </div>
             </div>
@@ -114,25 +158,33 @@
                             <div class="card-user">
                                 <div class="card-top clearfix">
                                     <a href="<%=request.getContextPath()%>/show/user/user.action" class="l">
-                                        <img src="<%=session.getAttribute("avatar")%>" alt="<%=session.getAttribute("username")%>">
+                                        <img src="<%=session.getAttribute("avatar")%>"
+                                             alt="<%=session.getAttribute("username")%>">
 
                                     </a>
                                     <div class="card-top-right-box l">
-                                        <p><%=session.getAttribute("username")%></p>
+                                        <p><%=session.getAttribute("username")%>
+                                        </p>
                                         <p>新手上路</p>
                                     </div>
                                 </div>
                                 <div class="user-center-box">
                                     <ul class="clearfix" style="padding: 0px;">
-                                        <li class="l"><a href="" target="_blank"><span class="glyphicon glyphicon-user"></span> 我的信息</a></li>
-                                        <li class="l"><a href="" target="_blank"><span class="glyphicon glyphicon-book"></span> 我的帖子</a></li>
+                                        <li class="l"><a href="<%=request.getContextPath()%>/show/user/user.action"
+                                                         target="_blank"><span class="glyphicon glyphicon-user"></span>
+                                            我的信息</a></li>
+                                        <li class="l"><a
+                                                href="<%=request.getContextPath()%>/show/user/postCenter.action"
+                                                target="_blank"><span class="glyphicon glyphicon-book"></span> 我的帖子</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="card-history">
                                     <span class="history-item">
                                         <span class="tit">最近帖子</span>
                                         <span class="media-name">3-3 Spring Bean装配之Aware接口</span>
-                                        <div style="text-align: right;margin-top: 10px;"><a href="<%=request.getContextPath()%>/show/posted.action">点击发帖</a></div>
+                                        <div style="text-align: right;margin-top: 10px;"><a
+                                                href="<%=request.getContextPath()%>/show/posted.action">点击发帖</a></div>
                                         <span class="glyphicon glyphicon-time abs-span"></span>
                                     </span>
                                 </div>
@@ -160,26 +212,73 @@
     $('.registerbtn').click(function () {
         window.location.href = "<%=request.getContextPath()%>/show/register.action";
     });
+
+    $("#zh-top-nav-count-wrap").click(function () {
+        $("#myModalLabel").text("发送私信");
+        $('#myModal').modal();
+    });
+
     var type;
-    function selectName(name){
+    function selectName(name) {
         type = $('#select_name').text(name);
     };
     function search() {
-            var keyWord = $('#keyWord').val();
+        var keyWord = $('#keyWord').val();
+        $.ajax({
+            url: "/show/search.action",
+            type: "POST",
+            dataType: "json",
+            data: {
+                "type": "帖子",
+                "keyWord": keyWord,
+            },
+            success: function (rtn) {
+                if (rtn.code == "000000") {
+                    helper.toast({
+                        content: "搜索" + rtn.message,
+                        type: "success"
+                    });
+                } else {
+                    helper.toast({
+                        content: rtn.message,
+                        type: "error"
+                    });
+                }
+            },
+        });
+    }
+
+    //发送私信
+    $("#btn_submit").click(function () {
+        var touser = $("#touser").val();
+        var tocontent = $("#tocontent").val();
+        if (touser == null || touser == ""){
+            helper.toast({
+                content: "发送对象不能为空",
+                type: "error"
+            });
+        }else if (tocontent == null || tocontent == ""){
+            helper.toast({
+                content: "发送内容不能为空",
+                type: "error"
+            });
+        }else {
             $.ajax({
-                url: "/show/search.action",
+                url: "<%=request.getContextPath()%>/show/msg/addMessage.json",
                 type: "POST",
                 dataType: "json",
                 data: {
-                    "type": "帖子",
-                    "keyWord":keyWord,
+                    "toName": touser,
+                    "toContent": tocontent
                 },
                 success: function (rtn) {
                     if (rtn.code == "000000") {
                         helper.toast({
-                            content: "搜索"+rtn.message,
+                            content: "发送成功",
                             type: "success"
                         });
+                        // 刷新页面
+                        window.location.href = "<%=request.getContextPath()%>/show/msg/list.action";
                     } else {
                         helper.toast({
                             content: rtn.message,
@@ -187,8 +286,10 @@
                         });
                     }
                 },
+
             });
-    }
+        }
+    });
 
 </script>
 </body>

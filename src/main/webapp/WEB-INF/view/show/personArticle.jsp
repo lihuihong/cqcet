@@ -80,7 +80,7 @@
                                         <div class="news-title">
                                             <h3 style="overflow: hidden;white-space: nowrap;text-overflow:ellipsis;">${entity.title}</h3>
                                             <span>${entity.name}</span>
-                                            <div class="right"><span style="color: #0f74a8">阅读（${entity.viewCount}）</span>&nbsp&nbsp<span><fmt:formatDate value="${entity.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" /></span>
+                                            <div class="right"><span style="color: #0f74a8">赞（${entity.liked}）</span>&nbsp&nbsp<span style="color: #0f74a8">阅读（${entity.viewCount}）</span>&nbsp&nbsp<span><fmt:formatDate value="${entity.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" /></span>
                                             </div>
                                         </div>
                                     </a>

@@ -3,15 +3,15 @@ package com.cqcet.entity;
 import lombok.Data;
 
 /**
- * Created by ÄÇ¸öË­ on 2018/10/14.
+ * Created by  é‚£ä¸ªè° on 2018/10/14.
  */
 @Data
 public class UploadInfo {
-    private String id;			// Ö÷¼ü
-    private String type;		// ÀàĞÍ£¨ÆßÅ£ÔÆ£©
-    private String domain;		// ÓòÃû
-    private String ak;			// ak
-    private String sk;			// sk
-    private String bucket;		// ¿Õ¼äÃû³Æ
-    private String compress;	// Ñ¹ËõÂÊ
+    private String id;
+    private String type;
+    private String domain;
+    private String ak;
+    private String sk;
+    private String bucket;
+    private String compress;
 }

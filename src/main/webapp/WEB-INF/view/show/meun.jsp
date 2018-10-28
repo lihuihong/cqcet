@@ -52,10 +52,10 @@
             </a>
         </li>
         <li>
-            <a href="grid.html" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/grid.html">
+            <a href="<%=request.getContextPath()%>/show/msg/list.action" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/grid.html">
                 <i class="icon-th-large"></i>
                 最新消息
-                <span class="label label-warning pull-right">5</span>
+                <span class="label label-warning pull-right">${unreadCount}</span>
             </a>
         </li>
         <li>

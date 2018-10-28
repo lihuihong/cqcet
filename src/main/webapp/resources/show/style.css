@@ -44,6 +44,20 @@
 .content_title h3{
 	font-weight:bold;
 }
+.msg-num {
+	position: absolute;
+	margin-left: 80px;
+	top: 10px;
+	left: 0;
+	background: #e84a4a;
+	color: #FFF;
+	border-radius: 50px;
+	line-height: 16px;
+	min-height: 16px;
+	outline: medium none;
+	padding: 0 4px;
+	text-align: center;
+}
 
 .blod{
 	font-size:20px;
@@ -754,6 +768,7 @@ a:hover{
 	height: 98px;
 	transition: all 0.5s;
 	margin-bottom: 20px;
+	position: relative;
 }
 .news-content:hover {
 	box-shadow: 0 1px 7px 1px rgba(0,0,0,0.18);
@@ -937,4 +952,51 @@ a:hover{
 	height: 0px;
 	transition: all 0.2s;
 	overflow: hidden;
+}
+
+.letter-chatlist {
+	margin: 0;
+	padding: 20px;
+}
+.letter-chatlist li {
+	margin-bottom: 40px;
+	overflow: hidden;
+	list-style: none;
+}
+.letter-chatlist .list-head {
+	margin: 20px 20px 0 0;
+}
+.list-head {
+	display: block;
+	float: left;
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+	border: 1px solid #ededed;
+	border-radius: 50px;
+}
+.letter-chatlist .tooltip {
+	z-index: 0;
+	width: 80%;
+	float: left;
+}
+.tooltip.right {
+	padding: 0 5px;
+	margin-top: 10px;
+	margin-left: 60px;
+}
+.letter-info{
+	float: right;
+	padding: 20px;
+}
+.chat-content{
+	padding: 20px;
+}
+.tooltip-inner1{
+	/* max-width: 200px; */
+	padding: 3px 8px;
+	color: #fff;
+	/* text-align: center; */
+	background-color: #666;
+	border-radius: 4px;
 }

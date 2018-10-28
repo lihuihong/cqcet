@@ -5,6 +5,7 @@ import com.cqcet.exception.LException;
 import com.cqcet.services.*;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
+import com.sun.scenario.effect.impl.prism.PrImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,6 +39,8 @@ public class ForumController {
     private AnswerService answerService;
     @Autowired
     private SensitiveService sensitiveService;
+    @Autowired
+    private LikeService likeService;
 
 
     /**
@@ -109,6 +112,9 @@ public class ForumController {
         PageMethod.startPage(pageNum, pageSize);
         //该学院下帖子信息
         List<Article> articles = articleService.articleByCollegeId(collegeId);
+        for (Article article : articles) {
+            article.setLiked(likeService.getLikeCount(EntityType.ENTITY_ARTIUCLE,article.getId()));
+        }
         PageInfo<Article> articlePageInfo = new PageInfo<Article>(articles);
         map.put("college", college);
         map.put("articles", articlePageInfo);
@@ -139,8 +145,13 @@ public class ForumController {
         Map<String, Object> param = new HashMap<>();
         param.put("userId", article.getUserId());
         param.put("status", "0");
+        //该帖子是否获得该用户的赞
+        article.setIslike(likeService.getLikeStatus(Integer.parseInt(userInfo.getId()),EntityType.ENTITY_ARTIUCLE,article.getId()));
+        //该帖子获得赞的总数
+        article.setLiked(likeService.getLikeCount(EntityType.ENTITY_ARTIUCLE,article.getId()));
         map.put("article", article);
-        map.put("articleList", articleService.list(param));
+        List<Article> articles = articleService.list(param);
+        map.put("articleList",articles);
 
         List<Answer> answers = answerService.queryAnswerById(Integer.parseInt(id));
 
@@ -271,7 +282,10 @@ public class ForumController {
         // 只需要在查询之前调用，传入当前页码，以及每一页显示多少条
         PageMethod.startPage(pageNum, pageSize);
         List<Article> list = articleService.list(param);
-
+        //添加点赞数
+        for (Article article : list) {
+            article.setLiked(likeService.getLikeCount(EntityType.ENTITY_ARTIUCLE,article.getId()));
+        }
         PageInfo<Article> pageInfo = new PageInfo<Article>(list);
         map.put("pageInfo", pageInfo);
         User user = userService.selectById(id);

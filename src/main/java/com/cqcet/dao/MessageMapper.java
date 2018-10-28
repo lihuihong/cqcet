@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * Õ¾ÄÚĞÅ
- * Created by ÄÇ¸öË­ on 2018/10/25.
+ * ç§ä¿¡
+ * Created by é‚£ä¸ªè° on 2018/10/25.
  */
 public interface MessageMapper {
 

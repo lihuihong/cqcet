@@ -6,63 +6,33 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * Created by ÄÇ¸öË­ on 2018/10/2.
+ * Created by é‚£ä¸ªè° on 2018/10/2.
  */
 public interface ProfessionalMapper {
 
-    /**
-     * ²éÑ¯ËùÓĞ×¨Òµ
-     */
+
     List<Professional> list();
 
-    /**
-     * ²åÈë×¨Òµ
-     * @param professional
-     */
+
     void insert(Professional professional);
 
-    /**
-     *  ¸üĞÂ×¨Òµ
-     * @param professional
-     */
+
     void update(Professional professional);
 
-    /**
-     * ÅúÁ¿É¾³ı×¨Òµ
-     * @param idArr Ö÷¼üÊı×é
-     */
+
     void delete(@Param("idArr") String[] idArr);
 
-    /**
-     * ×¨ÒµÊÇ·ñÖØ¸´
-     * @param name Ìû×Ó·ÖÀà
-     * @param id Ö÷¼ü
-     * @return
-     */
+
     int countByName(@Param("name") String name, @Param("id") String id);
 
-    /**
-     * ×¨ÒµÅÅĞòÊÇ·ñÖØ¸´
-     * @param sort ÅÅĞò
-     * @param id Ö÷¼ü
-     * @return
-     */
+
     int countBySort(@Param("sort") String sort, @Param("id") String id);
 
-    /**
-     * ²éÑ¯Ñ§ÔºidÊÇ·ñÔÚÊ¹ÓÃ
-     * @param collegeId
-     * @return
-     */
+
     int countByCollegeIdArr(String collegeId);
 
-    //¸ù¾İ×¨Òµid²éÑ¯Ñ§Ôºid
     int selectByProfessionalId(String professionalId);
 
-    /**
-     * ×¨ÒµÃû³Æ²éÑ¯×¨Òµid
-     * @param professional
-     * @return
-     */
+
     int idByName(String professional);
 }
