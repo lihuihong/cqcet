@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcet.dao.ShopMessageMapper">
+    <resultMap id="BaseResultMap" type="com.cqcet.entity.ShopMessage">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="category_id" jdbcType="INTEGER" property="categoryId"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="promote_price" jdbcType="DECIMAL" property="promotePrice"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+
+        <result column="categoryName" property="categoryName"/>
+    </resultMap>
+
+
+    <select id="list" resultMap="BaseResultMap">
+        SELECT
+        sm.id,
+        sm.user_id,
+        sm.category_id,
+        sm.stock,
+        sm.content,
+        sm.title,
+        sm.img_url,
+        sm.price,
+        sm.promote_price,
+        sm.update_time,
+        sm.status,
+        sc.name AS categoryName
+        FROM
+        shop_message sm,
+        shop_category sc
+        WHERE
+        sc.id = sm.category_id
+
+        <if test="id!=null and id!=''">AND sm.id=#{id}</if>
+        <if test="userId!=null and userId!=''">AND sm.user_id=#{userId}</if>
+        <if test="categoryId!=null and categoryId!=''">AND sm.category_id=#{categoryId}</if>
+        <if test="stock!=null and stock!=''">AND sm.stock = #{stock}</if>
+        <if test="content!=null and content!=''">AND sm.content = #{content}</if>
+        <if test="keyWord!=null and keyWord!=''">AND sm.title like #{%keyWord%}</if>
+        <if test="imgUrl!=null and imgUrl!=''">AND sm.img_url = #{imgUrl}</if>
+        <if test="price!=null and price!=''">AND sm.price = #{price}</if>
+        <if test="promotePrice!=null and promotePrice!=''">AND sm.promote_price = #{promotePrice}</if>
+        <if test="updateTime!=null and updateTime!=''">AND sm.update_time = #{updateTime}</if>
+        <if test="status!=null and status!=''">AND sm.status = #{status}</if>
+
+    </select>
+
+    <!--添加商品-->
+    <insert id="insert">
+        INSERT INTO shop_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId!=null and userId!=''">user_id,</if>
+            <if test="categoryId!=null and categoryId!=''">category_id,</if>
+            <if test="stock!=null and stock!='' ">stock,</if>
+            <if test="content!=null and content!=''">content,</if>
+            <if test="title!=null and title!=''">title,</if>
+            <if test="imgUrl!=null and imgUrl!='' ">img_url,</if>
+            <if test="updateTime!=null and updateTime!=''">update_time,</if>
+            <if test="price!=null and price!=''">price,</if>
+            <if test="promotePrice!=null and promotePrice!=''">promote_price,</if>
+            <if test="status!=null and status!=''">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId!=null and userId!=''">#{userId},</if>
+            <if test="categoryId!=null and categoryId!=''">#{categoryId},</if>
+            <if test="stock!=null and stock!='' ">#{stock},</if>
+            <if test="content!=null and content!=''">#{content},</if>
+            <if test="title!=null and title!=''">#{title},</if>
+            <if test="imgUrl!=null and imgUrl!='' ">#{imgUrl},</if>
+            <if test="updateTime!=null and updateTime!=''">#{updateTime},</if>
+            <if test="price!=null and price!=''">#{price},</if>
+            <if test="promotePrice!=null and promotePrice!=''">#{promotePrice},</if>
+            <if test="status!=null and status!=''">#{status},</if>
+        </trim>
+    </insert>
+    <!--更新商品-->
+    <update id="update">
+        UPDATE shop_message
+        <set>
+            <if test="userId!=null and userId!=''">user_id=#{userId},</if>
+            <if test="categoryId!=null and categoryId!=''">category_id=#{categoryId},</if>
+            <if test="stock!=null and stock!=''">stock=#{stock},</if>
+            <if test="title!=null and title!='' ">title=#{title},</if>
+            <if test="content!=null and content!=''">content=#{content},</if>
+            <if test="imgUrl!=null and imgUrl!=''">img_url=#{imgUrl},</if>
+            <if test="price!=null and price!='' ">price=#{price},</if>
+            <if test="updateTime!=null and updateTime!=''">update_time=#{updateTime},</if>
+            <if test="promotePrice!=null and promotePrice!=''">promote_price=#{promotePrice},</if>
+            <if test="status!=null and status!=''">status=#{status},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--根据商品id查询商品信息-->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            shop_message
+        WHERE
+            id = #{id}
+
+    </select>
+
+    <!-- 批量移动商品到某个分类 -->
+    <update id="batchUpdate">
+        UPDATE shop_message
+        <set>
+            <if test="categoryId!=null and categoryId!=''">category_id=#{categoryId},</if>
+        </set>
+        WHERE id IN
+        <foreach collection="idArr" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 根据商品主键批量删除 -->
+    <delete id="batchDelete">
+        DELETE FROM shop_message WHERE id IN
+        <foreach collection="idArr" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

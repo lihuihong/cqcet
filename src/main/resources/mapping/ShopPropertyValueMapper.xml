@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcet.dao.ShopPropertyValueMapper">
+    <resultMap id="BaseResultMap" type="com.cqcet.entity.ShopPropertyValue">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="pid" jdbcType="INTEGER" property="pid"/>
+        <result column="ptid" jdbcType="VARCHAR" property="ptid"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+    </resultMap>
+
+
+    <select id="listById" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        shop_propertyvalue
+        WHERE
+        pid=#{pid}
+        AND ptid=#{ptid}
+    </select>
+
+    <!--插入一条新的商品属性  -->
+    <insert id="insert">
+        INSERT INTO shop_propertyvalue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pid!=null and pid!=''">pid,</if>
+            <if test="ptid!=null and ptid!=''">ptid,</if>
+            <if test="value!=null and value!=''">value,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pid!=null">#{pid},</if>
+            <if test="ptid!=null">#{ptid},</if>
+            <if test="value!=null">#{value},</if>
+        </trim>
+    </insert>
+
+    <!--更新商品属性-->
+    <update id="update">
+        UPDATE shop_propertyvalue
+        <set>
+            <if test="pid!=null and pid!=''">pid=#{pid},</if>
+            <if test="ptid!=null and ptid!=''">ptid=#{ptid},</if>
+            <if test="value!=null and value!=''">value=#{value},</if>
+        </set>
+        WHERE
+        pid=#{pid}
+        AND
+        ptid=#{ptid}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM
+            shop_propertyvalue
+        WHERE
+            ptid =#{ptid}
+    </delete>
+
+</mapper>

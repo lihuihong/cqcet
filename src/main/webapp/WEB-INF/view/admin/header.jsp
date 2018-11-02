@@ -19,7 +19,7 @@
 <!--左侧logo-->
 <div>
 	<a href="#">
-		<img class="logo-img" src="${pageContext.request.contextPath}/resources/javaex/pc/images/logo.png">
+		<img class="logo-img" src="${pageContext.request.contextPath}/resources/show/img/logo.png">
 	</a>
 </div>
 <!--右侧功能-->

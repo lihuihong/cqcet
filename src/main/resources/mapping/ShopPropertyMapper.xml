@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqcet.dao.ShopPropertyMapper">
+    <resultMap id="BaseResultMap" type="com.cqcet.entity.ShopProperty">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="cid" jdbcType="INTEGER" property="cid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
+
+    <!--通过商品id查询商品名称-->
+    <select id="listByShopId" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        shop_property
+        WHERE
+        cid=#{cid}
+    </select>
+
+    <!--根据商品名称判断商品名是否存在-->
+    <select id="countByName" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        shop_property
+        WHERE
+        name = #{name}
+    </select>
+
+
+    <!--根据商品名称判断商品名是否存在-->
+    <select id="idByName" resultMap="BaseResultMap">
+        SELECT
+        id,
+        cid
+        FROM
+        shop_property
+        WHERE
+        name = #{name}
+    </select>
+
+    <!--插入一条新的商品属性  -->
+    <insert id="insert">
+        INSERT INTO shop_property
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cid!=null and cid!=''">cid,</if>
+            <if test="name!=null and name!=''">name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cid!=null">#{cid},</if>
+            <if test="name!=null">#{name},</if>
+        </trim>
+        <selectKey keyProperty="id" order="AFTER" resultType="String" >
+            <!-- 得到刚insert到数据表中的记录的主键值，只适用于自增主键 -->
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!--更新商品属性-->
+    <update id="update">
+        UPDATE shop_property
+        <set>
+            <if test="cid!=null and cid!=''">cid=#{cid},</if>
+            <if test="name!=null and name!=''">name=#{name},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM
+            shop_property
+        WHERE
+        id =#{id}
+    </delete>
+
+
+</mapper>
