@@ -30,9 +30,28 @@
                             <p class="dark-p">${user.groupName}</p><br>
                         </div>
                         <div class="answer-bod">
-                            <a href="${pageContext.request.contextPath}/show/personArticle.action?id=${user.id}" class="btn btn-info btn-sm">
-                                查 看 更 多
-                            </a>
+
+                            <c:if test="${user.id eq sessionScope.get(\"user\")}">
+                                <a href="${pageContext.request.contextPath}/show/personArticle.action?id=${user.id}" class="btn btn-info btn-sm">
+                                    查 看 更 多
+                                </a>
+                            </c:if>
+                            <c:if test="${user.id != sessionScope.get(\"user\")}">
+                                <a href="${pageContext.request.contextPath}/show/personArticle.action?id=${user.id}" class="btn btn-info btn-sm">
+                                    查 看 更 多
+                                </a>
+                                <c:if test="${follower == true}">
+                                <a href="javascript:void(0);" onclick="unfollowUser();" class="btn btn-info btn-sm">
+                                    已 关 注
+                                </a>
+                                </c:if>
+                                <c:if test="${follower == false}">
+                                    <a href="javascript:void(0);" onclick="followUser();" class="btn btn-info btn-sm">
+                                        关 注
+                                    </a>
+                                </c:if>
+                            </c:if>
+
                         </div>
                     </div>
                     <div class="answer-item">
@@ -223,7 +242,7 @@
         window.location.href = "<%=request.getContextPath()%>/show/posted.action?id=${article.id}";
     }
     //回复帖子
-    function post(acticleId,input_id) {
+    function post(articleId,input_id) {
 
         //获取编辑器的内容
         var content = $("#"+input_id).val();
@@ -235,7 +254,7 @@
             type: "POST",
             dataType: "json",
             data: {
-                "acticleId": acticleId,
+                "articleId": articleId,
                 "content": content,
                 "answerId" : answer_id,
                 "childId" : child_id
@@ -256,14 +275,14 @@
         });
     }
     //点赞
-    function postlike(acticleId) {
+    function postlike(articleId) {
 
             $.ajax({
                 url: "/show/like.json",
                 type: "POST",
                 dataType: "json",
                 data:{
-                    "acticleId":acticleId
+                    "articleId":articleId
                 },
                 success: function (rtn) {
                     if (rtn.code == "000000") {
@@ -281,13 +300,13 @@
 
         };
     //取消点赞
-    function postdislike(acticleId) {
+    function postdislike(articleId) {
         $.ajax({
             url: "/show/dislike.json",
             type: "POST",
             dataType: "json",
             data:{
-                "acticleId":acticleId
+                "articleId":articleId
             },
             success: function (rtn) {
                 if (rtn.code == "000000") {
@@ -301,7 +320,59 @@
                 }
             },
         });
-    }
+    };
+    //关注
+    function followUser() {
+        $.ajax({
+            url: "/show/followUser.json",
+            type: "POST",
+            dataType: "json",
+            data:{
+                "userId":${user.id}
+            },
+            success: function (rtn) {
+                if (rtn.code == "000000") {
+                    helper.toast({
+                        content: "关注"+rtn.message,
+                        type: "success"
+                    });
+                    // 刷新页面
+                    window.location.reload();
+                } else {
+                    helper.toast({
+                        content: "关注"+rtn.message,
+                        type: "error"
+                    });
+                }
+            },
+        });
+    };
+    //关注
+    function unfollowUser() {
+        $.ajax({
+            url: "/show/unfollowUser.json",
+            type: "POST",
+            dataType: "json",
+            data:{
+                "userId":${user.id}
+            },
+            success: function (rtn) {
+                if (rtn.code == "000000") {
+                    helper.toast({
+                        content: "取消关注"+rtn.message,
+                        type: "success"
+                    });
+                    // 刷新页面
+                    window.location.reload();
+                } else {
+                    helper.toast({
+                        content: "取消关注"+rtn.message,
+                        type: "error"
+                    });
+                }
+            },
+        });
+    };
     //删除帖子
     function move() {
         Ewin.confirm({ message: "确认要删除帖子？" }).on(function (e) {
@@ -322,7 +393,8 @@
             success : function(rtn) {
                 if (rtn.code=="000000") {
                     helper.toast({
-                        content : "删除"+rtn.message
+                        content : "删除"+rtn.message,
+                        type : "success"
                     });
                     // 建议延迟加载
                     setTimeout(function() {

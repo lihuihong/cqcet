@@ -9,5 +9,7 @@ public class EntityType {
     //评论
     public static int ENTITY_COMMENT = 2;
     //消息
-    public static int ENTITY_MESSAGE = 2;
+    public static int ENTITY_MESSAGE = 3;
+    //用户
+    public static int ENTITY_USER = 4;
 }

@@ -55,7 +55,7 @@ public class Linterceptor implements HandlerInterceptor {
             int unreadCount = 0;
             for (Message msg : conversationList) {
                 //未读消息
-                int count = messageService.getConvesationUnreadCount(msg.getToId(), msg.getConversationId());
+                int count = messageService.getConvesationUnreadCount(Integer.parseInt(msg.getToId()), msg.getConversationId());
                 unreadCount = unreadCount + count;
             }
             //未读消息放在redis

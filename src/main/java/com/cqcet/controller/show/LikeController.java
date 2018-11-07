@@ -37,33 +37,34 @@ public class LikeController {
     @Autowired
     EventProducer eventProducer;
 
+    //点赞
     @RequestMapping(value = "/like.json", method = {RequestMethod.POST})
     @ResponseBody
-    public Result like(@RequestParam("acticleId") int acticleId,
+    public Result like(@RequestParam("articleId") int articleId,
                        HttpServletRequest request) {
         User userInfo = userService.getUserInfo(request);
         if (userInfo == null) {
             return Result.error("未登录");
         }
-        Article article = articleService.selectById(String.valueOf(acticleId));
+        Article article = articleService.selectById(String.valueOf(articleId));
         //发送事件
         eventProducer.fireEvent(new EventModel(EventType.LIKE)
-                .setActorId(Integer.parseInt(userInfo.getId())).setEntityId(acticleId)
+                .setActorId(Integer.parseInt(userInfo.getId())).setEntityId(articleId)
                 .setEntityType(EntityType.ENTITY_COMMENT).setEntityOwnerId(article.getUserId())
-                .setExt("articleId", String.valueOf(acticleId)));
-        likeService.like(Integer.parseInt(userInfo.getId()), EntityType.ENTITY_ARTIUCLE, acticleId);
+                .setExt("articleId", String.valueOf(articleId)));
+        likeService.like(Integer.parseInt(userInfo.getId()), EntityType.ENTITY_ARTIUCLE, articleId);
         return Result.success();
     }
-
+    //取消点赞
     @RequestMapping(value ="/dislike.json", method = {RequestMethod.POST})
     @ResponseBody
-    public Result dislike(@RequestParam("acticleId") int acticleId,
+    public Result dislike(@RequestParam("articleId") int articleId,
                        HttpServletRequest request) {
         User userInfo = userService.getUserInfo(request);
         if (userInfo == null) {
             return Result.error("未登录");
         }
-        likeService.disLike(Integer.parseInt(userInfo.getId()), EntityType.ENTITY_ARTIUCLE, acticleId);
+        likeService.disLike(Integer.parseInt(userInfo.getId()), EntityType.ENTITY_ARTIUCLE, articleId);
         return Result.success();
     }
 }

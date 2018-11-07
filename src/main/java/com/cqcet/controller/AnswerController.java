@@ -42,7 +42,7 @@ public class AnswerController {
      */
     @RequestMapping(value = "/saveAnswer.json" , method = {RequestMethod.POST})
     @ResponseBody
-    public Result save(HttpServletRequest request, @RequestParam(value = "acticleId") int acticle_id,
+    public Result save(HttpServletRequest request, @RequestParam(value = "articleId") int articleId,
                        @RequestParam(value = "content") String content,
                        @RequestParam(value = "answerId") String answerId,
                        @RequestParam(value = "childId") String childId) throws LException {
@@ -54,7 +54,7 @@ public class AnswerController {
         }
 
         Answer answer = new Answer();
-        answer.setActicleId(acticle_id);
+        answer.setActicleId(articleId);
         answer.setContent(content);
         answer.setUserId(Integer.parseInt(userInfo.getId()));
 

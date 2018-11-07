@@ -56,13 +56,13 @@ public class MessageController {
         }
         Message msg = new Message();
         msg.setContent(content);
-        int fromId = Integer.parseInt(userInfo.getId());
+        String fromId = userInfo.getId();
         msg.setFromId(fromId);
-        int toId = Integer.parseInt(user.getId());
+        String toId = user.getId();
         msg.setToId(toId);
-        msg.setHasRead(0);
+        msg.setHasRead("0");
         msg.setCreatedDate(new Date());
-        msg.setConversationId(fromId < toId ? String.format("%d_%d", fromId, toId) : String.format("%d_%d", toId, fromId));
+        msg.setConversationId(Integer.valueOf(fromId) < Integer.valueOf(toId) ? String.format("%s_%s", fromId, toId) : String.format("%s_%s", toId, fromId));
         messageService.addMessage(msg);
         return Result.success();
     }
@@ -82,19 +82,19 @@ public class MessageController {
         if (userInfo == null) {
             return "/show/login";
         }
-        int localUserId = Integer.parseInt(userInfo.getId());
+        String localUserId = userInfo.getId();
         List<Map<String, Object>> conversations = new ArrayList<>();
-        List<Message> conversationList = messageService.getConversationList(localUserId);
+        List<Message> conversationList = messageService.getConversationList(Integer.parseInt(localUserId));
         int unreadCount = 0;
         for (Message msg : conversationList) {
             Map<String, Object> param = new HashMap<>();
             param.put("conversation", msg);
             //System.out.println(msg.getCreatedDate()+",,,,,,"+new Date());
-            String targetId = String.valueOf(msg.getFromId() == localUserId ? msg.getToId() : msg.getFromId());
+            String targetId = String.valueOf(msg.getFromId().equals(localUserId) ? msg.getToId() : msg.getFromId());
             User user = userService.selectById(targetId);
             param.put("user", user);
             //未读消息
-            int count = messageService.getConvesationUnreadCount(msg.getToId(), msg.getConversationId());
+            int count = messageService.getConvesationUnreadCount(Integer.parseInt(msg.getToId()), msg.getConversationId());
             unreadCount = unreadCount + count;
             param.put("unread", count);
             conversations.add(param);

@@ -83,6 +83,7 @@
 .app_box img{
 	width:66px;
 	margin-right:10px;
+	border-radius: 20px;
 }
 .app_box p{
 	font-size:12px;

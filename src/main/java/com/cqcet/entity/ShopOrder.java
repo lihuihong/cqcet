@@ -6,6 +6,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
+ * 用户订单
  * Created by 那个谁 on 2018/11/2.
  */
 @Data

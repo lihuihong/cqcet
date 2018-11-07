@@ -60,6 +60,31 @@
                     </div>
 
                 </div>
+
+                <div class="forum-box">
+                    <div class="navbar-default nav-title">校园专区</div>
+
+                    <div class="row" style="padding: 10px;">
+                            <div class="col-md-4">
+                                <div class="app_box">
+                                    <a href=""><img src="http://heylhh.com/mm.jpg" class="pull-left"/></a>
+                                    <dl class="box_dl">
+                                        <dt>
+                                            <a href="${pageContext.request.contextPath}/show/answer.action?collegeId=">校园交易</a>
+                                        </dt>
+                                        <dd style="width: 200px; overflow: hidden; white-space: nowrap;">
+                                            <span>旧书、闲置物品交易</span>
+                                        </dd>
+                                        <dd style="color:#999;">
+                                            <span>分类:12, 交易:999</span>
+                                        </dd>
+                                    </dl>
+                                </div>
+
+                            </div>
+                    </div>
+
+                </div>
             </div>
 
         </div>

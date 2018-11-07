@@ -45,6 +45,14 @@
                 我的帖子
             </a>
         </li>
+
+        <li>
+            <a href="<%=request.getContextPath()%>/show/user/followees.action?userId=${user.id}"
+               tppabs="http://www.jq22.com/demo/matrix-admin0320160622/faq.html">
+                <i class="icon-tags"></i>
+                我的关注、粉丝
+            </a>
+        </li>
         <li>
             <a href="plans.html" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/plans.html">
                 <i class="icon-th-list"></i>

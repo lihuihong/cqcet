@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * Created by 论坛 on 2018/9/11.
+ * Created by 那个谁 on 2018/9/11.
  * 帖子
  */
 @Controller
@@ -41,6 +41,8 @@ public class ForumController {
     private SensitiveService sensitiveService;
     @Autowired
     private LikeService likeService;
+    @Autowired
+    FollowService followService;
 
 
     /**
@@ -82,7 +84,6 @@ public class ForumController {
         List<Article> list;
         User userInfo = userService.getUserInfo(request);
         if (userInfo == null) {
-
             return "/show/login";
         }
         //得到当前用户登录的id
@@ -152,6 +153,9 @@ public class ForumController {
         map.put("article", article);
         List<Article> articles = articleService.list(param);
         map.put("articleList",articles);
+        //是否关注
+        boolean follower = followService.isFollower(Integer.parseInt(userInfo.getId()), EntityType.ENTITY_USER,article.getUserId() );
+        map.put("follower",follower);
 
         List<Answer> answers = answerService.queryAnswerById(Integer.parseInt(id));
 
@@ -182,9 +186,7 @@ public class ForumController {
 
 
     public List<Map<String,Object>> printf(List<Answer> answers){
-
         List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-
         for(Answer child : answers){
             if(flag[child.getId()])
                 continue;

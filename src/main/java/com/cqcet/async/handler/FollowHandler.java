@@ -3,6 +3,7 @@ package com.cqcet.async.handler;
 import com.cqcet.async.EventHandler;
 import com.cqcet.async.EventModel;
 import com.cqcet.async.EventType;
+import com.cqcet.entity.EntityType;
 import com.cqcet.entity.Message;
 import com.cqcet.entity.User;
 import com.cqcet.services.MessageService;
@@ -15,12 +16,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 点赞
- * Created by 那个谁 on 2018/10/28.
+ * 关注
+ * Created by 那个谁 on 2018/11/7.
  */
 @Component
-public class LikeHandler  implements EventHandler {
-
+public class FollowHandler implements EventHandler {
     @Autowired
     MessageService messageService;
 
@@ -31,22 +31,23 @@ public class LikeHandler  implements EventHandler {
     public void doHandle(EventModel model) {
         Message message = new Message();
         String fromId  = "0";
-        String toId  = String.valueOf(model.getEntityOwnerId());
         message.setFromId(fromId);
+        String toId  = String.valueOf(model.getEntityOwnerId());
         message.setToId(toId);
         message.setHasRead("0");
         message.setCreatedDate(new Date());
         message.setConversationId(Integer.valueOf(fromId) < Integer.valueOf(toId) ? String.format("%s_%s", fromId, toId) : String.format("%s_%s", toId, fromId));
         User user = userService.selectById(String.valueOf(model.getActorId()));
-        message.setContent("用户" + user.getUsername()
-                + "赞了你的,<a style='font-size: 20px' href='http://127.0.0.1:8080/show/detail.action?id="+model.getExt("articleId")+"'"+">帖子</a>");
+        if (model.getEntityType() == EntityType.ENTITY_USER) {
+            message.setContent("用户" + "<a style='font-size: 20px' href='http://127.0.0.1:8080/show/detail.action?id="+model.getExt("articleId")+"'"+">"+user.getUsername()+"</a>"
+                    + "关注了你。");
+        }
 
         messageService.addMessage(message);
-
     }
 
     @Override
     public List<EventType> getSupportEventTypes() {
-        return Arrays.asList(EventType.LIKE);
+        return Arrays.asList(EventType.FOLLOW);
     }
 }

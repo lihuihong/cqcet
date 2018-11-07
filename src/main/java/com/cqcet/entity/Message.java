@@ -10,11 +10,11 @@ import java.util.Date;
 @Data
 public class Message {
     private int id;
-    private int fromId;
-    private int toId;
+    private String fromId;
+    private String toId;
     private String content;
     private Date createdDate;
-    private int hasRead;
+    private String hasRead;
     private String conversationId;
 
     @Override

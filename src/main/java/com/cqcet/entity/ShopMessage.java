@@ -18,9 +18,9 @@ public class ShopMessage {
     //用户id
     private Integer userId;
     //商品价格
-    private BigDecimal price;
+    private Float price;
     //商品优惠价格
-    private BigDecimal promotePrice;
+    private Float promotePrice;
     //库存
     private int stock;
     //商品图片地址

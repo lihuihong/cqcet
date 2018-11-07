@@ -24,6 +24,13 @@ public class Result {
         return result;
     }
 
+    public static Result success(int code,String message) {
+        Result result = new Result();
+        result.setCode("000000");
+        result.setMessage("成功!!!");
+        return result;
+    }
+
     public static Result error(String string) {
         Result result = new Result();
         result.setCode("111111");
