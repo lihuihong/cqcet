@@ -1,6 +1,9 @@
 package com.cqcet.dao;
 
 import com.cqcet.entity.ShopOrderItem;
+import com.cqcet.entity.ShopOrderItemExample;
+
+import java.util.List;
 
 
 /**
@@ -13,7 +16,7 @@ public interface ShopOrderItemMapper {
 
     int insertSelective(ShopOrderItem record);
 
-    //List<ShopOrderItem> selectByExample(OrderItemExample example);
+    List<ShopOrderItem> selectByExample(ShopOrderItemExample example);
 
     ShopOrderItem selectByPrimaryKey(Integer id);
 

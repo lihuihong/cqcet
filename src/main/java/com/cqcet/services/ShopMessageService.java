@@ -76,7 +76,7 @@ public class ShopMessageService {
      */
     public void bacthUpdate(Map<String, Object> param)  throws LException {
         try {
-            shopMessageMapper.bacthUpdate(param);
+            shopMessageMapper.batchUpdate(param);
         }catch (Exception e){
             throw new LException("批量移动商品分类失败！");
         }

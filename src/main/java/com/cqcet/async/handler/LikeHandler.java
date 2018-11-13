@@ -39,7 +39,7 @@ public class LikeHandler  implements EventHandler {
         message.setConversationId(Integer.valueOf(fromId) < Integer.valueOf(toId) ? String.format("%s_%s", fromId, toId) : String.format("%s_%s", toId, fromId));
         User user = userService.selectById(String.valueOf(model.getActorId()));
         message.setContent("用户" + user.getUsername()
-                + "赞了你的,<a style='font-size: 20px' href='http://127.0.0.1:8080/show/detail.action?id="+model.getExt("articleId")+"'"+">帖子</a>");
+                + "赞了你的,<a style='font-size: 20px' href='http://www.heylhh.com/show/detail.action?id="+model.getExt("articleId")+"'"+">帖子</a>");
 
         messageService.addMessage(message);
 

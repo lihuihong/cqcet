@@ -39,7 +39,7 @@ public class FollowHandler implements EventHandler {
         message.setConversationId(Integer.valueOf(fromId) < Integer.valueOf(toId) ? String.format("%s_%s", fromId, toId) : String.format("%s_%s", toId, fromId));
         User user = userService.selectById(String.valueOf(model.getActorId()));
         if (model.getEntityType() == EntityType.ENTITY_USER) {
-            message.setContent("用户" + "<a style='font-size: 20px' href='http://127.0.0.1:8080/show/detail.action?id="+model.getExt("articleId")+"'"+">"+user.getUsername()+"</a>"
+            message.setContent("用户" + "<a style='font-size: 20px' href='http://www.heylhh.com/show/personArticle.action?id?id="+model.getExt("articleId")+"'"+">"+user.getUsername()+"</a>"
                     + "关注了你。");
         }
 

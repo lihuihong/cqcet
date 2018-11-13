@@ -25,7 +25,7 @@ public interface ShopMessageMapper {
     ShopMessage selectById(int id);
 
     //批量移动商品分类
-    void bacthUpdate(Map<String, Object> param);
+    void batchUpdate(Map<String, Object> param);
 
     //根据商品主键删除商品
     void batchDelete(@Param("idArr") String[] idArr);

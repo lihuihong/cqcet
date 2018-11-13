@@ -17,6 +17,7 @@ public class ShopOrderItem {
 
     private Integer number;
 
+    /*非数据库字段*/
     private ShopMessage shopMessage;
 
 }
