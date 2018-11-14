@@ -126,12 +126,12 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="${pageContext.request.contextPath}/show/forum.action">全部版块</a></li>
-                                <li><a href="#">EJB</a></li>
-                                <li><a href="#">Jasper Report</a></li>
+                                <li><a href="#">校园交易</a></li>
+                                <li><a href="#">校园公告墙</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#">分离的链接</a></li>
+                                <li><a href="#">就业平台</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#">另一个分离的链接</a></li>
+                                <li><a href="#">重电新闻</a></li>
                             </ul>
                         </li>
                         <c:choose>
@@ -290,8 +290,6 @@
             });
         }
     });
-
-
     // 退出登录
     function logout() {
         $.ajax({

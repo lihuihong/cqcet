@@ -32,7 +32,7 @@
                 总览
             </a>
         </li>
-        <li class="active">
+        <li>
             <a href="<%=request.getContextPath()%>/show/user/user.action" tppabs="http://www.jq22.com/demo/matrix-admin0320160622/account.html">
                 <i class="icon-user"></i>
                 个人信息
@@ -75,23 +75,18 @@
     </ul>
     <hr/>
     <div class="sidebar-extra">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+        <p></p>
     </div>
     <br/>
 </div>
 
 <script>
-
-    <!--动态改变li选中样式-->
-   /* $(function($){
-        $('li').bind('click',function(){
-            $('ul li').removeClass('active');
-            $(this).addClass('active');
-
-        });
-
-    });*/
+    $("#main-nav > li a").each(function(){
+        $this = $(this).parents('#main-nav > li');
+        if(this.href==window.location.href){
+            $this.addClass("active");
+        }
+    });
 
     // 退出登录
     function logout() {
