@@ -347,7 +347,7 @@
             },
         });
     };
-    //关注
+    //取消关注
     function unfollowUser() {
         $.ajax({
             url: "/show/unfollowUser.json",

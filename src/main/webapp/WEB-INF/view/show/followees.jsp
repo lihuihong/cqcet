@@ -59,7 +59,7 @@
                                                     <c:forEach items="${followees}" var="entity" varStatus="status">
                                                         <div class="form-group">
                                                             <div class="news-content shadow-bg">
-                                                                <a href="${pageContext.request.contextPath}/show/msg/detail.action?conversationId=">
+                                                                <a href="${pageContext.request.contextPath}/show/personArticle.action?id=${entity.user.id}">
                                                                     <c:if test="${entity.user.avatar==null}">
                                                                         <img src="http://heylhh.com/FgWPzwwYEQRoBYYvx1lL3epPtIws" />
                                                                     </c:if>
@@ -109,7 +109,7 @@
                                                     <c:forEach items="${followers}" var="entity" varStatus="status">
                                                         <div class="form-group">
                                                             <div class="news-content shadow-bg">
-                                                                <a href="${pageContext.request.contextPath}/show/msg/detail.action?conversationId=">
+                                                                <a href="${pageContext.request.contextPath}/show/personArticle.action?id=${entity.user.id}">
                                                                     <c:if test="${entity.user.avatar==null}">
                                                                         <img src="http://heylhh.com/FgWPzwwYEQRoBYYvx1lL3epPtIws" />
                                                                     </c:if>

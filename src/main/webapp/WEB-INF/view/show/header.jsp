@@ -189,7 +189,7 @@
                                     </span>
                                 </div>
                                 <div class="card-sets">
-                                    <a href="/passport/user/logout?referer=//www.imooc.com" class="l">安全退出</a>
+                                    <a href="#" onclick="logout()" class="l">安全退出</a>
                                 </div>
                             </div>
                         </div>
@@ -290,6 +290,24 @@
             });
         }
     });
+
+
+    // 退出登录
+    function logout() {
+        $.ajax({
+            url : "/show/user/login_out.json",
+            type : "POST",
+            dataType : "json",
+            async: false,
+            success : function(rtn) {
+                if (rtn.code=="000000") {
+                    delCookie("userToken");
+                    // 跳转到首页
+                    window.location.href = "${pageContext.request.contextPath}/";
+                }
+            }
+        });
+    }
 
 </script>
 </body>

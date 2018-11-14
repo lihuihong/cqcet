@@ -56,13 +56,19 @@ public class FollowController {
 
         eventProducer.fireEvent(new EventModel(EventType.FOLLOW)
                 .setActorId(Integer.parseInt(userInfo.getId())).setEntityId(userId)
-                .setExt("articleId", String.valueOf(userId))
+                .setExt("articleId", String.valueOf(userInfo.getId()))
                 .setEntityType(EntityType.ENTITY_USER).setEntityOwnerId(userId));
 
         // 返回关注的人数
         return Result.success(ret ? 0 : 1, String.valueOf(followService.getFolloweeCount(Integer.parseInt(userInfo.getId()), EntityType.ENTITY_USER)));
     }
 
+    /**
+     * 取消关注
+     * @param userId
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/unfollowUser.json",method = {RequestMethod.POST})
     @ResponseBody
     public Result unfollowUser(@RequestParam("userId") int userId,
