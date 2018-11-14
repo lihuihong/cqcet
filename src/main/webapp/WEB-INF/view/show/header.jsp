@@ -58,9 +58,9 @@
                                 </li>
                             </ul>
                         </div>
-                        <input type="text" class="form-control" id="keyWord">
+                        <input type="text" class="form-control" id="search_content">
                         <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button" onclick="search()">搜 索</button>
+                            <button class="btn btn-primary" type="button" onclick="go_search()">搜 索</button>
                         </span>
                     </div>
 
@@ -154,48 +154,41 @@
                         <div class="user" id="oklogin">
                             <a href="<%=request.getContextPath()%>/show/user/user.action">
                                 <img src="<%=session.getAttribute("avatar")%>"/>
+                                <span><%=session.getAttribute("username")%></span>
                             </a>
                             <div class="card-user">
                                 <div class="card-top clearfix">
                                     <a href="<%=request.getContextPath()%>/show/user/user.action" class="l">
-                                        <img src="<%=session.getAttribute("avatar")%>"
-                                             alt="<%=session.getAttribute("username")%>">
+                                        <img src="<%=session.getAttribute("avatar")%>" alt="<%=session.getAttribute("username")%>">
 
                                     </a>
                                     <div class="card-top-right-box l">
-                                        <p><%=session.getAttribute("username")%>
-                                        </p>
+                                        <p><%=session.getAttribute("username")%></p>
                                         <p>新手上路</p>
                                     </div>
                                 </div>
                                 <div class="user-center-box">
                                     <ul class="clearfix" style="padding: 0px;">
-                                        <li class="l"><a href="<%=request.getContextPath()%>/show/user/user.action"
-                                                         target="_blank"><span class="glyphicon glyphicon-user"></span>
-                                            我的信息</a></li>
-                                        <li class="l"><a
-                                                href="<%=request.getContextPath()%>/show/user/postCenter.action"
-                                                target="_blank"><span class="glyphicon glyphicon-book"></span> 我的帖子</a>
-                                        </li>
+                                        <li class="l"><a href="<%=request.getContextPath()%>/show/user/user.action" target="_blank"><span class="glyphicon glyphicon-user"></span> 我的信息</a></li>
+                                        <li class="l"><a href="<%=request.getContextPath()%>/show/user/postCenter.action" target="_blank"><span class="glyphicon glyphicon-book"></span> 我的帖子</a></li>
                                     </ul>
                                 </div>
                                 <div class="card-history">
                                     <span class="history-item">
                                         <span class="tit">最近帖子</span>
-                                        <span class="media-name">3-3 Spring Bean装配之Aware接口</span>
-                                        <div style="text-align: right;margin-top: 10px;"><a
-                                                href="<%=request.getContextPath()%>/show/posted.action">点击发帖</a></div>
+                                        <span class="media-name"><a href="" id="new_article_a">${new_article.title}</a></span>
+                                        <div style="text-align: right;margin-top: 10px;"><a href="<%=request.getContextPath()%>/show/posted.action">点击发帖</a></div>
                                         <span class="glyphicon glyphicon-time abs-span"></span>
                                     </span>
                                 </div>
                                 <div class="card-sets">
-                                    <a href="#" onclick="logout()" class="l">安全退出</a>
+                                    <a href="javascript:logout()"  class="l">安全退出</a>
                                 </div>
                             </div>
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <div class="user" id="nologin">
+                        <div class="user" id="nologin" style="line-height: 50px;">
                             <button type="button" class="btn btn-primary loginbtn">登陆</button>
                             <button type="button" class="btn btn-default registerbtn">注册</button>
                         </div>
@@ -222,30 +215,28 @@
     function selectName(name) {
         type = $('#select_name').text(name);
     };
-    function search() {
-        var keyWord = $('#keyWord').val();
-        $.ajax({
-            url: "/show/search.action",
-            type: "POST",
-            dataType: "json",
-            data: {
-                "type": "帖子",
-                "keyWord": keyWord,
-            },
-            success: function (rtn) {
-                if (rtn.code == "000000") {
-                    helper.toast({
-                        content: "搜索" + rtn.message,
-                        type: "success"
-                    });
-                } else {
-                    helper.toast({
-                        content: rtn.message,
-                        type: "error"
-                    });
-                }
-            },
-        });
+    $.ajax({
+        url: "/article/new_article.json",
+        type: "GET",
+        dataType: "json",
+        async:true,
+        success: function (rtn) {
+            if (rtn.code == "000000") {
+                //alert(rtn.data.data);
+                $('#new_article_a').attr("href","<%=request.getContextPath()%>/show/detail.action?id="+rtn.data.article_id);
+                $('#new_article_a').text(rtn.data.title);
+
+                return false;
+            }
+        }
+    });
+    /*搜索帖子*/
+    function go_search() {
+
+        var type = $('#select_name').text();
+        var search_content = $('#search_content').val();
+
+        window.location.href = "${pageContext.request.contextPath}/show/search.action?type="+type+"&keyWord="+search_content;
     }
 
     //发送私信

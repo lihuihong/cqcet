@@ -155,6 +155,11 @@ public class ArticleController {
 
     }
 
+    /**
+     * 查询最近发布得帖子
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/new_article.json",method = RequestMethod.GET)
     public Result new_article(HttpServletRequest request){

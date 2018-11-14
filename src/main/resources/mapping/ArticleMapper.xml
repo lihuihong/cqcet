@@ -269,4 +269,16 @@
             #{item}
         </foreach>
     </delete>
+    <!--查询用户最近的一篇帖子-->
+    <select id="selectArticleByUserIdNow" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        article
+        WHERE
+        user_id = #{userId}
+        ORDER BY update_time DESC
+        LIMIT 1
+    </select>
+
 </mapper>

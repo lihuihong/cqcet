@@ -371,39 +371,12 @@ public class ForumController {
     public String search(ModelMap map,@RequestParam(required = false,value = "keyWord")String keyWord,
                          @RequestParam(required = false, value = "type") String typeName,
                          @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
-                         @RequestParam(value = "pageSize",defaultValue = "8")int pageSize){
+                         @RequestParam(value = "pageSize",defaultValue = "6")int pageSize){
 
         Map<String, Object> param = new HashMap<String, Object>();
-        if (!StringUtils.isEmpty(typeName)) {
-
-            map.put("name",typeName);
-            if ("用户".equals(typeName)){
-
-
-                List<User> userList = userService.usernameList("%" + keyWord.trim() + "%");
-                map.put("userlist", userList);
-                return "show/search_user";
-
-            }else if ("帖子".equals(typeName)){
-                param.put("username","%" + keyWord.trim() + "%");
-                param.put("keyWord", "%" + keyWord.trim() + "%");
-
-            }else {
-                param.put("userlist", userService.list_article());
-            }
-
-        }
         param.put("status", 0);
-
+        map.put("name",typeName);
         map.put("articleList",articleService.list(null));
-
-        // pageHelper分页插件
-        // 只需要在查询之前调用，传入当前页码，以及每一页显示多少条
-        PageMethod.startPage(pageNum, pageSize);
-        List<Article> list = articleService.list(param);
-        PageInfo<Article> pageInfo = new PageInfo<Article>(list);
-        map.put("pageInfo", pageInfo);
-        map.put("keyWord", keyWord);
 
         // 查询所有帖子分类以及该分类下条数
         List<List> lists = new ArrayList<>();
@@ -417,6 +390,29 @@ public class ForumController {
         }
 
         map.put("typeList", lists);
+        if ("用户".equals(typeName)){
+            param.put("username","%" + keyWord.trim() + "%");
+            List<User> userList = userService.usernameList("%" + keyWord.trim() + "%");
+            map.put("keyWord", keyWord);
+            map.put("userlist", userList);
+            return "show/search_user";
+        }
+
+        if ("帖子".equals(typeName)){
+
+            param.put("keyWord", "%" + keyWord.trim() + "%");
+
+            // pageHelper分页插件
+            // 只需要在查询之前调用，传入当前页码，以及每一页显示多少条
+            PageMethod.startPage(pageNum, pageSize);
+            List<Article> list = articleService.list(param);
+            PageInfo<Article> pageInfo = new PageInfo<Article>(list);
+            //System.out.println(pageInfo.getList().size());
+            map.put("pageInfo", pageInfo);
+            return "show/search_article";
+        }else {
+            param.put("userlist", userService.list_article());
+        }
 
         return "show/search";
     }
