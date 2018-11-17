@@ -70,7 +70,7 @@
                                     <a href=""><img src="http://heylhh.com/mm.jpg" class="pull-left"/></a>
                                     <dl class="box_dl">
                                         <dt>
-                                            <a href="${pageContext.request.contextPath}/show/answer.action?collegeId=">校园交易</a>
+                                            <a href="${pageContext.request.contextPath}/shop/shop/list.action">校园交易</a>
                                         </dt>
                                         <dd style="width: 200px; overflow: hidden; white-space: nowrap;">
                                             <span>旧书、闲置物品交易</span>

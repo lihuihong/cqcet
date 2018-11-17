@@ -1001,3 +1001,162 @@ a:hover{
 	background-color: #666;
 	border-radius: 4px;
 }
+
+.groupbox{
+	transition: 0.5s all;
+}
+
+.groupbox:hover{
+	box-shadow: 0 1px 7px 1px rgba(0,0,0,0.18);
+	transform: scale(1.1);
+}
+.groupbox h3{
+	margin: 0px;
+}
+.groupbox p{
+	font-size: 12px;
+	max-height: 35px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	/*white-space: nowrap;*/
+}
+.thumbnail h4 {
+	border-bottom: 1px solid #2277da;
+}
+
+.gb-cen {
+	height: 50px;
+	line-height: 50px;
+	position: relative;
+	background-size: 100%;
+	margin: 0 auto;
+	background-position: 100%;
+	background-repeat: no-repeat;
+	text-align: -webkit-center;
+	color: black;
+	font-size: 20px;
+}
+.productPrice{
+	font-size: 16px;
+	color: #FF003A;
+	display: block;
+	padding-left: 16px;
+}
+
+.left-mark {
+	display: inline-block;
+	height: 20px;
+	vertical-align: top;
+	width: 5px;
+	background-color: #19C8A9;
+}
+.categoryTitle {
+	font-size: 16px;
+	margin-left: 30px;
+	color: #646464;
+	font-weight: bold;
+}
+table.categorySortBarTable {
+	border-collapse: collapse;
+	display: inline-table;
+}
+table.categorySortBarTable td.grayColumn {
+	background-color: #F1EDEC;
+}
+table.categorySortBarTable span.glyphicon {
+	font-size: 10px;
+}
+table.categorySortBarTable td.priceMiddleColumn {
+	width: 10px;
+	vertical-align: middle;
+	color: #CCCCCC;
+}
+div.categorySortBar {
+	background-color: #FAF9F9;
+	margin: 40px 20px 20px 20px;
+	padding: 4px;
+}
+div.productInfo {
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #EEEEEE;
+	color: #999999;
+}
+
+div.productInfo span.monthDeal, div.productInfo span.productReview {
+	display: inline-block;
+	height: 30px;
+	padding-top: 5px;
+	padding-left: 5px;
+}
+div.productInfo span.productDealNumber {
+	font-weight: bold;
+	color: #B57C5B;
+}
+div.productInfo span.productReview {
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #EEEEEE;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #EEEEEE;
+}
+div.productInfo span.productReviewNumber {
+	font-weight: bold;
+	color: #3388BB;
+}
+div.productInfo span.wangwang {
+	padding-left: 3px;
+}
+
+/***************************************/
+.content2 {
+	background-color: #ffffff;
+}
+.tag-banner{
+	height: 400px;
+	/*margin-top:80px;*/
+	border-radius: 20px;
+	box-shadow: 0 12px 24px 0 rgba(28,31,33,.1);
+	background-color: #fff;
+	margin-bottom: 20px;
+	width:100%;
+}
+.tag-content{
+	height:70%;
+	text-align: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border-top-left-radius:20px;
+	border-top-right-radius:20px;
+	color:#fff;
+	padding-top: 50px;
+}
+.left{
+	float:left;
+}
+.left-text{
+	margin: 10px;
+	position:relative;
+	height: 100px;
+}
+.right-video{
+	margin: 10px 20px 10px 10px ;
+	position:relative;
+	height: 100px;
+}
+.text-img img{
+	height:100px;
+	float:left;
+	margin-right: 20px;
+}
+.video-img img{
+	height: 100px;
+	float:left;
+	margin-right: 20px;
+}
+.tag-btn{
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+}

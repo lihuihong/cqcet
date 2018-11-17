@@ -1,8 +1,10 @@
 package com.cqcet.controller.admin;
 
+import com.cqcet.dao.ShopProductImageMapper;
 import com.cqcet.entity.*;
 import com.cqcet.exception.LException;
 import com.cqcet.services.*;
+import com.cqcet.util.BASE64DecodedMultipartFile;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import com.google.gson.Gson;
@@ -12,15 +14,13 @@ import com.qiniu.http.Response;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
-import com.qiniu.util.Auth;
-import com.qiniu.util.StringMap;
-import com.qiniu.util.UrlSafeBase64;
+import com.qiniu.util.*;
+import com.qiniu.util.Base64;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +29,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
+
 
 /**
  * Created by 那个谁 on 2018/10/30.
@@ -54,22 +57,17 @@ public class ShopMessageController {
     /**
      * 商品列表
      * @param map
-     * @param categoryId
-     * @param startDate
-     * @param endDate
      * @param keyWord
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @RequestMapping("shop/list.action")
     public String shopList(ModelMap map,
-                                  @RequestParam(required = false, value = "categoryId") String categoryId,
-                                  @RequestParam(required = false, value = "startDate") String startDate,
-                                  @RequestParam(required = false, value = "endDate") String endDate,
-                                  @RequestParam(required = false, value = "keyWord") String keyWord,
-                                  @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                  @RequestParam(value = "pageSize", defaultValue = "5") int pageSize){
+                           @RequestParam(required = false, value = "categoryId") String categoryId,
+                           @RequestParam(required = false, value = "startDate") String startDate,
+                           @RequestParam(required = false, value = "endDate") String endDate,
+                           @RequestParam(required = false, value = "keyWord") String keyWord,
+                           @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                           @RequestParam(value = "pageSize", defaultValue = "5") int pageSize){
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("categoryId", categoryId);
         param.put("startDate", startDate);
@@ -98,19 +96,36 @@ public class ShopMessageController {
     }
 
     /**
-     * 商品图片
+     * 商品详情图片
      * @param map
      * @param productImageId
      * @return
      */
-    @RequestMapping("shop/productImage.action")
-    public String productImage(ModelMap map,
+    @RequestMapping("shop/productImage_detail.action")
+    public String productImage_detail(ModelMap map,
                                @RequestParam(required = false, value = "productImageId") int productImageId){
         if (productImageId != 0){
-            ShopProductImage shopProductImage = shopProductImageService.listByproductImageId(productImageId);
-            map.put("shopProductImage",shopProductImage);
+            List<ShopProductImage> detailList = shopProductImageService.listByPid(productImageId,ShopProductImageMapper.type_detail);
+            map.put("detailList",detailList);
         }
-        return "admin/shop/editImage";
+        map.put("productImageId",productImageId);
+        return "admin/shop/editDetailImage";
+    }
+    /**
+     * 商品单个图片
+     * @param map
+     * @param productImageId
+     * @return
+     */
+    @RequestMapping("shop/productImage_single.action")
+    public String productImage_single(ModelMap map,
+                                      @RequestParam(required = false, value = "productImageId") int productImageId){
+        if (productImageId != 0){
+            List<ShopProductImage> singleList = shopProductImageService.listByPid(productImageId,ShopProductImageMapper.type_single);
+            map.put("singleList",singleList);
+        }
+        map.put("productImageId",productImageId);
+        return "admin/shop/editSingleImage";
     }
 
     /**
@@ -308,15 +323,55 @@ public class ShopMessageController {
     }
 
     /**
-     * 保存上传的商品图片
-     * @param shopProductImage
+     * 保存上传的商品详情图片
+     * @param imageUrl
+     * @param pid
      * @return
      */
-    @RequestMapping("shop/image_save.json")
+    @RequestMapping("shop/image_save_detail.json")
     @ResponseBody
-    public Result image_save(ShopProductImage shopProductImage){
-        shopProductImageService.save(shopProductImage);
+    public Result image_save_detail(@RequestParam(value = "imageUrl") String[] imageUrl,
+                             @RequestParam(value = "pid") String pid){
+        ShopProductImage shopProductImage = new ShopProductImage();
+        for (int i = 0; i < imageUrl.length; i++) {
+            shopProductImage.setValue(imageUrl[i]);
+            shopProductImage.setPid(Integer.valueOf(pid));
+            shopProductImage.setType(ShopProductImageMapper.type_detail);
+            shopProductImageService.add(shopProductImage);
+        }
         return Result.success();
+    }
+
+    /**
+     * 保存上传的商品当个图片
+     * @param imageUrl
+     * @param pid
+     * @return
+     */
+    @RequestMapping("shop/image_save_single.json")
+    @ResponseBody
+    public Result image_save_single(@RequestParam(value = "imageUrl") String[] imageUrl,
+                             @RequestParam(value = "pid") String pid){
+        ShopProductImage shopProductImage = new ShopProductImage();
+        for (int i = 0; i < imageUrl.length; i++) {
+            shopProductImage.setValue(imageUrl[i]);
+            shopProductImage.setPid(Integer.valueOf(pid));
+            shopProductImage.setType(ShopProductImageMapper.type_single);
+            shopProductImageService.add(shopProductImage);
+        }
+        return Result.success();
+    }
+
+    /**
+     * 保存上传的商品图片
+     * @param imageUrl
+     * @return
+     */
+    @RequestMapping("shop/image_delete.json")
+    @ResponseBody
+    public Result image_delete(@RequestParam(value = "imageUrl") String imageUrl){
+            shopProductImageService.deleteByValue(imageUrl);
+            return Result.success();
     }
 
     /**
@@ -326,8 +381,8 @@ public class ShopMessageController {
      */
     @RequestMapping("shop/upload.json")
     @ResponseBody
-    public Result upload(String file64) throws IOException {
-
+    public Result upload(@RequestParam String image) throws IOException {
+        MultipartFile file = BASE64DecodedMultipartFile.base64ToMultipart(image);
         /**
          * 构造一个带指定Zone对象的配置类 华东 : Zone.zone0() 华北 : Zone.zone1() 华南 : Zone.zone2() 北美 :
          * Zone.zoneNa0()
@@ -338,29 +393,37 @@ public class ShopMessageController {
         // ...生成上传凭证，然后准备上传
         String accessKey = "usvmdc4mAZAL3bhwLkm5iMk50aq-31Dl_U8b_P5j";
         String secretKey = "VI2N4hgyhNO7QrJcGFARIL70A6S6rNaoWD6m-lM6";
-        String bucketname = "heylhh";
-        Auth auth = Auth.create(accessKey, secretKey);
+        String bucket = "heylhh";
+        // 默认不指定key的情况下，以文件内容的hash值作为文件名
+        String key = null;
 
-        // 上传的图片名
-        String key = UUID.randomUUID().toString();
+        String imgUrl = "";
+        try {
+            // 数据流上传
+            InputStream byteInputStream = file.getInputStream();
+            Auth auth = Auth.create(accessKey, secretKey);
+            String upToken = auth.uploadToken(bucket);
+            try {
+                Response response = uploadManager.put(byteInputStream, key, upToken, null, null);
+                // 解析上传成功的结果
+                DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+                System.out.println(putRet.key);
+                System.out.println(putRet.hash);
+                imgUrl = putRet.hash;
+                System.err.println("http://heylhh.com/" + imgUrl);
+            } catch (QiniuException ex) {
+                Response r = ex.response;
+                System.err.println(r.toString());
+                try {
+                    System.err.println(r.bodyString());
+                } catch (QiniuException ex2) {
+                    // ignore
+                }
+            }
+        } catch (UnsupportedEncodingException ex) {
+            // ignore
+        }
 
-        file64 = file64.substring(22);
-        System.out.println("file64:"+file64);
-        String url = "http://heylhh.com/" + -1 + "/key/" + UrlSafeBase64.encodeToString(key);
-        // 非华东空间需要根据注意事项 1 修改上传域名
-        RequestBody rb = RequestBody.create(null, file64);
-        String upToken  = auth.uploadToken(bucketname, null, 3600, new StringMap().put("insertOnly", 1));
-        Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Content-Type", "application/octet-stream")
-                .addHeader("Authorization", "UpToken " + upToken)
-                .post(rb).build();
-        System.out.println(request.headers());
-        OkHttpClient client = new OkHttpClient();
-        okhttp3.Response response = client.newCall(request).execute();
-        System.out.println(response);
-
-
-        return Result.success().add("imgUrl", "http://heylhh.com/" + key);
+        return Result.success().add("imgUrl", "http://heylhh.com/" + imgUrl);
     }
 }

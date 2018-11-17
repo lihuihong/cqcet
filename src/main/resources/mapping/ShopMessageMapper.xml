@@ -109,6 +109,18 @@
 
     </select>
 
+
+    <!--根据商品分类id查询商品信息-->
+    <select id="byCategoryId" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        shop_message
+        WHERE
+            category_id = #{id}
+
+    </select>
+
     <!-- 批量移动商品到某个分类 -->
     <update id="batchUpdate">
         UPDATE shop_message

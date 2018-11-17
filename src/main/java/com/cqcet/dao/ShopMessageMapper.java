@@ -29,4 +29,7 @@ public interface ShopMessageMapper {
 
     //根据商品主键删除商品
     void batchDelete(@Param("idArr") String[] idArr);
+
+    //通过商品种类id查询商品信息
+    List<ShopMessage> byCategoryId(int id);
 }

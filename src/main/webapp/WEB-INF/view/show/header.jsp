@@ -126,7 +126,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="${pageContext.request.contextPath}/show/forum.action">全部版块</a></li>
-                                <li><a href="#">校园交易</a></li>
+                                <li><a href="${pageContext.request.contextPath}/shop/shop/list.action"">校园交易</a></li>
                                 <li><a href="#">校园公告墙</a></li>
                                 <li class="divider"></li>
                                 <li><a href="#">就业平台</a></li>

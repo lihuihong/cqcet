@@ -71,6 +71,16 @@ public class ShopMessageService {
     }
 
     /**
+     * 通过商品种类id查询商品信息
+     * @param id
+     * @return
+     * @throws LException
+     */
+    public List<ShopMessage> byCategoryId(int id) throws LException{
+        return shopMessageMapper.byCategoryId(id);
+    }
+
+    /**
      * 批量移动商品分类
      * @param param
      */

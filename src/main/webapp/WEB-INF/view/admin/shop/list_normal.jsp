@@ -105,7 +105,7 @@
 													<td>${entity.stock}</td>
 													<td><fmt:formatDate value="${entity.updateTime}" pattern="yyyy/MM/dd  HH:mm:ss" /></td>
 													<td>
-														<a href="${pageContext.request.contextPath}/admin/shop/productImage.action?productImageId=${entity.id}">
+														<a href="${pageContext.request.contextPath}/admin/shop/productImage_detail.action?productImageId=${entity.id}">
 															<button class="button blue"><span class="icon-eye"></span>图片管理</button>
 														</a>
 													</td>

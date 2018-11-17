@@ -31,7 +31,9 @@
                                     <li class="active">
                                         <a href="#1" data-toggle="tab">简况</a>
                                     </li>
-                                    <li><a href="#2" data-toggle="tab">安全信息</a></li>
+                                    <li>
+                                        <a href="#2" data-toggle="tab">安全信息</a>
+                                    </li>
                                 </ul>
                                 <br />
                                 <div class="tab-content">

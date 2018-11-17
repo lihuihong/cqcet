@@ -1,6 +1,10 @@
 package com.cqcet.dao;
 
+import com.cqcet.entity.ProductImageExample;
 import com.cqcet.entity.ShopProductImage;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -9,8 +13,24 @@ import com.cqcet.entity.ShopProductImage;
  */
 public interface ShopProductImageMapper {
 
-    //查询该商品下详情图片
-    ShopProductImage listByproductImageId(int pid);
+    String type_single = "type_single";
+    String type_detail = "type_detail";
 
-    ShopProductImage update(ShopProductImage shopProductImage);
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(ShopProductImage record);
+
+    int insertSelective(ShopProductImage record);
+
+    List<ShopProductImage> selectByExample(ProductImageExample example);
+
+    ShopProductImage selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(ShopProductImage record);
+
+    int updateByPrimaryKey(ShopProductImage record);
+
+    void deleteByValue(String imageUrl);
+
+    List<ShopProductImage> listByPid(@Param("productImageId") int productImageId,@Param("type") String type);
 }
